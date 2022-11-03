@@ -5,9 +5,11 @@ import vinylsAnimation from "@assets/lottieJson/17807-sound-animation.json";
 import Banner from "@components/Banner";
 import { FooterPerso } from "@components/FooterPerso";
 
-type Props = PropsWithChildren<{}>;
+type Props = PropsWithChildren<{
+  initialData: any;
+}>;
 
-export const Layout: FunctionComponent<Props> = ({ children }) => {
+export const Layout: FunctionComponent<Props> = ({ children, initialData }) => {
   const tawkTo = () => {
     const tawk = document.createElement("script");
     tawk.type = "text/javascript";
@@ -51,23 +53,7 @@ export const Layout: FunctionComponent<Props> = ({ children }) => {
           Collection
         </h1>
       </div>
-      <Banner />
-      <main className={"flex flex-col items-center"}>
-        <div
-          className={
-            "flex flex-col items-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
-          }
-        >
-          <div
-            className={
-              "flex flex-col justify-center bg-black bg-opacity-10 p-3 mb-8 rounded"
-            }
-          >
-            {children}
-            <FooterPerso />
-          </div>
-        </div>
-      </main>
+      {children}
     </div>
   );
 };

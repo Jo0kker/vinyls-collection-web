@@ -4,6 +4,7 @@ import { Carousel } from "flowbite-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCompactDisc } from "@fortawesome/pro-light-svg-icons";
 import { Button } from "@components/Button";
+import Banner from "@components/Banner";
 
 export default function Home() {
   return (
@@ -56,20 +57,26 @@ export default function Home() {
 
         <div className="h-56 sm:hidden">
           <Carousel>
-            <img
+            <Image
+              src={"https://picsum.photos/300/300/?random=3"}
+              alt={"vinyls"}
+              width={300}
+              height={300}
               className={"h-full w-full object-cover border-8"}
-              src="https://i.discogs.com/4_hlQoW4Wcu5IvGy7TVrEm9CLmRtc30aOiML0WJCF1s/rs:fit/g:sm/q:90/h:600/w:595/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI0ODEw/NzA0LTE2NjU2Njk4/MTAtNzEyNC5qcGVn.jpeg"
-              alt="one"
             />
-            <img
+            <Image
+              src={"https://picsum.photos/300/300/?random=4"}
+              alt={"vinyls"}
+              width={300}
+              height={300}
               className={"h-full w-full object-cover border-8"}
-              src="https://picsum.photos/300/300/?random=3"
-              alt="one"
             />
-            <img
+            <Image
+              src={"https://picsum.photos/300/300/?random=5"}
+              alt={"vinyls"}
+              width={300}
+              height={300}
               className={"h-full w-full object-cover border-8"}
-              src="https://picsum.photos/300/300/?random=4"
-              alt="one"
             />
           </Carousel>
         </div>
@@ -80,40 +87,48 @@ export default function Home() {
           }
         >
           <div>
-            <img
+            <Image
+              src={"https://picsum.photos/300/300/?random=3"}
+              alt={"vinyls"}
+              width={300}
+              height={300}
               className={"h-56 w-56 object-cover border-8"}
-              src="https://i.discogs.com/4_hlQoW4Wcu5IvGy7TVrEm9CLmRtc30aOiML0WJCF1s/rs:fit/g:sm/q:90/h:600/w:595/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI0ODEw/NzA0LTE2NjU2Njk4/MTAtNzEyNC5qcGVn.jpeg"
-              alt="one"
             />
             <h3>Titre du vinyl</h3>
             <p className={"text-sm"}>Artiste</p>
             <p>Nicolas - 10/03 14:43</p>
           </div>
           <div>
-            <img
+            <Image
+              src={"https://picsum.photos/300/300/?random=4"}
+              alt={"vinyls"}
+              width={300}
+              height={300}
               className={"h-56 w-56 object-cover border-8"}
-              src="https://picsum.photos/300/300/?random=5"
-              alt="one"
             />
             <h3>Titre du vinyl</h3>
             <p className={"text-sm"}>Artiste</p>
             <p>Nicolas - 10/03 14:43</p>
           </div>
           <div>
-            <img
+            <Image
+              src={"https://picsum.photos/300/300/?random=5"}
+              alt={"vinyls"}
+              width={300}
+              height={300}
               className={"h-56 w-56 object-cover border-8"}
-              src="https://picsum.photos/300/300/?random=6"
-              alt="one"
             />
             <h3>Titre du vinyl</h3>
             <p className={"text-sm"}>Artiste</p>
             <p>Nicolas - 10/03 14:43</p>
           </div>
           <div>
-            <img
+            <Image
+              src={"https://picsum.photos/300/300/?random=6"}
+              alt={"vinyls"}
+              width={300}
+              height={300}
               className={"h-56 w-56 object-cover border-8"}
-              src="https://picsum.photos/300/300/?random=7"
-              alt="one"
             />
             <h3>Titre du vinyl</h3>
             <p className={"text-sm"}>Artiste</p>

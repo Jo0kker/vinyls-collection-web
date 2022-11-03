@@ -7,7 +7,7 @@ import vinylsAnimation from "@assets/lottieJson/vinyl-loading.json";
 
 const NavBar: FunctionComponent = () => {
   return (
-    <Popover className="relative bg-transparent z-40">
+    <Popover className="relative bg-transparent z-40 font-roboto">
       <div className="flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
         <div className="flex justify-start lg:w-0 lg:flex-1">
           <Link href="/">
@@ -49,7 +49,7 @@ const NavBar: FunctionComponent = () => {
         </Popover.Group>
         <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
           <Link
-            href="#"
+            href="login"
             className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-3xl bg-black bg-opacity-10 hover:bg-opacity-20 border border-red-700 bg-transparent px-4 py-2 text-base font-medium text-white shadow-sm hover:text-orange-700"
           >
             Connexion
@@ -116,7 +116,7 @@ const NavBar: FunctionComponent = () => {
               </div>
               <div className="mt-6">
                 <Link
-                  href="#"
+                  href="login"
                   className="flex w-full items-center justify-center rounded-md border border-transparent bg-fuchsia-800 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-orange-700"
                 >
                   Connexion

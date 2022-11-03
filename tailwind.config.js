@@ -7,6 +7,10 @@ module.exports = {
     "node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
+    fontFamily: {
+      body: ["Roboto", "sans-serif"],
+      sans: ["Roboto", "sans-serif"],
+    },
     extend: {
       colors: {
         fuchsia: {
