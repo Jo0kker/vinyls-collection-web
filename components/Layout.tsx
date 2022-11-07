@@ -10,19 +10,6 @@ type Props = PropsWithChildren<{
 }>;
 
 export const Layout: FunctionComponent<Props> = ({ children, initialData }) => {
-  const tawkTo = () => {
-    const tawk = document.createElement("script");
-    tawk.type = "text/javascript";
-    tawk.async = true;
-    tawk.src = "https://embed.tawk.to/624bef4a2abe5b455fc4d655/1fvs9tf84";
-    tawk.setAttribute("crossorigin", "*");
-    document.body.appendChild(tawk);
-  };
-
-  useEffect(() => {
-    tawkTo();
-  }, []);
-
   return (
     <div
       className={
