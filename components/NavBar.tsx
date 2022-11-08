@@ -4,8 +4,20 @@ import Link from "next/link";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/20/solid";
 import Lottie from "lottie-react";
 import vinylsAnimation from "@assets/lottieJson/vinyl-loading.json";
+import { useBearStore } from "@store/useBearStore";
+import { Dropdown } from "flowbite-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faUser,
+  faSquareSlidersVertical,
+  faRightFromBracket,
+} from "@fortawesome/pro-light-svg-icons";
 
 const NavBar: FunctionComponent = () => {
+  const user = useBearStore((state) => state.user);
+
+  console.log(user);
+
   return (
     <Popover className="relative bg-transparent z-40 font-roboto">
       <div className="flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
@@ -48,12 +60,40 @@ const NavBar: FunctionComponent = () => {
           </Link>
         </Popover.Group>
         <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-          <Link
-            href="login"
-            className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-3xl bg-black bg-opacity-10 hover:bg-opacity-20 border border-red-700 bg-transparent px-4 py-2 text-base font-medium text-white shadow-sm hover:text-orange-700"
-          >
-            Connexion
-          </Link>
+          {/* dropdown if user connect */}
+          {user ? (
+            <Dropdown label="Dropdown">
+              <Dropdown.Header>
+                <span className="block text-sm">{user.name}</span>
+                <span className="block text-sm font-medium truncate">
+                  {user.email}
+                </span>
+              </Dropdown.Header>
+              <Dropdown.Item>
+                <FontAwesomeIcon icon={faUser} className={"mr-1"} />
+                Mon profil
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <FontAwesomeIcon
+                  icon={faSquareSlidersVertical}
+                  className={"mr-1"}
+                />
+                Paramètres
+              </Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item>
+                <FontAwesomeIcon icon={faRightFromBracket} className={"mr-1"} />
+                Déconnexion
+              </Dropdown.Item>
+            </Dropdown>
+          ) : (
+            <Link
+              href="login"
+              className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-3xl bg-black bg-opacity-10 hover:bg-opacity-20 border border-red-700 bg-transparent px-4 py-2 text-base font-medium text-white shadow-sm hover:text-orange-700"
+            >
+              Connexion
+            </Link>
+          )}
         </div>
       </div>
 
@@ -81,7 +121,7 @@ const NavBar: FunctionComponent = () => {
                 </div>
                 <div className="-mr-2">
                   <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                    <span className="sr-only">Close menu</span>
+                    <span className="sr-only">Fermer menu</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </Popover.Button>
                 </div>

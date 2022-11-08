@@ -23,6 +23,7 @@
       "@assets/*": ["assets/*"],
       "@images/*": ["assets/images/*"],
       "@store/*": ["store/*"],
+      "@utils/*": ["utils/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

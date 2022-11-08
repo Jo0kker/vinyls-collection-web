@@ -3,10 +3,12 @@ import type { AppProps } from "next/app";
 import { Layout } from "@components/Layout";
 import Banner from "@components/Banner";
 import { FooterPerso } from "@components/FooterPerso";
+import { Toaster } from "react-hot-toast";
 
 export default function App({ Component, pageProps, data }: AppProps | any) {
   return (
     <Layout initialData={data}>
+      <Toaster />
       <Banner />
       <main className={"flex flex-col items-center"}>
         <div className={"container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"}>

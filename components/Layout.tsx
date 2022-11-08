@@ -2,8 +2,6 @@ import { FunctionComponent, PropsWithChildren, useEffect } from "react";
 import NavBar from "@components/NavBar";
 import Lottie from "lottie-react";
 import vinylsAnimation from "@assets/lottieJson/17807-sound-animation.json";
-import Banner from "@components/Banner";
-import { FooterPerso } from "@components/FooterPerso";
 
 type Props = PropsWithChildren<{
   initialData: any;

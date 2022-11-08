@@ -5,8 +5,10 @@ import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { InputText } from "@components/InputText";
 import Link from "next/link";
 import { Button } from "@components/Button";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import axiosApiInstance from "../services/interceptorService";
+import toast from "react-hot-toast";
+import { showToast } from "@utils/utils";
 
 interface LoginProps {
   email: string;
@@ -17,43 +19,49 @@ const Login = () => {
   const user = useBearStore((state) => state.user);
 
   const login = async (username: string, password: string) => {
-    const res = await axios.post(
-      "http://localhost:8000/oauth/token",
-      {
-        grant_type: "password",
-        client_id: 2,
-        client_secret: "F0XckSdexv1TDvYLZeC4BWWTou351rmaM0ViDO6G",
-        username: username,
-        password: password,
-        scope: "",
-      },
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+    axios
+      .post(
+        "http://localhost:8000/oauth/token",
+        {
+          grant_type: "password",
+          client_id: 2,
+          client_secret: "F0XckSdexv1TDvYLZeC4BWWTou351rmaM0ViDO6G",
+          username: username,
+          password: password,
+          scope: "",
         },
-      }
-    );
-
-    if (res.status === 200) {
-      console.log(res.data);
-      // token with localStorage
-      localStorage.setItem("token", res.data.access_token);
-      localStorage.setItem("refresh_token", res.data.refresh_token);
-      localStorage.setItem("expires_in", res.data.expires_in);
-      // user with zustand
-      const user = await axiosApiInstance.get("/user");
-      console.log(user.data);
-      useBearStore.setState({ user: user.data });
-    }
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response: AxiosResponse) => {
+        localStorage.setItem("token", response.data.access_token);
+        localStorage.setItem("refresh_token", response.data.refresh_token);
+        localStorage.setItem("expires_in", response.data.expires_in);
+        // user with zustand
+        axiosApiInstance.get("/user").then((res: AxiosResponse) => {
+          useBearStore.setState({ user: res.data });
+          showToast("success", "Logged in successfully");
+        });
+      })
+      .catch((error) => {
+        // if status code is 401, then the user is unauthorized
+        if (error.response.status === 401) {
+          showToast("error", "Identifiants incorrects");
+        } else {
+          showToast(
+            "error",
+            "Une erreur est survenue, merci de réessayer ou de contacter le support"
+          );
+        }
+      });
   };
 
-  const showStateUser = () => {
-    console.log(user);
-  };
-
-  const resetStateUser = () => {
-    useBearStore.setState({ user: {} });
+  const testToast = () => {
+    showToast("success", "Logged in successfully");
   };
 
   return (
@@ -133,8 +141,7 @@ const Login = () => {
       <Button className={"my-12"}>
         <Link href={"/register"}>Pas de compte ? Inscrivez-vous !</Link>
       </Button>
-      <button onClick={showStateUser}>test</button>
-      <button onClick={resetStateUser}>reset State user</button>
+      <button onClick={testToast}>test2</button>
     </div>
   );
 };
