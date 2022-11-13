@@ -9,6 +9,7 @@ import axios, { AxiosResponse } from "axios";
 import axiosApiInstance from "../services/interceptorService";
 import toast from "react-hot-toast";
 import { showToast } from "@utils/utils";
+import { router } from "next/client";
 
 interface LoginProps {
   email: string;
@@ -16,9 +17,7 @@ interface LoginProps {
 }
 
 const Login = () => {
-  const user = useBearStore((state) => state.user);
-
-  const login = async (username: string, password: string) => {
+  const login = (username: string, password: string) => {
     axios
       .post(
         "http://localhost:8000/oauth/token",
@@ -45,6 +44,7 @@ const Login = () => {
         axiosApiInstance.get("/user").then((res: AxiosResponse) => {
           useBearStore.setState({ user: res.data });
           showToast("success", "Logged in successfully");
+          router.push("/");
         });
       })
       .catch((error) => {
@@ -58,10 +58,6 @@ const Login = () => {
           );
         }
       });
-  };
-
-  const testToast = () => {
-    showToast("success", "Logged in successfully");
   };
 
   return (
@@ -141,7 +137,6 @@ const Login = () => {
       <Button className={"my-12"}>
         <Link href={"/register"}>Pas de compte ? Inscrivez-vous !</Link>
       </Button>
-      <button onClick={testToast}>test2</button>
     </div>
   );
 };

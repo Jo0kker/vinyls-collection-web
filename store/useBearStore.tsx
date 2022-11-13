@@ -22,10 +22,16 @@ type User = {
 
 interface BearState {
   user: User | null;
+
+  logout(): void;
 }
 
 export const useBearStore = create<BearState>()((set) => ({
   user: null,
   login: (user: User) => set({ user }),
-  logout: () => set({ user: null }),
+  logout: () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refresh_token");
+    set({ user: null });
+  },
 }));

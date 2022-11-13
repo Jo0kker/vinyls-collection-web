@@ -4,8 +4,24 @@ import { Layout } from "@components/Layout";
 import Banner from "@components/Banner";
 import { FooterPerso } from "@components/FooterPerso";
 import { Toaster } from "react-hot-toast";
+import NextNProgress from "nextjs-progressbar";
+import { useEffect } from "react";
+import { useBearStore } from "@store/useBearStore";
+import axiosApiInstance from "services/interceptorService";
+import { AxiosResponse } from "axios";
 
 export default function App({ Component, pageProps, data }: AppProps | any) {
+  useEffect(() => {
+    // check if user is logged in
+    const token = localStorage.getItem("token");
+    if (token) {
+      // user with zustand
+      axiosApiInstance.get("/user").then((res: AxiosResponse) => {
+        useBearStore.setState({ user: res.data });
+      });
+    }
+  }, []);
+
   return (
     <Layout initialData={data}>
       <Toaster />
@@ -17,6 +33,7 @@ export default function App({ Component, pageProps, data }: AppProps | any) {
               "flex flex-col justify-center bg-black bg-opacity-10 p-3 mb-8 rounded"
             }
           >
+            <NextNProgress />
             <Component {...pageProps} />
             <FooterPerso />
           </div>
