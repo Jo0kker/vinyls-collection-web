@@ -22,7 +22,6 @@ type User = {
 
 interface BearState {
   user: User | null;
-
   logout(): void;
 }
 

@@ -3,9 +3,12 @@ import { InputText } from "@components/InputText";
 import Link from "next/link";
 import { Button } from "@components/Button";
 import { Checkbox, Label } from "flowbite-react";
+import axios from "axios";
+import { showToast } from "@utils/utils";
+import { useRouter } from "next/router";
 
 interface RegisterProps {
-  pseudo: string;
+  name: string;
   email: string;
   password: string;
   password_confirmation: string;
@@ -13,23 +16,50 @@ interface RegisterProps {
 }
 
 const Register = () => {
+  const router = useRouter();
+
   const register = (
-    pseudo: string,
+    name: string,
     email: string,
     password: string,
     password_confirmation: string
-  ) => {};
+  ) => {
+    axios
+      .post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/register`,
+        {
+          name: name,
+          email: email,
+          password: password,
+          password_confirmation: password_confirmation,
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(() => {
+        router.push("/login").then(() => {
+          showToast(
+            "success",
+            "Inscription réussie, merci de vérifier votre boîte mail pour confirmer votre compte"
+          );
+        });
+      });
+  };
 
   return (
     <div className={"pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col"}>
       <div className={"flex flex-row justify-center font-bold text-2xl mt-6"}>
         <span className={"mr-3 text-emerald-500"}>//</span>
-        <h1 className={"text-fuchsia-800"}>Connectez-vous à votre compte</h1>
+        <h1 className={"text-fuchsia-800"}>Pas de compte ? Inscrivez-vous</h1>
         <span className={"ml-3 text-orange-400"}>//</span>
       </div>
       <Formik
         initialValues={{
-          pseudo: "",
+          name: "",
           email: "",
           password: "",
           password_confirmation: "",
@@ -40,7 +70,7 @@ const Register = () => {
           { setSubmitting }: FormikHelpers<RegisterProps>
         ) => {
           register(
-            values.pseudo,
+            values.name,
             values.email,
             values.password,
             values.password_confirmation
@@ -48,15 +78,15 @@ const Register = () => {
           setSubmitting(false);
         }}
       >
-        <>
+        <Form>
           <div className={"flex flex-col justify-center items-center"}>
-            <Form
-              className={
-                "flex flex-col sm:flex-row justify-center  gap-4 p-4 m-4 rounded bg-black bg-opacity-20"
-              }
-            >
-              <div>
-                <Field name="pseudo">
+            <div className={"flex flex-col justify-center gap-2 p-4 mt-4 "}>
+              <div
+                className={
+                  "flex flex-col lg:flex-row justify-center align-middle rounded bg-black bg-opacity-20 p-4 gap-4"
+                }
+              >
+                <Field name="name">
                   {({ field, form, meta }: any) => (
                     <InputText
                       field={field}
@@ -68,7 +98,7 @@ const Register = () => {
                         placeholder: "Pseudo",
                       }}
                       className={
-                        "flex flex-col sm:flex-row items-center content-center gap-4"
+                        "flex flex-col sm:flex-row sm:justify-between lg:flex-1 items-center content-center gap-4"
                       }
                     />
                   )}
@@ -85,13 +115,17 @@ const Register = () => {
                         placeholder: "Email",
                       }}
                       className={
-                        "flex flex-col sm:flex-row items-center content-center gap-4"
+                        "flex flex-col sm:flex-row sm:justify-between lg:flex-1 items-center content-center gap-4 mt-4 lg:mt-0"
                       }
                     />
                   )}
                 </Field>
               </div>
-              <div>
+              <div
+                className={
+                  "flex flex-col lg:flex-row justify-center align-middle rounded bg-black bg-opacity-20 p-4 gap-4"
+                }
+              >
                 <Field name="password">
                   {({ field, form, meta }: any) => (
                     <InputText
@@ -104,7 +138,7 @@ const Register = () => {
                         placeholder: "Mot de passe",
                       }}
                       className={
-                        "flex flex-col sm:flex-row items-center content-center gap-4"
+                        "flex flex-col sm:flex-row sm:justify-between lg:flex-1 items-center content-center gap-4"
                       }
                     />
                   )}
@@ -121,18 +155,22 @@ const Register = () => {
                         placeholder: "Mot de passe",
                       }}
                       className={
-                        "flex flex-col sm:flex-row items-center content-center gap-4"
+                        "flex flex-col sm:flex-row sm:justify-between lg:flex-1 items-center content-center gap-4 mt-4 lg:mt-0"
                       }
                     />
                   )}
                 </Field>
               </div>
-            </Form>
+            </div>
           </div>
-          <div className={"flex flex-col sm:flex-row justify-center"}>
+          <div
+            className={
+              "flex flex-col lg:flex-row lg:justify-around justify-center items-center"
+            }
+          >
             <Field name="terms">
               {({ field, form, meta }: any) => (
-                <div>
+                <div className={"mb-2"}>
                   <Label
                     className={"flex flex-row items-center gap-2"}
                     htmlFor="terms"
@@ -140,8 +178,6 @@ const Register = () => {
                     <input
                       type="checkbox"
                       className={"focus:ring-0"}
-                      id="terms"
-                      name="terms"
                       {...field}
                     />
                     <span className={"text-gray-700"}>
@@ -154,7 +190,7 @@ const Register = () => {
             <div>
               <button
                 className={
-                  "text-white bg-fuchsia-800 h-auto rounded px-3 font-roboto"
+                  "text-white bg-fuchsia-800 h-auto rounded px-3 font-roboto px-4 py-2"
                 }
                 type="submit"
               >
@@ -162,10 +198,10 @@ const Register = () => {
               </button>
             </div>
           </div>
-        </>
+        </Form>
       </Formik>
       <Button className={"my-12"}>
-        <Link href={"/register"}>Pas de compte ? Inscrivez-vous !</Link>
+        <Link href={"/login"}>Déjà un compte ? Connectez-vous !</Link>
       </Button>
     </div>
   );

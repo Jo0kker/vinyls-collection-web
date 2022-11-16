@@ -1,5 +1,5 @@
 import { Menu, Popover, Transition } from "@headlessui/react";
-import { Fragment, FunctionComponent } from "react";
+import { Fragment, FunctionComponent, useState } from "react";
 import Link from "next/link";
 import {
   Bars3Icon,
@@ -17,8 +17,7 @@ function classNames(...classes: string[]) {
 
 const NavBar: FunctionComponent = () => {
   const user = useBearStore((state) => state.user);
-
-  console.log(user);
+  const [isMenuOpen, setIsMenuOpen] = useState();
 
   return (
     <Popover className="relative bg-transparent z-40 font-roboto">
@@ -176,12 +175,12 @@ const NavBar: FunctionComponent = () => {
           <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
             <div className="px-5 pt-5 pb-6">
               <div className="flex items-center justify-between">
-                <div>
+                <Link href={"/"}>
                   <Lottie
                     animationData={vinylsAnimation}
                     className={"w-12"}
                   ></Lottie>
-                </div>
+                </Link>
                 <div className="-mr-2">
                   <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                     <span className="sr-only">Fermer menu</span>

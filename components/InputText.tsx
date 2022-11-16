@@ -4,6 +4,7 @@ type buildInfo = {
   label: string;
   type: string;
   placeholder: string;
+  labelClassName?: string;
 };
 
 type InputTextProps = {
@@ -25,7 +26,7 @@ export const InputText = ({
     <div className={`${className}`}>
       <label
         htmlFor="email"
-        className="block text-sm font-medium text-fuchsia-800 font-roboto"
+        className={`block font-medium text-fuchsia-800 font-roboto ${buildInfo.labelClassName}`}
       >
         {buildInfo.label}
       </label>
@@ -38,7 +39,7 @@ export const InputText = ({
             meta.touched && meta.error
               ? "border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500"
               : "border-gray-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
-          } block pl-7 pr-12 sm:text-sm border-gray-300 h-auto rounded-md`}
+          } block sm:text-sm border-gray-300 h-auto rounded-md`}
           aria-invalid={meta.touched && meta.error ? "true" : "false"}
           aria-describedby={`${field.name}-error`}
         />

@@ -6,6 +6,17 @@ import { faPlus, faCompactDisc } from "@fortawesome/pro-light-svg-icons";
 import { Button } from "@components/Button";
 import Banner from "@components/Banner";
 
+export async function getServerSideProps() {
+  // get last 6 vinyls
+  const vinyls = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/vinyls?_limit=6`
+  );
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+}
+
 export default function Home() {
   return (
     <div className={"pt-44 sm:pt-0 mt-24 px-4 rounded bg-white flex flex-col"}>

@@ -9,7 +9,7 @@ import axios, { AxiosResponse } from "axios";
 import axiosApiInstance from "../services/interceptorService";
 import toast from "react-hot-toast";
 import { showToast } from "@utils/utils";
-import { router } from "next/client";
+import { useRouter } from "next/router";
 
 interface LoginProps {
   email: string;
@@ -17,14 +17,16 @@ interface LoginProps {
 }
 
 const Login = () => {
+  const router = useRouter();
+
   const login = (username: string, password: string) => {
     axios
       .post(
-        "http://localhost:8000/oauth/token",
+        `${process.env.NEXT_PUBLIC_API_URL}/oauth/token`,
         {
           grant_type: "password",
-          client_id: 2,
-          client_secret: "F0XckSdexv1TDvYLZeC4BWWTou351rmaM0ViDO6G",
+          client_id: process.env.NEXT_PUBLIC_API_CLIENT_ID,
+          client_secret: process.env.NEXT_PUBLIC_API_CLIENT_SECRET,
           username: username,
           password: password,
           scope: "",
@@ -62,12 +64,14 @@ const Login = () => {
 
   return (
     <div className={"pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col"}>
-      <div className={"flex flex-row justify-center font-bold text-2xl mt-6"}>
+      <div
+        className={"flex flex-row justify-center font-bold text-2xl mt-6 mb-4"}
+      >
         <span className={"mr-3 text-emerald-500"}>//</span>
         <h1 className={"text-fuchsia-800"}>Connectez-vous à votre compte</h1>
         <span className={"ml-3 text-orange-400"}>//</span>
       </div>
-      <div className={"flex flex-col justify-center items-center"}>
+      <div className={"flex flex-col justify-center items-center lg:mx-32"}>
         <Formik
           initialValues={{
             email: "",
@@ -83,46 +87,52 @@ const Login = () => {
         >
           <Form
             className={
-              "flex flex-col sm:flex-row justify-center  gap-4 p-4 m-4 rounded bg-black bg-opacity-20"
+              "flex flex-col xl:flex-row justify-center items-center gap-4 p-2 mx-4 w-full rounded bg-black bg-opacity-20"
             }
           >
-            <Field name="email">
-              {({ field, form, meta }: any) => (
-                <InputText
-                  field={field}
-                  form={form}
-                  meta={meta}
-                  buildInfo={{
-                    label: "Email :",
-                    type: "email",
-                    placeholder: "Email",
-                  }}
-                  className={
-                    "flex flex-col sm:flex-row items-center content-center gap-4"
-                  }
-                />
-              )}
-            </Field>
-            <Field name="password">
-              {({ field, form, meta }: any) => (
-                <InputText
-                  field={field}
-                  form={form}
-                  meta={meta}
-                  buildInfo={{
-                    label: "Password :",
-                    type: "password",
-                    placeholder: "Password",
-                  }}
-                  className={
-                    "flex flex-col sm:flex-row items-center content-center gap-4"
-                  }
-                />
-              )}
-            </Field>
+            <div
+              className={
+                "flex flex-col w-full md:flex-row md:w-1/2 md:gap-4 lg:w-full md:justify-center"
+              }
+            >
+              <Field name="email">
+                {({ field, form, meta }: any) => (
+                  <InputText
+                    field={field}
+                    form={form}
+                    meta={meta}
+                    buildInfo={{
+                      label: "Email :",
+                      type: "email",
+                      placeholder: "Email",
+                    }}
+                    className={
+                      "flex flex-col lg:flex-row items-center content-center gap-4"
+                    }
+                  />
+                )}
+              </Field>
+              <Field name="password">
+                {({ field, form, meta }: any) => (
+                  <InputText
+                    field={field}
+                    form={form}
+                    meta={meta}
+                    buildInfo={{
+                      label: "Password :",
+                      type: "password",
+                      placeholder: "Password",
+                    }}
+                    className={
+                      "flex flex-col lg:flex-row items-center content-center gap-4"
+                    }
+                  />
+                )}
+              </Field>
+            </div>
             <button
               className={
-                "text-white bg-fuchsia-800 h-auto rounded px-3 font-roboto"
+                "text-white bg-fuchsia-800 rounded px-3 py-3 w-full sm:w-2/5 font-roboto xl:w-auto xl:px-6"
               }
               type="submit"
             >
@@ -131,7 +141,7 @@ const Login = () => {
           </Form>
         </Formik>
       </div>
-      <Link className={"self-start ml-48"} href={"/"}>
+      <Link className={"sm:ml-48"} href={"/"}>
         Mot de passe oubliée ?
       </Link>
       <Button className={"my-12"}>
