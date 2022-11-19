@@ -5,19 +5,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCompactDisc } from "@fortawesome/pro-light-svg-icons";
 import { Button } from "@components/Button";
 import Banner from "@components/Banner";
+import {CollectionVinyl} from "../types/CollectionVinyl";
+import axiosApiInstance from "../services/interceptorService";
 
 export async function getServerSideProps() {
   // get last 6 vinyls
-  const vinyls = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/vinyls?_limit=6`
+  const reqCollectionVinyl = await axiosApiInstance.get(
+    `/collectionVinyl?include=vinyl,collection,collection.user&limit=6`
   );
 
+  const collectionVinyls: CollectionVinyl[] = reqCollectionVinyl.data.data;
+
   return {
-    props: {}, // will be passed to the page component as props
-  };
+      props: {
+        collectionVinyls,
+      }
+  }
 }
 
-export default function Home() {
+export default function Home({ collectionVinyls }: { collectionVinyls: CollectionVinyl[] }) {
   return (
     <div className={"pt-44 sm:pt-0 mt-24 px-4 rounded bg-white flex flex-col"}>
       <div
@@ -97,54 +103,20 @@ export default function Home() {
             "hidden sm:grid sm:grid-cols-3 content-around gap-4 justify-items-center"
           }
         >
-          <div>
-            <Image
-              src={"https://picsum.photos/300/300/?random=3"}
-              alt={"vinyls"}
-              width={300}
-              height={300}
-              className={"h-56 w-56 object-cover border-8"}
-            />
-            <h3>Titre du vinyl</h3>
-            <p className={"text-sm"}>Artiste</p>
-            <p>Nicolas - 10/03 14:43</p>
-          </div>
-          <div>
-            <Image
-              src={"https://picsum.photos/300/300/?random=4"}
-              alt={"vinyls"}
-              width={300}
-              height={300}
-              className={"h-56 w-56 object-cover border-8"}
-            />
-            <h3>Titre du vinyl</h3>
-            <p className={"text-sm"}>Artiste</p>
-            <p>Nicolas - 10/03 14:43</p>
-          </div>
-          <div>
-            <Image
-              src={"https://picsum.photos/300/300/?random=5"}
-              alt={"vinyls"}
-              width={300}
-              height={300}
-              className={"h-56 w-56 object-cover border-8"}
-            />
-            <h3>Titre du vinyl</h3>
-            <p className={"text-sm"}>Artiste</p>
-            <p>Nicolas - 10/03 14:43</p>
-          </div>
-          <div>
-            <Image
-              src={"https://picsum.photos/300/300/?random=6"}
-              alt={"vinyls"}
-              width={300}
-              height={300}
-              className={"h-56 w-56 object-cover border-8"}
-            />
-            <h3>Titre du vinyl</h3>
-            <p className={"text-sm"}>Artiste</p>
-            <p>Nicolas - 10/03 14:43</p>
-          </div>
+          {collectionVinyls.map((collectionVinyl) => (
+            <div>
+              <Image
+                src={collectionVinyl.vinyl.image_path}
+                alt={collectionVinyl.vinyl.label}
+                width={300}
+                height={300}
+                className={"h-56 w-56 object-cover border-8"}
+              />
+              <h3>{collectionVinyl.vinyl.label}</h3>
+              <p className={"text-sm"}>{collectionVinyl.vinyl.artist}</p>
+              <p>{collectionVinyl.collection?.user?.name}</p>
+            </div>
+          ))}
         </div>
 
         <Button className={"my-4"}>En voir davantage</Button>

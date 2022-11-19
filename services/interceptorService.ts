@@ -6,14 +6,22 @@ const axiosApiInstance = axios.create();
 // Request interceptor for API calls
 axiosApiInstance.interceptors.request.use(
   async (config: AxiosRequestConfig) => {
-    const accessToken = localStorage.getItem("token");
+    if (typeof window !== 'undefined') {
+      const accessToken = localStorage.getItem("token");
+      config.headers = {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      };
+    } else {
+      config.headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      };
+    }
     // set base url
-    config.baseURL = "http://localhost:8000/api";
-    config.headers = {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    };
+    config.baseURL = process.env.NEXT_PUBLIC_API_URL + "/api";
+
     return config;
   },
   (error: any) => {
