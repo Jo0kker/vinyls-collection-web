@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCompactDisc } from "@fortawesome/pro-light-svg-icons";
 import { Button } from "@components/Button";
 import Banner from "@components/Banner";
-import {CollectionVinyl} from "../types/CollectionVinyl";
+import { CollectionVinyl } from "../types/CollectionVinyl";
 import axiosApiInstance from "../services/interceptorService";
 
 export async function getServerSideProps() {
@@ -17,13 +17,17 @@ export async function getServerSideProps() {
   const collectionVinyls: CollectionVinyl[] = reqCollectionVinyl.data.data;
 
   return {
-      props: {
-        collectionVinyls,
-      }
-  }
+    props: {
+      collectionVinyls,
+    },
+  };
 }
 
-export default function Home({ collectionVinyls }: { collectionVinyls: CollectionVinyl[] }) {
+export default function Home({
+  collectionVinyls,
+}: {
+  collectionVinyls: CollectionVinyl[];
+}) {
   return (
     <div className={"pt-44 sm:pt-0 mt-24 px-4 rounded bg-white flex flex-col"}>
       <div
@@ -136,7 +140,7 @@ export default function Home({ collectionVinyls }: { collectionVinyls: Collectio
                 "h-56 sm:h-64 xl:h-80 2xl:h-96 bg-black bg-opacity-40 rounded p-4"
               }
             >
-              <h3 className={"font-bold"}>Titre du message</h3>
+              <h3 className={"font-bold"}>Titre de la rubrique</h3>
               <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
               <p className={"leading-5"}>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -149,7 +153,7 @@ export default function Home({ collectionVinyls }: { collectionVinyls: Collectio
                 "h-56 sm:h-64 xl:h-80 2xl:h-96 bg-black bg-opacity-40 rounded p-4"
               }
             >
-              <h3 className={"font-bold"}>Titre du message</h3>
+              <h3 className={"font-bold"}>Titre de la rubrique</h3>
               <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
               <p className={"leading-5"}>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -162,7 +166,7 @@ export default function Home({ collectionVinyls }: { collectionVinyls: Collectio
                 "h-56 sm:h-64 xl:h-80 2xl:h-96 bg-black bg-opacity-40 rounded p-4"
               }
             >
-              <h3 className={"font-bold"}>Titre du message</h3>
+              <h3 className={"font-bold"}>Titre de la rubrique</h3>
               <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
               <p className={"leading-5"}>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -175,7 +179,7 @@ export default function Home({ collectionVinyls }: { collectionVinyls: Collectio
                 "h-56 sm:h-64 xl:h-80 2xl:h-96 bg-black bg-opacity-40 rounded p-4"
               }
             >
-              <h3 className={"font-bold"}>Titre du message</h3>
+              <h3 className={"font-bold"}>Titre de la rubrique</h3>
               <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
               <p className={"leading-5"}>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -188,28 +192,28 @@ export default function Home({ collectionVinyls }: { collectionVinyls: Collectio
 
         <div className={"hidden sm:flex flex-row border-8"}>
           <div className={"h-48 border flex flex-col justify-center gap-2 p-2"}>
-            <h3 className={"font-bold"}>Titre du message</h3>
+            <h3 className={"font-bold"}>Titre de la rubrique</h3>
             <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
             <p className={"leading-5"}>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             </p>
           </div>
           <div className={"h-48 border flex flex-col justify-center gap-2 p-2"}>
-            <h3 className={"font-bold"}>Titre du message</h3>
+            <h3 className={"font-bold"}>Titre de la rubrique</h3>
             <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
             <p className={"leading-5"}>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             </p>
           </div>
           <div className={"h-48 border flex flex-col justify-center gap-2 p-2"}>
-            <h3 className={"font-bold"}>Titre du message</h3>
+            <h3 className={"font-bold"}>Titre de la rubrique</h3>
             <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
             <p className={"leading-5"}>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             </p>
           </div>
           <div className={"h-48 border flex flex-col justify-center gap-2 p-2"}>
-            <h3 className={"font-bold"}>Titre du message</h3>
+            <h3 className={"font-bold"}>Titre de la rubrique</h3>
             <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
             <p className={"leading-5"}>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.

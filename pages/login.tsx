@@ -4,12 +4,12 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { InputText } from "@components/InputText";
 import Link from "next/link";
-import { Button } from "@components/Button";
 import axios, { AxiosResponse } from "axios";
 import axiosApiInstance from "../services/interceptorService";
 import toast from "react-hot-toast";
 import { showToast } from "@utils/utils";
 import { useRouter } from "next/router";
+import { Button } from "@components/Button";
 
 interface LoginProps {
   email: string;
@@ -130,21 +130,17 @@ const Login = () => {
                 )}
               </Field>
             </div>
-            <button
-              className={
-                "text-white bg-fuchsia-800 rounded px-3 py-3 w-full sm:w-2/5 font-roboto xl:w-auto xl:px-6"
-              }
-              type="submit"
-            >
-              Connexion
-            </button>
+            <Button type={"submit"}>Connexion</Button>
           </Form>
         </Formik>
       </div>
-      <Link className={"sm:ml-48"} href={"/"}>
+      <Link
+        className={"sm:ml-48 hover:text-orange-700"}
+        href={"/password_reset"}
+      >
         Mot de passe oubliée ?
       </Link>
-      <Button className={"my-12"}>
+      <Button className={"my-12"} type={"button"}>
         <Link href={"/register"}>Pas de compte ? Inscrivez-vous !</Link>
       </Button>
     </div>

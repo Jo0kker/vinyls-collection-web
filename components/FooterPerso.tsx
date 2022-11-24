@@ -20,10 +20,10 @@ export const FooterPerso = () => {
             />
             <span
               className={
-                "self-center whitespace-nowrap text-2xl font-semibold text-gray-300 dark:text-white"
+                "self-center  text-2xl font-semibold text-gray-300 dark:text-white"
               }
             >
-              Vinyls-Collection
+              Vinyls Collection
             </span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 lg:mt-4 lg:mb-4 lg:grid-cols-4 lg:gap-6 mr-4">

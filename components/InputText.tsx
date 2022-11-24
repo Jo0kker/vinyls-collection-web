@@ -13,6 +13,7 @@ type InputTextProps = {
   meta: any;
   buildInfo: buildInfo;
   className?: string;
+  inputClassName?: string;
 };
 
 export const InputText = ({
@@ -21,6 +22,7 @@ export const InputText = ({
   meta,
   buildInfo,
   className,
+  inputClassName,
 }: InputTextProps) => {
   return (
     <div className={`${className}`}>
@@ -39,7 +41,7 @@ export const InputText = ({
             meta.touched && meta.error
               ? "border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500"
               : "border-gray-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
-          } block sm:text-sm border-gray-300 h-auto rounded-md`}
+          } block sm:text-sm border-gray-300 h-auto rounded-md ${inputClassName}`}
           aria-invalid={meta.touched && meta.error ? "true" : "false"}
           aria-describedby={`${field.name}-error`}
         />
