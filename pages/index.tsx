@@ -30,6 +30,10 @@ export default function Home({
 }) {
   return (
     <div className={"pt-44 sm:pt-0 mt-24 px-4 rounded bg-white flex flex-col"}>
+      <Head>
+        <title>Vinyls Collection</title>
+        <meta name="description" content="Vinyls-collection" />
+      </Head>
       <div
         className={
           "sm:flex sm:flex-row sm:gap-8 md:gap-16 lg:gap-24 sm:relative sm:-top-[63px]"

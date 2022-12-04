@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { showToast } from "@utils/utils";
 import { useRouter } from "next/router";
 import { Button } from "@components/Button";
+import Head from "next/head";
 
 interface LoginProps {
   email: string;
@@ -64,6 +65,9 @@ const Login = () => {
 
   return (
     <div className={"pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col"}>
+      <Head>
+        <title>Connexion</title>
+      </Head>
       <div
         className={"flex flex-row justify-center font-bold text-2xl mt-6 mb-4"}
       >

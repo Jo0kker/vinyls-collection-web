@@ -6,6 +6,7 @@ import { Checkbox, Label } from "flowbite-react";
 import axios from "axios";
 import { showToast } from "@utils/utils";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 interface RegisterProps {
   name: string;
@@ -52,6 +53,9 @@ const Register = () => {
 
   return (
     <div className={"pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col"}>
+      <Head>
+        <title>Inscription</title>
+      </Head>
       <div className={"flex flex-row justify-center font-bold text-2xl mt-6"}>
         <span className={"mr-3 text-emerald-500"}>//</span>
         <h1 className={"text-fuchsia-800"}>Pas de compte ? Inscrivez-vous</h1>

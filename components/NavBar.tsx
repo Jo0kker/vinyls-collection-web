@@ -36,7 +36,7 @@ const NavBar: FunctionComponent = () => {
         </div>
         <Popover.Group as="nav" className="hidden space-x-5 md:flex">
           <Link
-            href="#"
+            href="/vinyls"
             className="text-base font-medium text-white hover:text-orange-700"
           >
             Les vinyles
