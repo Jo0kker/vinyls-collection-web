@@ -129,6 +129,7 @@ export default function Home({
 
         <Button className={"my-4"}>En voir davantage</Button>
       </div>
+      {/*
       <div className={"mb-12"}>
         <h2 className={"mt-4 mb-4 text-fuchsia-800 font-bold text-xl"}>
           <span className={"text-orange-400"}>
@@ -225,6 +226,7 @@ export default function Home({
           </div>
         </div>
       </div>
+      */}
     </div>
   );
 }

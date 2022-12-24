@@ -23,6 +23,7 @@ type User = {
 interface BearState {
   user: User | null;
   logout(): void;
+
 }
 
 export const useBearStore = create<BearState>()((set) => ({

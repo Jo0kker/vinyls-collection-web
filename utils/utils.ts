@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 
 export function showToast(type: string, message: string, icon?: string) {
   toast(message, {
-    position: "top-right",
+    position: "top-left",
     duration: 3000,
     icon: icon,
     style: {

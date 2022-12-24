@@ -2,6 +2,7 @@ export interface User {
   id: number;
   name: string;
   email: string;
+  avatar: string;
   email_verified_at: Date;
   is_subscribed_newsletter: number;
   is_blocked: number;

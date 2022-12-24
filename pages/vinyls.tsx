@@ -5,26 +5,44 @@ import axiosApiInstance from "../services/interceptorService";
 import { CollectionVinyl } from "../types/CollectionVinyl";
 import { Search } from "../types/Search";
 import { Trade } from "../types/Trade";
+import {Button} from "@components/Button";
+import Link from "next/link";
+import {DateTime} from "luxon";
 
 export async function getServerSideProps() {
   // get last 6 vinyls
-  const reqCollectionVinyl = await axiosApiInstance.get(
-    `/collectionVinyl?include=vinyl,collection,collection.user&limit=8`
+  const reqCollectionVinyl = await axiosApiInstance.post(
+    `/collectionVinyl/search?include=vinyl,collection,collection.user&limit=8`,
+    {
+      sort: [
+        { field: "updated_at", direction: "desc" },
+      ],
+    }
   );
 
   const collectionVinyls: CollectionVinyl[] = reqCollectionVinyl.data.data;
 
-  const reqSearchVinyl = await axiosApiInstance.get(
-    `/searches?limit=8&include=user`
-  );
-
-  const searchVinyls: Search[] = reqSearchVinyl.data.data;
-
-  const reqTradeVinyl = await axiosApiInstance.get(
-    `/trades?limit=8&include=user`
+  const reqTradeVinyl = await axiosApiInstance.post(
+    `/trades/search?include=vinyl,user&limit=8`,
+    {
+      sort: [
+        { field: "updated_at", direction: "desc" },
+      ],
+    }
   );
 
   const tradeVinyls: Trade[] = reqTradeVinyl.data.data;
+
+  const reqSearchVinyl = await axiosApiInstance.post(
+    `/searches/search?include=vinyl,user&limit=8&`,
+    {
+      sort: [
+        { field: "updated_at", direction: "desc" },
+      ],
+    }
+  );
+
+  const searchVinyls: Search[] = reqSearchVinyl.data.data;
 
   return {
     props: {
@@ -55,7 +73,6 @@ const Vinyls = ({
       </div>
 
       {/* Les derniers vinyls ajoutés */}
-
       <div className={"lg:mx-32"}>
         <h2 className={"mt-4 mb-2 text-fuchsia-800 font-bold text-xl"}>
           <span className={"text-emerald-500"}>
@@ -65,9 +82,10 @@ const Vinyls = ({
         </h2>
         <div className={"flex flex-row flex-wrap justify-center"}>
           {collectionVinyls.map((collectionVinyl) => (
-            <div
+            <Link
+              href={`/vinyls/${collectionVinyl.vinyl.id}`}
               key={collectionVinyl.id}
-              className={"flex flex-col items-center m-4 w-48"}
+              className={"flex flex-col items-center m-4 p-2 w-48 hover:bg-gray-300"}
             >
               <div className={"flex flex-col items-center"}>
                 <Image
@@ -89,29 +107,32 @@ const Vinyls = ({
                   </h4>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
+        <Link href={'/vinyls/list'}>
+          <Button className={"mt-4"}>Voir tous les vinyls</Button>
+        </Link>
       </div>
-
       {/* Les derniers vinyls à échanger */}
       <div className={"lg:mx-32"}>
         <h2 className={"mt-4 mb-2 text-fuchsia-800 font-bold text-xl"}>
           <span className={"text-emerald-500"}>
             <FontAwesomeIcon icon={faCompactDisc} />{" "}
           </span>{" "}
-          Derniers vinyls ajoutés
+          Derniers vinyls à échanger
         </h2>
         <div className={"flex flex-row flex-wrap justify-center"}>
-          {collectionVinyls.map((collectionVinyl) => (
-            <div
-              key={collectionVinyl.id}
-              className={"flex flex-col items-center m-4 w-48"}
+          {tradeVinyls.map((trade) => (
+            <Link
+              href={`/vinyls/${trade.vinyl.id}`}
+              key={trade.id}
+              className={"flex flex-col items-center m-4 p-2 w-48 hover:bg-gray-300"}
             >
               <div className={"flex flex-col items-center"}>
                 <Image
-                  src={collectionVinyl.vinyl.image_path}
-                  alt={collectionVinyl.vinyl.label}
+                  src={trade.image_path}
+                  alt={trade.vinyl.label}
                   width={100}
                   height={100}
                   className={"object-cover"}
@@ -119,18 +140,24 @@ const Vinyls = ({
                 <div className={"flex flex-col items-center"}>
                   <h3 className={"text-fuchsia-800 font-bold text-lg"}>
                     {/* cut if string too long */}
-                    {collectionVinyl.vinyl.label.length > 15
-                      ? collectionVinyl.vinyl.label.substring(0, 15) + "..."
-                      : collectionVinyl.vinyl.label}
+                    {trade.vinyl.label.length > 15
+                      ? trade.vinyl.label.substring(0, 15) + "..."
+                      : trade.vinyl.label}
                   </h3>
-                  <h4 className={"text-fuchsia-800 font-bold text-sm"}>
-                    {collectionVinyl.vinyl.artist}
+                  <h4 className={"text-fuchsia-800 font-bold text-sm hover:text-amber-600"}>
+                    <Link href={`/users/${trade.user_id}`}>
+                      {trade.user?.name}
+                    </Link>
                   </h4>
+                  <p className={'text-sm'}>{DateTime.fromISO(trade.updated_at).toFormat("dd/MM/yyyy")}</p>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
+        <Link href={'/trades'} >
+          <Button className={"mt-4 mb-4"}>Voir tous les vinyls à échanger</Button>
+        </Link>
       </div>
       {/* Les derniers vinyls recherchés */}
       <div className={"lg:mx-32"}>
@@ -138,18 +165,18 @@ const Vinyls = ({
           <span className={"text-emerald-500"}>
             <FontAwesomeIcon icon={faCompactDisc} />{" "}
           </span>{" "}
-          Derniers vinyls ajoutés
+          Derniers vinyls recherchés
         </h2>
         <div className={"flex flex-row flex-wrap justify-center"}>
-          {collectionVinyls.map((collectionVinyl) => (
+          {searchVinyls.map((search) => (
             <div
-              key={collectionVinyl.id}
+              key={search.id}
               className={"flex flex-col items-center m-4 w-48"}
             >
               <div className={"flex flex-col items-center"}>
                 <Image
-                  src={collectionVinyl.vinyl.image_path}
-                  alt={collectionVinyl.vinyl.label}
+                  src={search.image_path}
+                  alt={search.vinyl.label}
                   width={100}
                   height={100}
                   className={"object-cover"}
@@ -157,18 +184,21 @@ const Vinyls = ({
                 <div className={"flex flex-col items-center"}>
                   <h3 className={"text-fuchsia-800 font-bold text-lg"}>
                     {/* cut if string too long */}
-                    {collectionVinyl.vinyl.label.length > 15
-                      ? collectionVinyl.vinyl.label.substring(0, 15) + "..."
-                      : collectionVinyl.vinyl.label}
+                    {search.vinyl.label.length > 15
+                      ? search.vinyl.label.substring(0, 15) + "..."
+                      : search.vinyl.label}
                   </h3>
                   <h4 className={"text-fuchsia-800 font-bold text-sm"}>
-                    {collectionVinyl.vinyl.artist}
+                    {search.vinyl.artist}
                   </h4>
                 </div>
               </div>
             </div>
           ))}
         </div>
+        <Link href={'/searches'} >
+          <Button className={"mt-4 mb-4"}>Voir tous les vinyls recherchés</Button>
+        </Link>
       </div>
     </div>
   );

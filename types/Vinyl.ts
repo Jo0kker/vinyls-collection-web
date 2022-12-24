@@ -8,6 +8,7 @@ export interface Vinyl {
   image_path: string;
   provenance: string;
   discog_id: number;
+  discogs?: {[key: string]: any};
   created_at: Date;
   updated_at: Date;
 }

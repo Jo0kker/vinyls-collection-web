@@ -19,6 +19,36 @@ const NavBar: FunctionComponent = () => {
   const user = useBearStore((state) => state.user);
   const [isMenuOpen, setIsMenuOpen] = useState();
 
+  const menuItems = [
+    {
+      name: "Les vinyles",
+      href: "/vinyls",
+    },
+    {
+      name: "Les collectionneurs",
+      href: "/collector",
+    },
+    {
+      name: "Votre espace collectionneur",
+      href: "/#",
+    },
+    {
+      name: "Forum",
+      href: "/#",
+    }
+  ];
+
+  const userMenuItems = [
+    {
+      name: "Mon profil",
+      href: "/#",
+    },
+    {
+      name: "Paramètres",
+      href: "/#",
+    }
+  ];
+
   return (
     <Popover className="relative bg-transparent z-40 font-roboto">
       <div className="flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
@@ -35,30 +65,15 @@ const NavBar: FunctionComponent = () => {
           </Popover.Button>
         </div>
         <Popover.Group as="nav" className="hidden space-x-5 md:flex">
-          <Link
-            href="/vinyls"
-            className="text-base font-medium text-white hover:text-orange-700"
-          >
-            Les vinyles
-          </Link>
-          <Link
-            href="#"
-            className="text-base font-medium text-white hover:text-orange-700"
-          >
-            Les collectionneurs
-          </Link>
-          <Link
-            href="#"
-            className="text-base font-medium text-white hover:text-orange-700"
-          >
-            Votre espace collectionneur
-          </Link>
-          <Link
-            href="#"
-            className="text-base font-medium text-white hover:text-orange-700"
-          >
-            Forum
-          </Link>
+          {menuItems.map((item, index) => (
+            <Link
+              href={item.href}
+              className="text-base font-medium text-white hover:text-amber-600"
+              key={index}
+            >
+              {item.name}
+            </Link>
+          ))}
         </Popover.Group>
         <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
           {/* dropdown if user connect */}
@@ -92,36 +107,23 @@ const NavBar: FunctionComponent = () => {
                     </p>
                   </div>
                   <div className="py-1">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <Link
-                          href="#"
-                          className={classNames(
-                            active
-                              ? "bg-gray-100 text-gray-900"
-                              : "text-gray-700",
-                            "block px-4 py-2 text-sm"
-                          )}
-                        >
-                          Profil
-                        </Link>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <Link
-                          href="#"
-                          className={classNames(
-                            active
-                              ? "bg-gray-100 text-gray-900"
-                              : "text-gray-700",
-                            "block px-4 py-2 text-sm"
-                          )}
-                        >
-                          Paramètres
-                        </Link>
-                      )}
-                    </Menu.Item>
+                    {userMenuItems.map((item, index) => (
+                      <Menu.Item key={index}>
+                        {({ active }) => (
+                          <Link
+                            href={item.href}
+                            className={classNames(
+                              active
+                                ? "bg-gray-100 text-gray-900"
+                                : "text-gray-700",
+                              "block px-4 py-2 text-sm"
+                            )}
+                          >
+                            {item.name}
+                          </Link>
+                        )}
+                      </Menu.Item>
+                    ))}
                   </div>
                   <div className="py-1">
                     <form method="POST" action="#">
@@ -151,7 +153,7 @@ const NavBar: FunctionComponent = () => {
           ) : (
             <Link
               href="login"
-              className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-3xl bg-black bg-opacity-10 hover:bg-opacity-20 border border-red-700 bg-transparent px-4 py-2 text-base font-medium text-white shadow-sm hover:text-orange-700"
+              className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-3xl bg-black bg-opacity-10 hover:bg-opacity-20 border border-red-700 bg-transparent px-4 py-2 text-base font-medium text-white shadow-sm hover:text-amber-600"
             >
               Connexion / Inscription
             </Link>
@@ -191,30 +193,15 @@ const NavBar: FunctionComponent = () => {
             </div>
             <div className="py-6 px-5">
               <div className="grid grid-cols-1 gap-4">
-                <Link
-                  href="#"
-                  className="text-base font-medium text-gray-900 hover:text-orange-700"
-                >
-                  Les vinyles
-                </Link>
-                <Link
-                  href="#"
-                  className="text-base font-medium text-gray-900 hover:text-orange-700"
-                >
-                  Les collectionneurs
-                </Link>
-                <Link
-                  href="#"
-                  className="text-base font-medium text-gray-900 hover:text-orange-700"
-                >
-                  Votre espace collectionneur
-                </Link>
-                <Link
-                  href="#"
-                  className="text-base font-medium text-gray-900 hover:text-orange-700"
-                >
-                  Forum
-                </Link>
+                {menuItems.map((item, index) => (
+                  <Link
+                    href={item.href}
+                    className="text-base font-medium text-gray-900 hover:text-amber-600"
+                    key={index}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
               </div>
               <div className="mt-6">
                 {user ? (

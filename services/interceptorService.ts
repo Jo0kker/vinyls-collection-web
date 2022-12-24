@@ -1,4 +1,7 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
+import {useBearStore} from "@store/useBearStore";
+import jwtDecode from "jwt-decode";
+import {any} from "prop-types";
 
 const axios = require("axios");
 const axiosApiInstance = axios.create();
@@ -8,11 +11,27 @@ axiosApiInstance.interceptors.request.use(
   async (config: AxiosRequestConfig) => {
     if (typeof window !== 'undefined') {
       const accessToken = localStorage.getItem("token");
-      config.headers = {
-        Authorization: `Bearer ${accessToken}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      };
+
+      if (accessToken) {
+        // check if token is expired
+        const decodedToken:any = jwtDecode(accessToken);
+
+        if (decodedToken.exp * 1000 < Date.now()) {
+          localStorage.removeItem("token");
+          useBearStore.getState().logout();
+          config.headers = {
+            Authorization: `Bearer ${accessToken}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          };
+        } else {
+          config.headers = {
+            Authorization: `Bearer ${accessToken}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          };
+        }
+      }
     } else {
       config.headers = {
         Accept: "application/json",
@@ -36,7 +55,7 @@ axiosApiInstance.interceptors.response.use(
   },
   async function (error: any) {
     const originalRequest = error.config;
-    if (error.response.status === 403 && !originalRequest._retry) {
+    if ((error.response.status === 403 || error.response.status === 401) && !originalRequest._retry) {
       originalRequest._retry = true;
       const refreshToken = localStorage.getItem("refreshToken");
       const response = await axiosApiInstance.post(
@@ -55,6 +74,10 @@ axiosApiInstance.interceptors.response.use(
         localStorage.setItem("token", response.data.access);
         return axiosApiInstance(originalRequest);
       } else {
+        // clear local storage
+        localStorage.clear();
+        //clear redux store
+        useBearStore.getState().logout();
         return Promise.reject(error);
       }
     }
