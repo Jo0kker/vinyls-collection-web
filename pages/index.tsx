@@ -7,6 +7,7 @@ import { Button } from "@components/Button";
 import Banner from "@components/Banner";
 import { CollectionVinyl } from "../types/CollectionVinyl";
 import axiosApiInstance from "../services/interceptorService";
+import {useBearStore} from "@store/useBearStore";
 
 export async function getServerSideProps() {
   // get last 6 vinyls
@@ -112,7 +113,7 @@ export default function Home({
           }
         >
           {collectionVinyls.map((collectionVinyl) => (
-            <div>
+            <div key={collectionVinyl.id}>
               <Image
                 src={collectionVinyl.vinyl.image_path}
                 alt={collectionVinyl.vinyl.label}

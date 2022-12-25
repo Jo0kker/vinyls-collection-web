@@ -1,5 +1,5 @@
 import { Menu, Popover, Transition } from "@headlessui/react";
-import { Fragment, FunctionComponent, useState } from "react";
+import {Fragment, FunctionComponent, useEffect, useState} from "react";
 import Link from "next/link";
 import {
   Bars3Icon,
@@ -18,8 +18,9 @@ function classNames(...classes: string[]) {
 const NavBar: FunctionComponent = () => {
   const user = useBearStore((state) => state.user);
   const [isMenuOpen, setIsMenuOpen] = useState();
+  const [menuItems, setMenuItems] = useState<{ name: string; href: string; }[]>([]);
 
-  const menuItems = [
+  const menuItemsLogin = [
     {
       name: "Les vinyles",
       href: "/vinyls",
@@ -30,13 +31,37 @@ const NavBar: FunctionComponent = () => {
     },
     {
       name: "Votre espace collectionneur",
-      href: "/#",
+      href: "/collection",
     },
     {
       name: "Forum",
       href: "/#",
     }
   ];
+
+  const menuItemsNotLogin = [
+    {
+      name: "Les vinyles",
+      href: "/vinyls",
+    },
+    {
+      name: "Les collectionneurs",
+      href: "/collector",
+    },
+    {
+      name: "Forum",
+      href: "/#",
+    }
+  ];
+
+  useEffect(() => {
+    if (user) {
+      setMenuItems(menuItemsLogin);
+    } else {
+      setMenuItems(menuItemsNotLogin);
+    }
+  }, [user]);
+
 
   const userMenuItems = [
     {

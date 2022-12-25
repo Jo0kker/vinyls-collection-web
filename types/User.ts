@@ -17,4 +17,6 @@ export interface User {
   created_at: Date;
   updated_at: Date;
   deleted_at?: any;
+  collections_count?: number;
+  collectionVinyls_count?: number;
 }
