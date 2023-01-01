@@ -11,6 +11,7 @@ import { showToast } from "@utils/utils";
 import { useRouter } from "next/router";
 import { Button } from "@components/Button";
 import Head from "next/head";
+import { Cookies } from "react-cookie";
 
 interface LoginProps {
   email: string;
@@ -40,11 +41,24 @@ const Login = () => {
         }
       )
       .then((response: AxiosResponse) => {
-        localStorage.setItem("token", response.data.access_token);
-        localStorage.setItem("refresh_token", response.data.refresh_token);
-        localStorage.setItem("expires_in", response.data.expires_in);
+        // set in cookie
+        const cookie = new Cookies();
+        // set token / refresh token / expires in cookie
+        cookie.set("token", response.data.access_token, {
+          path: "/",
+          maxAge: 3600, // Expires after 1hr
+        });
+        cookie.set("refresh_token", response.data.refresh_token, {
+          path: "/",
+          maxAge: 3600, // Expires after 1hr
+        });
+        cookie.set("expires_in", response.data.expires_in, {
+          path: "/",
+          maxAge: 3600, // Expires after 1hr
+        });
         // user with zustand
-        axiosApiInstance.get("/user").then((res: AxiosResponse) => {
+        axiosApiInstance.get("/users/me").then((res: AxiosResponse) => {
+          console.log(res.data);
           useBearStore.setState({ user: res.data });
           showToast("success", "Logged in successfully");
           router.push("/");
@@ -52,7 +66,7 @@ const Login = () => {
       })
       .catch((error) => {
         // if status code is 401, then the user is unauthorized
-        if (error.response.status === 401) {
+        if (error.response.status === 401 || error.response.status === 400) {
           showToast("error", "Identifiants incorrects");
         } else {
           showToast(

@@ -1,5 +1,5 @@
 import { Menu, Popover, Transition } from "@headlessui/react";
-import {Fragment, FunctionComponent, useEffect, useState} from "react";
+import { Fragment, FunctionComponent, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Bars3Icon,
@@ -18,7 +18,9 @@ function classNames(...classes: string[]) {
 const NavBar: FunctionComponent = () => {
   const user = useBearStore((state) => state.user);
   const [isMenuOpen, setIsMenuOpen] = useState();
-  const [menuItems, setMenuItems] = useState<{ name: string; href: string; }[]>([]);
+  const [menuItems, setMenuItems] = useState<{ name: string; href: string }[]>(
+    []
+  );
 
   const menuItemsLogin = [
     {
@@ -36,7 +38,7 @@ const NavBar: FunctionComponent = () => {
     {
       name: "Forum",
       href: "/#",
-    }
+    },
   ];
 
   const menuItemsNotLogin = [
@@ -51,7 +53,7 @@ const NavBar: FunctionComponent = () => {
     {
       name: "Forum",
       href: "/#",
-    }
+    },
   ];
 
   useEffect(() => {
@@ -62,7 +64,6 @@ const NavBar: FunctionComponent = () => {
     }
   }, [user]);
 
-
   const userMenuItems = [
     {
       name: "Mon profil",
@@ -71,7 +72,7 @@ const NavBar: FunctionComponent = () => {
     {
       name: "Paramètres",
       href: "/#",
-    }
+    },
   ];
 
   return (

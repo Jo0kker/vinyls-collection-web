@@ -5,22 +5,22 @@ import Banner from "@components/Banner";
 import { FooterPerso } from "@components/FooterPerso";
 import { Toaster } from "react-hot-toast";
 import NextNProgress from "nextjs-progressbar";
-import { useEffect } from "react";
 import { useBearStore } from "@store/useBearStore";
 import axiosApiInstance from "services/interceptorService";
 import { AxiosResponse } from "axios";
+import { Cookies } from "react-cookie";
 
 export default function App({ Component, pageProps, data }: AppProps | any) {
-  useEffect(() => {
-    // check if user is logged in
-    const token = localStorage.getItem("token");
-    if (token) {
-      // user with zustand
-      axiosApiInstance.get("/user").then((res: AxiosResponse) => {
-        useBearStore.setState({ user: res.data });
-      });
-    }
-  }, []);
+  // token in cookie
+  const cookie = new Cookies();
+  const token = cookie.get("token");
+
+  if (token) {
+    // user with zustand
+    axiosApiInstance.get("/users/me").then((res: AxiosResponse) => {
+      useBearStore.setState({ user: res.data });
+    });
+  }
 
   return (
     <Layout initialData={data}>

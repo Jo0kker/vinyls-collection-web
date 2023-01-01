@@ -1,7 +1,7 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
-import {useBearStore} from "@store/useBearStore";
+import { useBearStore } from "@store/useBearStore";
 import jwtDecode from "jwt-decode";
-import {any} from "prop-types";
+import { Cookies } from "react-cookie";
 
 const axios = require("axios");
 const axiosApiInstance = axios.create();
@@ -9,21 +9,38 @@ const axiosApiInstance = axios.create();
 // Request interceptor for API calls
 axiosApiInstance.interceptors.request.use(
   async (config: AxiosRequestConfig) => {
-    if (typeof window !== 'undefined') {
-      const accessToken = localStorage.getItem("token");
+    if (typeof window !== "undefined") {
+      // get token from COOKIE
+      const cookies = new Cookies();
+      const accessToken = cookies.get("token");
 
       if (accessToken) {
         // check if token is expired
-        const decodedToken:any = jwtDecode(accessToken);
+        const decodedToken: any = jwtDecode(accessToken);
 
         if (decodedToken.exp * 1000 < Date.now()) {
-          localStorage.removeItem("token");
+          // token is expired
+          // remove token from COOKIE
+          cookies.remove("token");
+          // remove token from store
           useBearStore.getState().logout();
-          config.headers = {
-            Authorization: `Bearer ${accessToken}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          };
+
+          // try to refresh token
+          const refreshToken = cookies.get("refreshToken");
+          if (refreshToken) {
+            try {
+              const response = await axios.post("/api/auth/refresh", {
+                refreshToken,
+              });
+              const newAccessToken = response.data.accessToken;
+              const newRefreshToken = response.data.refreshToken;
+              // set new token to COOKIE
+              cookies.set("token", newAccessToken);
+              cookies.set("refreshToken", newRefreshToken);
+            } catch (error) {
+              console.log(error);
+            }
+          }
         } else {
           config.headers = {
             Authorization: `Bearer ${accessToken}`,
@@ -55,11 +72,15 @@ axiosApiInstance.interceptors.response.use(
   },
   async function (error: any) {
     const originalRequest = error.config;
-    if ((error.response.status === 403 || error.response.status === 401) && !originalRequest._retry) {
+    if (
+      (error.response.status === 403 || error.response.status === 401) &&
+      !originalRequest._retry
+    ) {
       originalRequest._retry = true;
-      const refreshToken = localStorage.getItem("refreshToken");
+      const cookies = new Cookies();
+      const refreshToken = cookies.get("refreshToken");
       const response = await axiosApiInstance.post(
-        "http://localhost:8000/api/token/refresh/",
+        "http://localhost:8000/api/auth/refresh/",
         {
           refresh: refreshToken,
         },
@@ -71,11 +92,18 @@ axiosApiInstance.interceptors.response.use(
         }
       );
       if (response.status === 200) {
-        localStorage.setItem("token", response.data.access);
+        const newAccessToken = response.data.access;
+        const newRefreshToken = response.data.refresh;
+        // set new token to COOKIE
+        cookies.set("token", newAccessToken);
+        cookies.set("refreshToken", newRefreshToken);
+        axios.defaults.headers.common["Authorization"] =
+          "Bearer " + newAccessToken;
         return axiosApiInstance(originalRequest);
       } else {
-        // clear local storage
-        localStorage.clear();
+        // remove token from COOKIE
+        cookies.remove("token");
+        cookies.remove("refreshToken");
         //clear redux store
         useBearStore.getState().logout();
         return Promise.reject(error);

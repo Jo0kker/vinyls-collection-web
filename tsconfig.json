@@ -17,13 +17,14 @@
     "incremental": true,
     "paths": {
       "@components/*": ["components/*"],
+      "@types/*": ["types/*"],
       "@lib/*": ["lib/*"],
       "@pages/*": ["pages/*"],
       "@styles/*": ["styles/*"],
       "@assets/*": ["assets/*"],
       "@images/*": ["assets/images/*"],
       "@store/*": ["store/*"],
-      "@utils/*": ["utils/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
