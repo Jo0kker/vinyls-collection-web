@@ -48,7 +48,7 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
               key={item.name}
               onClick={() => setActiveTab(item.id)}
             >
-              <Link href={`/collection/${item.id}`}>{item.name}</Link>
+              <div>{item.name}</div>
             </Dropdown.Item>
           ))}
         </Dropdown>
