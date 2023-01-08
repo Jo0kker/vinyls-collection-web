@@ -13,9 +13,7 @@ import SlideOvers from "@components/SlideOvers";
 import { FormikValues } from "formik";
 import {showToast} from "@utils/utils";
 
-// if not logged in, redirect to login page
 export async function getServerSideProps(context: any) {
-  // search in local storage for use
   const token = context.req.cookies.token;
   const refresh_token = context.req.cookies.refresh_token;
 
