@@ -73,14 +73,16 @@ axiosApiInstance.interceptors.response.use(
   async function (error: any) {
     const originalRequest = error.config;
     if (
-      (error.response.status === 403 || error.response.status === 401) &&
+      (error.response?.status !== undefined &&
+        error.response.status === 403 ||
+        error.response.status === 401) &&
       !originalRequest._retry
     ) {
       originalRequest._retry = true;
       const cookies = new Cookies();
       const refreshToken = cookies.get("refreshToken");
       const response = await axiosApiInstance.post(
-        "http://localhost:8000/api/auth/refresh/",
+        "http://localhost:8000/oauth/token/refresh",
         {
           refresh: refreshToken,
         },

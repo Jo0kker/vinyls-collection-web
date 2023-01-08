@@ -6,11 +6,12 @@ import axiosApiInstance from "../../services/interceptorService";
 import { CollectionVinyl } from "@types/CollectionVinyl";
 // @ts-ignore
 import { Collection } from "@types/Collection";
-import { AxiosResponse } from "axios";
+import {AxiosError, AxiosResponse} from "axios";
 import ListVinyls from "@components/ListVinyls";
 import { Button } from "@components/Button";
 import SlideOvers from "@components/SlideOvers";
 import { FormikValues } from "formik";
+import {showToast} from "@utils/utils";
 
 // if not logged in, redirect to login page
 export async function getServerSideProps(context: any) {
@@ -32,7 +33,7 @@ export async function getServerSideProps(context: any) {
   };
 }
 
-const EspaceMembre = () => {
+const UserCollection = () => {
   const [collectionShow, setCollectionShow] = useState(0);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [collectionVinyls, setCollectionVinyls] = useState<CollectionVinyl[]>(
@@ -57,15 +58,17 @@ const EspaceMembre = () => {
       const reqCollectionVinyl = await axiosApiInstance.get(
         `/users/${user.id}/collections`
       );
-
       setCollections(reqCollectionVinyl.data.data);
-
-      // set tab active to first collection
       setCollectionShow(reqCollectionVinyl.data.data[0].id);
-      console.log(reqCollectionVinyl.data.data[0].id);
-    } else {
-      window.location.href = "/";
     }
+  };
+
+  const getCollectionVinyls = () => {
+    axiosApiInstance
+      .get(`/collections/${collectionShow}/collectionVinyl?include=vinyl`)
+      .then((res: AxiosResponse) => {
+        setCollectionVinyls(res.data.data);
+      });
   };
 
   const searchVinyls = async (data: FormikValues) => {
@@ -80,19 +83,28 @@ const EspaceMembre = () => {
     setVinylSearch(reqVinyls.data.results);
   };
 
-  const addVinylToCollection = async () => {};
+  const addVinylToCollection = (idDiscogs: number) => {
+    if (user) {
+      axiosApiInstance.post(`/collectionVinyl`, {
+        discog_id: idDiscogs,
+        collection_id: collectionShow,
+      }).then(() => {
+        getCollectionVinyls();
+      }).catch((err: AxiosError) => {
+        if (err.response?.status === 409) {
+          showToast('error', 'Vinyle déjà présent dans la collection')
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     getAllCollections().then(() => {});
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (collectionShow) {
-      axiosApiInstance
-        .get(`/collections/${collectionShow}/collectionVinyl?include=vinyl`)
-        .then((res: AxiosResponse) => {
-          setCollectionVinyls(res.data.data);
-        });
+      getCollectionVinyls();
     }
   }, [collectionShow]);
 
@@ -103,7 +115,7 @@ const EspaceMembre = () => {
         className={"flex flex-row justify-center font-bold text-2xl mt-6 mb-4"}
       >
         <span className={"mr-3 text-emerald-500"}>//</span>
-        <h1 className={"text-fuchsia-800"}>Votre espace</h1>
+        <h1 className={"text-fuchsia-800"}>Gestion de vos collections</h1>
         <span className={"ml-3 text-orange-400"}>//</span>
       </div>
       <div className={"flex flex-col"}>
@@ -113,8 +125,6 @@ const EspaceMembre = () => {
           setActiveTab={setCollectionShow}
         />
         <div>
-          <ListVinyls collection={collectionVinyls} />
-          {/*  Add collection vinyls btn*/}
           <Button
             onClick={() => {
               setSlideIsOpen(true);
@@ -123,16 +133,18 @@ const EspaceMembre = () => {
           >
             Ajouter un vinyle
           </Button>
+          <ListVinyls collectionVinyls={collectionVinyls} setCollectionVinyls={setCollectionVinyls} />
         </div>
         <SlideOvers
           open={slideIsOpen}
           setOpen={setSlideIsOpen}
           searchVinyl={searchVinyls}
           vinyl={vinylSearch}
+          addVinylToCollection={addVinylToCollection}
         />
       </div>
     </div>
   );
 };
 
-export default EspaceMembre;
+export default UserCollection;

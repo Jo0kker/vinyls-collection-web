@@ -17,7 +17,7 @@ function classNames(...classes: string[]) {
 
 const NavBar: FunctionComponent = () => {
   const user = useBearStore((state) => state.user);
-  const [isMenuOpen, setIsMenuOpen] = useState();
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [menuItems, setMenuItems] = useState<{ name: string; href: string }[]>(
     []
   );
@@ -34,6 +34,10 @@ const NavBar: FunctionComponent = () => {
     {
       name: "Votre espace collectionneur",
       href: "/collection",
+    },
+    {
+      name: "Espace trocs",
+      href: "/troc",
     },
     {
       name: "Forum",
@@ -56,14 +60,6 @@ const NavBar: FunctionComponent = () => {
     },
   ];
 
-  useEffect(() => {
-    if (user) {
-      setMenuItems(menuItemsLogin);
-    } else {
-      setMenuItems(menuItemsNotLogin);
-    }
-  }, [user]);
-
   const userMenuItems = [
     {
       name: "Mon profil",
@@ -75,6 +71,14 @@ const NavBar: FunctionComponent = () => {
     },
   ];
 
+  useEffect(() => {
+    if (user) {
+      setMenuItems(menuItemsLogin);
+    } else {
+      setMenuItems(menuItemsNotLogin);
+    }
+  }, [user]);
+
   return (
     <Popover className="relative bg-transparent z-40 font-roboto">
       <div className="flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
@@ -85,7 +89,10 @@ const NavBar: FunctionComponent = () => {
           </Link>
         </div>
         <div className="-my-2 -mr-2 md:hidden">
-          <Popover.Button className="inline-flex items-center justify-center rounded-md p-2 bg-transparent text-white text-bold hover:outline-none outline-none focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+          <Popover.Button
+            className="inline-flex items-center justify-center rounded-md p-2 bg-transparent text-white text-bold hover:outline-none outline-none focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
             <span className="sr-only">Ouvrir menu</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </Popover.Button>
@@ -188,6 +195,7 @@ const NavBar: FunctionComponent = () => {
       </div>
 
       <Transition
+        show={isMenuOpen}
         as={Fragment}
         enter="duration-200 ease-out"
         enterFrom="opacity-0 scale-95"
@@ -197,8 +205,8 @@ const NavBar: FunctionComponent = () => {
         leaveTo="opacity-0 scale-95"
       >
         <Popover.Panel
-          focus
           className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden"
+          style={{ zIndex: 40 }}
         >
           <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
             <div className="px-5 pt-5 pb-6">
@@ -210,7 +218,10 @@ const NavBar: FunctionComponent = () => {
                   ></Lottie>
                 </Link>
                 <div className="-mr-2">
-                  <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                  <Popover.Button
+                    className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  >
                     <span className="sr-only">Fermer menu</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                   </Popover.Button>
@@ -224,6 +235,7 @@ const NavBar: FunctionComponent = () => {
                     href={item.href}
                     className="text-base font-medium text-gray-900 hover:text-amber-600"
                     key={index}
+                    onClick={() => setIsMenuOpen(false)}
                   >
                     {item.name}
                   </Link>
@@ -321,6 +333,7 @@ const NavBar: FunctionComponent = () => {
                 ) : (
                   <Link
                     href="login"
+                    onClick={() => setIsMenuOpen(false)}
                     className="flex w-full items-center justify-center rounded-md border border-transparent bg-fuchsia-800 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-orange-700"
                   >
                     Connexion / Inscription
