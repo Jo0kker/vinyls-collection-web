@@ -6,12 +6,12 @@ import axiosApiInstance from "../../services/interceptorService";
 import { CollectionVinyl } from "@types/CollectionVinyl";
 // @ts-ignore
 import { Collection } from "@types/Collection";
-import {AxiosError, AxiosResponse} from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import ListVinyls from "@components/ListVinyls";
 import { Button } from "@components/Button";
 import SlideOvers from "@components/SlideOvers";
 import { FormikValues } from "formik";
-import {showToast} from "@utils/utils";
+import { showToast } from "@utils/utils";
 
 export async function getServerSideProps(context: any) {
   const token = context.req.cookies.token;
@@ -83,16 +83,19 @@ const UserCollection = () => {
 
   const addVinylToCollection = (idDiscogs: number) => {
     if (user) {
-      axiosApiInstance.post(`/collectionVinyl`, {
-        discog_id: idDiscogs,
-        collection_id: collectionShow,
-      }).then(() => {
-        getCollectionVinyls();
-      }).catch((err: AxiosError) => {
-        if (err.response?.status === 409) {
-          showToast('error', 'Vinyle déjà présent dans la collection')
-        }
-      });
+      axiosApiInstance
+        .post(`/collectionVinyl`, {
+          discog_id: idDiscogs,
+          collection_id: collectionShow,
+        })
+        .then(() => {
+          getCollectionVinyls();
+        })
+        .catch((err: AxiosError) => {
+          if (err.response?.status === 409) {
+            showToast("error", "Vinyle déjà présent dans la collection");
+          }
+        });
     }
   };
 
@@ -116,22 +119,20 @@ const UserCollection = () => {
         <h1 className={"text-fuchsia-800"}>Gestion de vos collections</h1>
         <span className={"ml-3 text-orange-400"}>//</span>
       </div>
-      <div className={"flex flex-col"}>
+      <div className={"flex flex-col md:flex-row"}>
         <SideBar
           navItems={collections}
           activeTab={collectionShow}
           setActiveTab={setCollectionShow}
         />
         <div>
-          <Button
-            onClick={() => {
-              setSlideIsOpen(true);
-            }}
-            className={"my-4"}
-          >
+          <Button onClick={() => setSlideIsOpen(true)} className={"my-4"}>
             Ajouter un vinyle
           </Button>
-          <ListVinyls collectionVinyls={collectionVinyls} setCollectionVinyls={setCollectionVinyls} />
+          <ListVinyls
+            collectionVinylsDiff={collectionVinyls}
+            setCollectionVinylsDiff={setCollectionVinyls}
+          />
         </div>
         <SlideOvers
           open={slideIsOpen}

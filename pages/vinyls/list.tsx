@@ -66,7 +66,7 @@ const VinylList = ({
         <span className={"ml-3 text-orange-400"}>//</span>
       </div>
 
-      <ListVinyls collection={collection} />
+      <ListVinyls collectionVinylsDiff={collection} />
 
       <Button className={"my-4"} onClick={loadMore}>
         Charger plus

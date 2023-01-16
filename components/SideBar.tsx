@@ -2,8 +2,10 @@ import Link from "next/link";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { Listbox, Transition } from "@headlessui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { faChevronDown } from "@fortawesome/pro-light-svg-icons";
+import { Sidebar } from "flowbite-react";
+import { HiInbox } from "react-icons/all";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -32,20 +34,33 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
 
   return (
     <>
-      <nav className="hidden md:block space-y-1" aria-label="Sidebar">
-        {navItems.map((item) => (
-          <Link key={item.id} href={`/collection/${item.id}`}>
-            <span className="truncate">{item.name}</span>
-          </Link>
-        ))}
-      </nav>
+      <div className="w-fit">
+        <Sidebar aria-label="Default sidebar example">
+          <Sidebar.Items>
+            <Sidebar.ItemGroup>
+              {navItems.map((item) => (
+                <Sidebar.Item href="#" key={item.id}>
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setActiveTab(item.id);
+                    }}
+                  >
+                    <span className="truncate">{item.name}</span>
+                  </button>
+                </Sidebar.Item>
+              ))}
+            </Sidebar.ItemGroup>
+          </Sidebar.Items>
+        </Sidebar>
+      </div>
       <Listbox
         value={activeTab}
         onChange={(value) => {
           setActiveTab(navItems[value].id);
         }}
       >
-        <div className="relative mt-1">
+        <div className="md:hidden relative mt-1">
           <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             <span className="block truncate">
               {

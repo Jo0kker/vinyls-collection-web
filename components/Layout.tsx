@@ -16,7 +16,7 @@ export const Layout: FunctionComponent<Props> = ({ children, initialData }) => {
       }
     >
       <NavBar />
-      <div className={"flex justify-center mb-28 drop-shadow-2xl"}>
+      <div className={"flex justify-center mb-14 drop-shadow-2xl"}>
         <Link href={"/"}>
           <h1
             className={

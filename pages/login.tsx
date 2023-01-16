@@ -46,15 +46,15 @@ const Login = () => {
         // set token / refresh token / expires in cookie
         cookie.set("token", response.data.access_token, {
           path: "/",
-          maxAge: 3600, // Expires after 1hr
+          maxAge: 31536000, // Expires after 1year
         });
         cookie.set("refresh_token", response.data.refresh_token, {
           path: "/",
-          maxAge: 3600, // Expires after 1hr
+          maxAge: 31536000, // Expires after 1year
         });
         cookie.set("expires_in", response.data.expires_in, {
           path: "/",
-          maxAge: 3600, // Expires after 1hr
+          maxAge: 31536000, // Expires after 1year
         });
         // user with zustand
         axiosApiInstance.get("/users/me").then((res: AxiosResponse) => {

@@ -13,22 +13,23 @@ import { showToast } from "@utils/utils";
 import { Trade } from "@types/Trade";
 // @ts-ignore
 import { Search } from "@types/Search";
-import { array } from "yup";
 
 const ListVinyls = ({
-  collectionVinyls,
-  setCollectionVinyls,
+  collectionVinylsDiff,
+  setCollectionVinylsDiff = () => {},
 }: {
-  collectionVinyls: [];
-  setCollectionVinyls: Function;
+  collectionVinylsDiff: CollectionVinyl[] | Search[] | Trade[];
+  setCollectionVinylsDiff?: Function;
 }) => {
   const deleteVinyl = (collectionId: number, collectionVinylId: number) => {
-    setCollectionVinyls(
-      collectionVinyls.filter(
-        (vinyl: CollectionVinyl | Trade | Search) =>
+    setCollectionVinylsDiff(
+      // @ts-ignore
+      collectionVinylsDiff.filter(
+        (vinyl: CollectionVinyl | Search | Trade) =>
           vinyl.id !== collectionVinylId
       )
     );
+
     axiosApiInstance
       .delete(
         `/collections/${collectionId}/collectionVinyl/${collectionVinylId}`
@@ -40,25 +41,25 @@ const ListVinyls = ({
       .catch(() => {
         showToast("error", "Une erreur est survenue");
         // if error, add the vinyl back to the list
-        setCollectionVinyls(collectionVinyls);
+        setCollectionVinylsDiff(collectionVinylsDiff);
       });
   };
 
   return (
-    <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2"}>
+    <div className={"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-2"}>
       {/* if collection empty return no vinyl */}
-      {collectionVinyls.length === 0 ? (
+      {collectionVinylsDiff.length === 0 ? (
         <div className={"text-center"}>
           <p className={""}>Aucun vinyle</p>
         </div>
       ) : (
-        collectionVinyls.map(
+        collectionVinylsDiff.map(
           (collectionVinylItem: CollectionVinyl | Trade | Search) => (
             <Link
               href={`/vinyls/${collectionVinylItem.vinyl_id}`}
               key={collectionVinylItem.id}
               className={
-                "flex flex-row m-1 border border-gray-300 rounded border-8 hover:bg-gray-400"
+                "grid grid-cols-[2fr_3fr_1fr] m-1 border border-gray-300 rounded border-8 hover:bg-gray-400"
               }
             >
               <Image
@@ -66,19 +67,24 @@ const ListVinyls = ({
                 alt={collectionVinylItem.vinyl.label}
                 width={100}
                 height={100}
-                className={"rounded-bl rounded-tl"}
+                className={"cursor-pointer h-[100px] object-cover h-full"}
               />
-              <div className={"flex flex-col flex-1 mx-3 justify-center"}>
-                <h2>{collectionVinylItem.vinyl.label}</h2>
-                <h3>{collectionVinylItem.vinyl.artist}</h3>
-                <p>{collectionVinylItem.vinyl.year_released}</p>
+              <div className={"grid grid-rows-3 mx-3"}>
+                <h2 className={"text-fuchsia-80 font-bold text-lg truncate"}>
+                  {collectionVinylItem.vinyl.label}
+                </h2>
+                <h3 className={"text-fuchsia-800 text-sm truncate"}>
+                  {collectionVinylItem.vinyl.artist}
+                </h3>
+                <p className={"font-light text-xs"}>
+                  {collectionVinylItem.vinyl.year_released}
+                </p>
               </div>
-              <div className={"flex mx-2 items-center"}>
+              <div className={"flex flex-col"}>
                 <button
                   onClick={(event) => {
                     event.preventDefault();
-                    // if collectionVinylItem is a collectionVinylItem
-                    if (collectionVinylItem instanceof CollectionVinyl) {
+                    if ("collection_id" in collectionVinylItem) {
                       deleteVinyl(
                         collectionVinylItem.collection_id,
                         collectionVinylItem.id
@@ -86,9 +92,13 @@ const ListVinyls = ({
                     } else {
                     }
                   }}
-                  className={"bg-fuchsia-900 rounded py-1 px-2"}
+                  className={"py-1 px-2"}
                 >
-                  <FontAwesomeIcon icon={faTrash} color={"white"} />
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    className={"text-fuchsia-800"}
+                    size={"sm"}
+                  />
                 </button>
               </div>
             </Link>

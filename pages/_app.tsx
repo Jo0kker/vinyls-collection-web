@@ -22,7 +22,6 @@ export default function App({ Component, pageProps, data }: AppProps | any) {
 
   useEffect(() => {
     if (token) {
-      // user with zustand
       axiosApiInstance.get("/users/me").then((res: AxiosResponse) => {
         useBearStore.setState({ user: res.data });
         setIsReady(true);
