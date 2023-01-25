@@ -47,6 +47,8 @@ const UserCollection = () => {
     artist: "",
     year: "",
   });
+  const [isLoadingCollectionVinyls, setIsLoadingCollectionVinyls] =
+    useState(true);
   const [vinylSearch, setVinylSearch] = useState([]);
   const [slideIsOpen, setSlideIsOpen] = useState(false);
   const user = useBearStore((state) => state.user);
@@ -62,10 +64,12 @@ const UserCollection = () => {
   };
 
   const getCollectionVinyls = () => {
+    setIsLoadingCollectionVinyls(true);
     axiosApiInstance
       .get(`/collections/${collectionShow}/collectionVinyl?include=vinyl`)
       .then((res: AxiosResponse) => {
         setCollectionVinyls(res.data.data);
+        setIsLoadingCollectionVinyls(false);
       });
   };
 
@@ -119,19 +123,20 @@ const UserCollection = () => {
         <h1 className={"text-fuchsia-800"}>Gestion de vos collections</h1>
         <span className={"ml-3 text-orange-400"}>//</span>
       </div>
-      <div className={"flex flex-col md:flex-row"}>
+      <div className={"flex flex-col sm:flex-row"}>
         <SideBar
           navItems={collections}
           activeTab={collectionShow}
           setActiveTab={setCollectionShow}
         />
-        <div>
+        <div className={"flex flex-col flex-1"}>
           <Button onClick={() => setSlideIsOpen(true)} className={"my-4"}>
             Ajouter un vinyle
           </Button>
           <ListVinyls
             collectionVinylsDiff={collectionVinyls}
             setCollectionVinylsDiff={setCollectionVinyls}
+            isLoadingCollectionVinyls={isLoadingCollectionVinyls}
           />
         </div>
         <SlideOvers
