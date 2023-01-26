@@ -39,8 +39,10 @@ const VinylList = ({
 }) => {
   const [collection, setCollection] = useState(collectionVinyls);
   const [currentPage, setCurrentPage] = useState(meta.current_page);
+  const [isLoading, setIsLoading] = useState(false);
 
   const loadMore = () => {
+    setIsLoading(true);
     axiosApiInstance
       .post(
         `/collectionVinyl/search?include=vinyl,collection,collection.user&page=${
@@ -53,6 +55,7 @@ const VinylList = ({
       .then((res: AxiosResponse) => {
         setCollection([...collection, ...res.data.data]);
         setCurrentPage(res.data.meta.current_page);
+        setIsLoading(false);
       });
   };
 
@@ -66,7 +69,10 @@ const VinylList = ({
         <span className={"ml-3 text-orange-400"}>//</span>
       </div>
 
-      <ListVinyls collectionVinylsDiff={collection} />
+      <ListVinyls
+        collectionVinylsDiff={collection}
+        isLoadingCollectionVinyls={isLoading}
+      />
 
       <Button className={"my-4"} onClick={loadMore}>
         Charger plus
