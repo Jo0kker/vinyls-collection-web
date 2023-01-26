@@ -36,10 +36,6 @@ const NavBar: FunctionComponent = () => {
       href: "/collection",
     },
     {
-      name: "Espace trocs",
-      href: "/troc",
-    },
-    {
       name: "Forum",
       href: "/#",
     },

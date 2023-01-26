@@ -12,6 +12,7 @@ import { Button } from "@components/Button";
 import SlideOvers from "@components/SlideOvers";
 import { FormikValues } from "formik";
 import { showToast } from "@utils/utils";
+import { array } from "yup";
 
 export async function getServerSideProps(context: any) {
   const token = context.req.cookies.token;
@@ -33,7 +34,7 @@ export async function getServerSideProps(context: any) {
 
 const UserCollection = () => {
   const [collectionShow, setCollectionShow] = useState(0);
-  const [collections, setCollections] = useState<Collection[]>([]);
+  const [collections, setCollections] = useState<{ [key: string]: any }>([]);
   const [collectionVinyls, setCollectionVinyls] = useState<CollectionVinyl[]>(
     []
   );
@@ -58,7 +59,12 @@ const UserCollection = () => {
       const reqCollectionVinyl = await axiosApiInstance.get(
         `/users/${user.id}/collections`
       );
-      setCollections(reqCollectionVinyl.data.data);
+      // add search and trades to collections
+      setCollections([
+        { id: 0, name: "Recherche", type: "search" },
+        { id: 0, name: "A échanger", type: "trade" },
+        ...reqCollectionVinyl.data.data,
+      ]);
       setCollectionShow(reqCollectionVinyl.data.data[0].id);
     }
   };

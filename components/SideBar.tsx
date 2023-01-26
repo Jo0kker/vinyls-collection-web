@@ -12,7 +12,7 @@ function classNames(...classes: any) {
 }
 
 type SideBarProps = {
-  navItems: any[];
+  navItems: { [key: string]: any };
   activeTab: number;
   setActiveTab: (tab: number) => void;
 };
@@ -20,7 +20,7 @@ type SideBarProps = {
 const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
   const getActiveTab = (tab: number) => {
     // search navItems selected whete activeTab is equal to id
-    if (navItems.find((item) => item.id === tab)) {
+    if (navItems.find((item: any) => item.id === tab)) {
       return tab;
     } else {
       if (navItems.length > 0) {
@@ -38,7 +38,7 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
         <Sidebar aria-label="Default sidebar example">
           <Sidebar.Items>
             <Sidebar.ItemGroup className={"space-y-0"}>
-              {navItems.map((item) => (
+              {navItems.map((item: any) => (
                 <Sidebar.Item
                   href="#"
                   key={item.id}
@@ -78,7 +78,7 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
               <span className="block truncate">
                 {
                   (
-                    navItems.find((item) => item.id === activeTab) || {
+                    navItems.find((item: any) => item.id === activeTab) || {
                       name: "Aucune collection",
                     }
                   ).name
@@ -95,7 +95,7 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {navItems.map((item, index) => (
+                {navItems.map((item: any, index: number) => (
                   <Listbox.Option
                     key={item.name}
                     className={({ active }) =>
