@@ -98,27 +98,18 @@ const Vinyl = ({ vinyl }: { vinyl: Vinyl }) => {
                 </tbody>
               </table>
             </div>
-            <div className={"flex flex-col justify-center items-center"}>
-              <h2 className={"mt-4 mb-2 text-fuchsia-800 font-bold text-xl"}>
-                <span className={"text-emerald-500"}>
-                  <FontAwesomeIcon icon={faVideo} />{" "}
-                </span>{" "}
-                Videos
-              </h2>
-              <div className={"flex flex-col gap-1"}>
-                <Accordion>
-                  {vinyl.discogs.videos.map((video: any, index: number) => {
-                    if (index < 3) {
-                      return (
-                        <Accordion.Panel key={index}>
-                          <Accordion.Title>{video.title}</Accordion.Title>
-                          <Accordion.Content>
-                            <YoutubeEmbed url={video.uri} />
-                          </Accordion.Content>
-                        </Accordion.Panel>
-                      );
-                    } else {
-                      if (showMoreVideo) {
+            {vinyl.discogs.videos && (
+              <div className={"flex flex-col justify-center items-center"}>
+                <h2 className={"mt-4 mb-2 text-fuchsia-800 font-bold text-xl"}>
+                  <span className={"text-emerald-500"}>
+                    <FontAwesomeIcon icon={faVideo} />{" "}
+                  </span>{" "}
+                  Videos
+                </h2>
+                <div className={"flex flex-col gap-1"}>
+                  <Accordion>
+                    {vinyl.discogs.videos.map((video: any, index: number) => {
+                      if (index < 3) {
                         return (
                           <Accordion.Panel key={index}>
                             <Accordion.Title>{video.title}</Accordion.Title>
@@ -128,19 +119,30 @@ const Vinyl = ({ vinyl }: { vinyl: Vinyl }) => {
                           </Accordion.Panel>
                         );
                       } else {
-                        return <></>;
+                        if (showMoreVideo) {
+                          return (
+                            <Accordion.Panel key={index}>
+                              <Accordion.Title>{video.title}</Accordion.Title>
+                              <Accordion.Content>
+                                <YoutubeEmbed url={video.uri} />
+                              </Accordion.Content>
+                            </Accordion.Panel>
+                          );
+                        } else {
+                          return <></>;
+                        }
                       }
-                    }
-                  })}
-                </Accordion>
+                    })}
+                  </Accordion>
+                </div>
+                <Button
+                  onClick={() => setShowMoreVideo(!showMoreVideo)}
+                  className={"my-4"}
+                >
+                  {showMoreVideo ? "Voir moins" : "Voir plus"}
+                </Button>
               </div>
-              <Button
-                onClick={() => setShowMoreVideo(!showMoreVideo)}
-                className={"my-4"}
-              >
-                {showMoreVideo ? "Voir moins" : "Voir plus"}
-              </Button>
-            </div>
+            )}
           </>
         )}
       </div>

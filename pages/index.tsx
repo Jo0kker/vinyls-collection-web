@@ -8,6 +8,7 @@ import Banner from "@components/Banner";
 import { CollectionVinyl } from "../types/CollectionVinyl";
 import axiosApiInstance from "../services/interceptorService";
 import { useBearStore } from "@store/useBearStore";
+import Link from "next/link";
 
 export async function getServerSideProps() {
   // get last 6 vinyls
@@ -83,27 +84,15 @@ export default function Home({
 
         <div className="h-56 sm:hidden">
           <Carousel>
-            <Image
-              src={"https://picsum.photos/300/300/?random=3"}
-              alt={"vinyls"}
-              width={300}
-              height={300}
-              className={"h-full w-full object-cover border-8"}
-            />
-            <Image
-              src={"https://picsum.photos/300/300/?random=4"}
-              alt={"vinyls"}
-              width={300}
-              height={300}
-              className={"h-full w-full object-cover border-8"}
-            />
-            <Image
-              src={"https://picsum.photos/300/300/?random=5"}
-              alt={"vinyls"}
-              width={300}
-              height={300}
-              className={"h-full w-full object-cover border-8"}
-            />
+            {collectionVinyls.map((collectionVinyl) => (
+              <Image
+                src={collectionVinyl.vinyl.image_path}
+                alt={collectionVinyl.vinyl.label}
+                width={300}
+                height={300}
+                className={"h-full w-full object-cover border-8"}
+              />
+            ))}
           </Carousel>
         </div>
 
@@ -113,7 +102,10 @@ export default function Home({
           }
         >
           {collectionVinyls.map((collectionVinyl) => (
-            <div key={collectionVinyl.id}>
+            <Link
+              href={`/vinyls/${collectionVinyl.vinyl_id}`}
+              key={collectionVinyl.id}
+            >
               <Image
                 src={collectionVinyl.vinyl.image_path}
                 alt={collectionVinyl.vinyl.label}
@@ -124,7 +116,7 @@ export default function Home({
               <h3>{collectionVinyl.vinyl.label}</h3>
               <p className={"text-sm"}>{collectionVinyl.vinyl.artist}</p>
               <p>{collectionVinyl.collection?.user?.name}</p>
-            </div>
+            </Link>
           ))}
         </div>
 

@@ -56,7 +56,7 @@ const ListVinyls = ({
           <Lottie animationData={loading} className={"opacity-40 w-10"} />
         </div>
       ) : (
-        <div className={"grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-2"}>
+        <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2"}>
           {collectionVinylsDiff.length === 0 ? (
             <div className={"text-center"}>
               <p className={""}>Aucun vinyle</p>
@@ -68,7 +68,7 @@ const ListVinyls = ({
                   href={`/vinyls/${collectionVinylItem.vinyl_id}`}
                   key={collectionVinylItem.id}
                   className={
-                    "grid grid-cols-[2fr_3fr_1fr] m-1 border border-gray-300 rounded border-8 hover:bg-gray-400"
+                    "grid grid-cols-[2fr_3fr_1fr] m-1 border border-gray-300 rounded border-4 hover:bg-gray-400"
                   }
                 >
                   <Image

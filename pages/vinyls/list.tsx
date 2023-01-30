@@ -1,7 +1,5 @@
 import { CollectionVinyl } from "../../types/CollectionVinyl";
 import axiosApiInstance from "../../services/interceptorService";
-import Image from "next/image";
-import Link from "next/link";
 import { Button } from "@components/Button";
 import { AxiosResponse } from "axios";
 import { useState } from "react";

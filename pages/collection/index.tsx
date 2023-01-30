@@ -61,8 +61,8 @@ const UserCollection = () => {
       );
       // add search and trades to collections
       setCollections([
-        { id: 0, name: "Recherche", type: "search" },
-        { id: 0, name: "A échanger", type: "trade" },
+        { id: -1, name: "Recherche", type: "search" },
+        { id: -2, name: "A échanger", type: "trade" },
         ...reqCollectionVinyl.data.data,
       ]);
       setCollectionShow(reqCollectionVinyl.data.data[0].id);
@@ -71,12 +71,26 @@ const UserCollection = () => {
 
   const getCollectionVinyls = () => {
     setIsLoadingCollectionVinyls(true);
-    axiosApiInstance
-      .get(`/collections/${collectionShow}/collectionVinyl?include=vinyl`)
-      .then((res: AxiosResponse) => {
-        setCollectionVinyls(res.data.data);
-        setIsLoadingCollectionVinyls(false);
-      });
+    if (user) {
+      if (collectionShow === -1) {
+        // search
+        axiosApiInstance
+          .get(`/users/${user.id}/searches?include=vinyl`)
+          .then((res: AxiosResponse) => {
+            setCollectionVinyls(res.data.data);
+            setIsLoadingCollectionVinyls(false);
+          });
+      } else if (collectionShow === -2) {
+        // trade
+      } else {
+        axiosApiInstance
+          .get(`/collections/${collectionShow}/collectionVinyl?include=vinyl`)
+          .then((res: AxiosResponse) => {
+            setCollectionVinyls(res.data.data);
+            setIsLoadingCollectionVinyls(false);
+          });
+      }
+    }
   };
 
   const searchVinyls = async (data: FormikValues) => {
@@ -119,7 +133,6 @@ const UserCollection = () => {
     }
   }, [collectionShow]);
 
-  // return with loading
   return (
     <div className={"pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col"}>
       <div
