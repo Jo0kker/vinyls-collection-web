@@ -84,15 +84,18 @@ export default function Home({
 
         <div className="h-56 sm:hidden">
           <Carousel>
-            {collectionVinyls.map((collectionVinyl) => (
-              <Image
-                src={collectionVinyl.vinyl.image_path}
-                alt={collectionVinyl.vinyl.label}
-                width={300}
-                height={300}
-                className={"h-full w-full object-cover border-8"}
-              />
-            ))}
+            {collectionVinyls && collectionVinyls.length > 0
+              ? collectionVinyls.map((collectionVinyl, key) => (
+                  <Image
+                    key={key}
+                    src={collectionVinyl.vinyl.image_path}
+                    alt={collectionVinyl.vinyl.label}
+                    width={300}
+                    height={300}
+                    className={"h-full w-full object-cover border-8"}
+                  />
+                ))
+              : ""}
           </Carousel>
         </div>
 
@@ -101,23 +104,25 @@ export default function Home({
             "hidden sm:grid sm:grid-cols-3 content-around gap-4 justify-items-center"
           }
         >
-          {collectionVinyls.map((collectionVinyl) => (
-            <Link
-              href={`/vinyls/${collectionVinyl.vinyl_id}`}
-              key={collectionVinyl.id}
-            >
-              <Image
-                src={collectionVinyl.vinyl.image_path}
-                alt={collectionVinyl.vinyl.label}
-                width={300}
-                height={300}
-                className={"h-56 w-56 object-cover border-8"}
-              />
-              <h3>{collectionVinyl.vinyl.label}</h3>
-              <p className={"text-sm"}>{collectionVinyl.vinyl.artist}</p>
-              <p>{collectionVinyl.collection?.user?.name}</p>
-            </Link>
-          ))}
+          {collectionVinyls && collectionVinyls.length > 0
+            ? collectionVinyls.map((collectionVinyl) => (
+                <Link
+                  href={`/vinyls/${collectionVinyl.vinyl_id}`}
+                  key={collectionVinyl.id}
+                >
+                  <Image
+                    src={collectionVinyl.vinyl.image_path}
+                    alt={collectionVinyl.vinyl.label}
+                    width={300}
+                    height={300}
+                    className={"h-56 w-56 object-cover border-8"}
+                  />
+                  <h3>{collectionVinyl.vinyl.label}</h3>
+                  <p className={"text-sm"}>{collectionVinyl.vinyl.artist}</p>
+                  <p>{collectionVinyl.collection?.user?.name}</p>
+                </Link>
+              ))
+            : ""}
         </div>
 
         <Button className={"my-4"}>En voir davantage</Button>
