@@ -5,6 +5,7 @@ import { Cookies } from "react-cookie";
 
 const axios = require("axios");
 const axiosApiInstance = axios.create();
+axiosApiInstance.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 
 // Request interceptor for API calls
 axiosApiInstance.interceptors.request.use(
@@ -73,8 +74,8 @@ axiosApiInstance.interceptors.response.use(
   async function (error: any) {
     const originalRequest = error.config;
     if (
-      (error.response?.status !== undefined &&
-        error.response.status === 403 ||
+      ((error.response?.status !== undefined &&
+        error.response.status === 403) ||
         error.response.status === 401) &&
       !originalRequest._retry
     ) {
