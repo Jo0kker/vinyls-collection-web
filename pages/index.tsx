@@ -31,7 +31,9 @@ export default function Home({
 }: {
   collectionVinyls: CollectionVinyl[];
 }) {
-  return <h1>{process.env.NEXT_PUBLIC_API_URL}</h1>;
+  if (collectionVinyls.length === 0) {
+    return <h1>Il n'y a pas de vinyls</h1>;
+  }
   return (
     <div className={"pt-44 sm:pt-0 mt-24 px-4 rounded bg-white flex flex-col"}>
       <Head>
