@@ -63,7 +63,7 @@ export default function Home({
             <FontAwesomeIcon icon={faPlus} className={"text-emerald-500 m-1"} />
             <span>du mois</span>
           </h2>
-          <h3 className={"font-bold my-2"}>Titre de l'intro</h3>
+          <h3 className={"font-bold my-2"}>Jordan :)</h3>
           <p className={"leading-5"}>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             Consequuntur cupiditate dignissimos doloremque exercitationem nihil
