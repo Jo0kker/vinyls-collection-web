@@ -47,6 +47,7 @@ axiosApiInstance.interceptors.request.use(
             Authorization: `Bearer ${accessToken}`,
             Accept: "application/json",
             "Content-Type": "application/json",
+            "Accept-Encoding": "gzip, deflate, br",
           };
         }
       }
@@ -54,6 +55,7 @@ axiosApiInstance.interceptors.request.use(
       config.headers = {
         Accept: "application/json",
         "Content-Type": "application/json",
+        "Accept-Encoding": "gzip, deflate, br",
       };
     }
     // set base url
@@ -91,6 +93,7 @@ axiosApiInstance.interceptors.response.use(
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            "Accept-Encoding": "gzip, deflate, br",
           },
         }
       );
