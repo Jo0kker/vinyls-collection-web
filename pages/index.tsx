@@ -31,6 +31,7 @@ export default function Home({
 }: {
   collectionVinyls: CollectionVinyl[];
 }) {
+  return <h1>{process.env.NEXT_PUBLIC_API_URL}</h1>;
   return (
     <div className={"pt-44 sm:pt-0 mt-24 px-4 rounded bg-white flex flex-col"}>
       <Head>
