@@ -51,6 +51,7 @@ export default function Home({
             "absolute object-cover h-56 w-56 lg:h-72 lg:w-72 border-8 -rotate-12 top-96 left-1/2 transform -translate-x-1/2 translate-y-16 sm:static sm:translate-x-0 sm:translate-y-0 lg:translate-x-12 md:translate-x-8"
           }
         />
+        <h1>{process.env.NEXT_PUBLIC_API_URL}</h1>
         <div>
           <h2
             className={
