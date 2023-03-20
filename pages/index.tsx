@@ -16,7 +16,8 @@ export async function getServerSideProps() {
     `/collectionVinyl?include=vinyl,collection,collection.user&limit=6`
   );
 
-  const collectionVinyls: CollectionVinyl[] = reqCollectionVinyl.data.data;
+  const collectionVinyls: CollectionVinyl[] =
+    reqCollectionVinyl?.data?.data || [];
 
   return {
     props: {
