@@ -63,7 +63,7 @@ export default function Home({
             <FontAwesomeIcon icon={faPlus} className={"text-emerald-500 m-1"} />
             <span>du mois</span>
           </h2>
-          <h3 className={"font-bold my-2"}>Jordan :)</h3>
+          <h3 className={"font-bold my-2"}>Lorem ipsum dolor sit.</h3>
           <p className={"leading-5"}>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             Consequuntur cupiditate dignissimos doloremque exercitationem nihil
@@ -75,157 +75,61 @@ export default function Home({
           </div>
         </div>
       </div>
-      <div>
-        <h2 className={"mt-4 mb-2 text-fuchsia-800 font-bold text-xl"}>
-          <span className={"text-emerald-500"}>
-            <FontAwesomeIcon icon={faCompactDisc} />{" "}
-          </span>{" "}
-          Derniers vinyls ajoutés
-        </h2>
+      {collectionVinyls && collectionVinyls.length > 0 ? (
+        <div>
+          <h2 className={"mt-4 mb-2 text-fuchsia-800 font-bold text-xl"}>
+            <span className={"text-emerald-500"}>
+              <FontAwesomeIcon icon={faCompactDisc} />{" "}
+            </span>{" "}
+            Derniers vinyls ajoutés
+          </h2>
 
-        <div className="h-56 sm:hidden">
-          <Carousel>
+          <div className="h-56 sm:hidden">
+            <Carousel>
+              {collectionVinyls.map((collectionVinyl, key) => (
+                <Image
+                  key={key}
+                  src={collectionVinyl.vinyl.image_path}
+                  alt={collectionVinyl.vinyl.label}
+                  width={300}
+                  height={300}
+                  className={"h-full w-full object-cover border-8"}
+                />
+              ))}
+            </Carousel>
+          </div>
+
+          <div
+            className={
+              "hidden sm:grid sm:grid-cols-3 content-around gap-4 justify-items-center"
+            }
+          >
             {collectionVinyls && collectionVinyls.length > 0
-              ? collectionVinyls.map((collectionVinyl, key) => (
-                  <Image
-                    key={key}
-                    src={collectionVinyl.vinyl.image_path}
-                    alt={collectionVinyl.vinyl.label}
-                    width={300}
-                    height={300}
-                    className={"h-full w-full object-cover border-8"}
-                  />
+              ? collectionVinyls.map((collectionVinyl) => (
+                  <Link
+                    href={`/vinyls/${collectionVinyl.vinyl_id}`}
+                    key={collectionVinyl.id}
+                  >
+                    <Image
+                      src={collectionVinyl.vinyl.image_path}
+                      alt={collectionVinyl.vinyl.label}
+                      width={300}
+                      height={300}
+                      className={"h-56 w-56 object-cover border-8"}
+                    />
+                    <h3>{collectionVinyl.vinyl.label}</h3>
+                    <p className={"text-sm"}>{collectionVinyl.vinyl.artist}</p>
+                    <p>{collectionVinyl.collection?.user?.name}</p>
+                  </Link>
                 ))
               : ""}
-          </Carousel>
-        </div>
-
-        <div
-          className={
-            "hidden sm:grid sm:grid-cols-3 content-around gap-4 justify-items-center"
-          }
-        >
-          {collectionVinyls && collectionVinyls.length > 0
-            ? collectionVinyls.map((collectionVinyl) => (
-                <Link
-                  href={`/vinyls/${collectionVinyl.vinyl_id}`}
-                  key={collectionVinyl.id}
-                >
-                  <Image
-                    src={collectionVinyl.vinyl.image_path}
-                    alt={collectionVinyl.vinyl.label}
-                    width={300}
-                    height={300}
-                    className={"h-56 w-56 object-cover border-8"}
-                  />
-                  <h3>{collectionVinyl.vinyl.label}</h3>
-                  <p className={"text-sm"}>{collectionVinyl.vinyl.artist}</p>
-                  <p>{collectionVinyl.collection?.user?.name}</p>
-                </Link>
-              ))
-            : ""}
-        </div>
-
-        <Button className={"my-4"}>En voir davantage</Button>
-      </div>
-      {/*
-      <div className={"mb-12"}>
-        <h2 className={"mt-4 mb-4 text-fuchsia-800 font-bold text-xl"}>
-          <span className={"text-orange-400"}>
-            <FontAwesomeIcon icon={faCompactDisc} />
-          </span>{" "}
-          Derniers messages du forum
-        </h2>
-
-        <div className="h-56 sm:hidden ">
-          <Carousel slide={false}>
-            <div
-              className={
-                "h-56 sm:h-64 xl:h-80 2xl:h-96 bg-black bg-opacity-40 rounded p-4"
-              }
-            >
-              <h3 className={"font-bold"}>Titre de la rubrique</h3>
-              <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
-              <p className={"leading-5"}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Consequuntur cupiditate dignissimos doloremque exercitationem
-                nihil placeat quo sapiente ut vel voluptatem!
-              </p>
-            </div>
-            <div
-              className={
-                "h-56 sm:h-64 xl:h-80 2xl:h-96 bg-black bg-opacity-40 rounded p-4"
-              }
-            >
-              <h3 className={"font-bold"}>Titre de la rubrique</h3>
-              <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
-              <p className={"leading-5"}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Consequuntur cupiditate dignissimos doloremque exercitationem
-                nihil placeat quo sapiente ut vel voluptatem!
-              </p>
-            </div>
-            <div
-              className={
-                "h-56 sm:h-64 xl:h-80 2xl:h-96 bg-black bg-opacity-40 rounded p-4"
-              }
-            >
-              <h3 className={"font-bold"}>Titre de la rubrique</h3>
-              <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
-              <p className={"leading-5"}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Consequuntur cupiditate dignissimos doloremque exercitationem
-                nihil placeat quo sapiente ut vel voluptatem!
-              </p>
-            </div>
-            <div
-              className={
-                "h-56 sm:h-64 xl:h-80 2xl:h-96 bg-black bg-opacity-40 rounded p-4"
-              }
-            >
-              <h3 className={"font-bold"}>Titre de la rubrique</h3>
-              <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
-              <p className={"leading-5"}>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Consequuntur cupiditate dignissimos doloremque exercitationem
-                nihil placeat quo sapiente ut vel voluptatem!
-              </p>
-            </div>
-          </Carousel>
-        </div>
-
-        <div className={"hidden sm:flex flex-row border-8"}>
-          <div className={"h-48 border flex flex-col justify-center gap-2 p-2"}>
-            <h3 className={"font-bold"}>Titre de la rubrique</h3>
-            <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
-            <p className={"leading-5"}>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            </p>
           </div>
-          <div className={"h-48 border flex flex-col justify-center gap-2 p-2"}>
-            <h3 className={"font-bold"}>Titre de la rubrique</h3>
-            <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
-            <p className={"leading-5"}>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            </p>
-          </div>
-          <div className={"h-48 border flex flex-col justify-center gap-2 p-2"}>
-            <h3 className={"font-bold"}>Titre de la rubrique</h3>
-            <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
-            <p className={"leading-5"}>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            </p>
-          </div>
-          <div className={"h-48 border flex flex-col justify-center gap-2 p-2"}>
-            <h3 className={"font-bold"}>Titre de la rubrique</h3>
-            <span className={"text-sm"}>Nicolas - 10/03 14:43</span>
-            <p className={"leading-5"}>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            </p>
-          </div>
+
+          <Button className={"my-4"}>En voir davantage</Button>
         </div>
-      </div>
-      */}
+      ) : (
+        ""
+      )}
     </div>
   );
 }
