@@ -1,10 +1,9 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { QueryKey, UseQueryOptions, useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosResponse } from "axios";
 import { Cookies } from "react-cookie";
 import axiosApiInstance from "../services/interceptorService";
-import { useBearStore } from "@store/useBearStore";
-import { showToast } from "@utils/utils";
 import { useRouter } from "next/router";
+import type { User } from "../types/User";
 
 export const useLogin = (username: string, password: string) => {
   const router = useRouter();
@@ -45,16 +44,13 @@ export const useLogin = (username: string, password: string) => {
   });
 };
 
-export const fetchUser = () => {
+export const useUser = (options?: UseQueryOptions<User>) => {
   return useQuery({
-    queryKey: ["me"],
-    queryFn: () => {
-      return axiosApiInstance.get("/users/me").then((res: AxiosResponse) => {
-        return res.data;
-      });
-    },
-    onSuccess: (data) => {
-      useBearStore.setState({ user: data });
-    },
+    ...options,
+    queryKey: ["me"] as QueryKey,
+    queryFn: ({ signal }) =>
+      axiosApiInstance
+        .get<User>("/users/me", { signal })
+        .then((res) => res.data),
   });
 };

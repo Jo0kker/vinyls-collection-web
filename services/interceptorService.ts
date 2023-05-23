@@ -2,8 +2,8 @@ import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { useBearStore } from "@store/useBearStore";
 import jwtDecode from "jwt-decode";
 import { Cookies } from "react-cookie";
+import axios from 'axios'
 
-const axios = require("axios");
 const axiosApiInstance = axios.create();
 
 // Request interceptor for API calls

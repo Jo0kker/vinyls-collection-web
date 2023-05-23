@@ -1,7 +1,4 @@
 import { Cookies } from "react-cookie";
-import { useQuery } from "@tanstack/react-query";
-import axiosApiInstance from "../services/interceptorService";
-import { AxiosResponse } from "axios";
 import Lottie from "lottie-react";
 import loading from "@assets/lottieJson/88944-vinyl-loading.json";
 import { Layout } from "@components/Layout";
@@ -10,8 +7,7 @@ import Banner from "@components/Banner";
 import NextNProgress from "nextjs-progressbar";
 import { FooterPerso } from "@components/FooterPerso";
 import { FunctionComponent, PropsWithChildren, useState } from "react";
-import { useBearStore } from "@store/useBearStore";
-import { fetchUser } from "../hooks/useUsers";
+import { useUser } from "../hooks/useUsers";
 
 type Props = PropsWithChildren<{}>;
 
@@ -20,9 +16,9 @@ export const ProviderCustom: FunctionComponent<Props> = ({ children }) => {
   const token = cookie.get("token");
   const [isReady, setIsReady] = useState(false);
 
-  const { data: userData } = fetchUser();
-  console.log(userData);
-  if (isReady) {
+  const { data: userData } = useUser({ onSuccess: () => setIsReady(true) });
+
+  if (!isReady) {
     return (
       <div
         className={
