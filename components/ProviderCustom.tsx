@@ -9,23 +9,20 @@ import { Toaster } from "react-hot-toast";
 import Banner from "@components/Banner";
 import NextNProgress from "nextjs-progressbar";
 import { FooterPerso } from "@components/FooterPerso";
-import { FunctionComponent, PropsWithChildren } from "react";
+import { FunctionComponent, PropsWithChildren, useState } from "react";
+import { useBearStore } from "@store/useBearStore";
+import { fetchUser } from "../hooks/useUsers";
 
 type Props = PropsWithChildren<{}>;
 
 export const ProviderCustom: FunctionComponent<Props> = ({ children }) => {
-  // token in cookie
   const cookie = new Cookies();
   const token = cookie.get("token");
+  const [isReady, setIsReady] = useState(false);
 
-  const { isLoading, data: userData } = useQuery({
-    queryKey: ["user"],
-    queryFn: () =>
-      axiosApiInstance.get("/users/me").then((res: AxiosResponse) => res.data),
-    enabled: !!token,
-  });
-
-  if (isLoading) {
+  const { data: userData } = fetchUser();
+  console.log(userData);
+  if (isReady) {
     return (
       <div
         className={

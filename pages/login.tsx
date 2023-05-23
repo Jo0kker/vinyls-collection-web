@@ -41,9 +41,7 @@ const Login = () => {
         }
       )
       .then((response: AxiosResponse) => {
-        // set in cookie
         const cookie = new Cookies();
-        // set token / refresh token / expires in cookie
         cookie.set("token", response.data.access_token, {
           path: "/",
           maxAge: 31536000, // Expires after 1year
@@ -58,14 +56,12 @@ const Login = () => {
         });
         // user with zustand
         axiosApiInstance.get("/users/me").then((res: AxiosResponse) => {
-          console.log(res.data);
           useBearStore.setState({ user: res.data });
           showToast("success", "Logged in successfully");
           router.push("/");
         });
       })
       .catch((error) => {
-        // if status code is 401, then the user is unauthorized
         if (error.response.status === 401 || error.response.status === 400) {
           showToast("error", "Identifiants incorrects");
         } else {

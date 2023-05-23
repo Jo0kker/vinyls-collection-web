@@ -65,7 +65,11 @@ const UserCollection = () => {
         { id: -2, name: "A échanger", type: "trade" },
         ...reqCollectionVinyl.data.data,
       ]);
-      setCollectionShow(reqCollectionVinyl.data.data[0].id);
+      if (reqCollectionVinyl.data.data.length > 0) {
+        setCollectionShow(reqCollectionVinyl.data.data[0].id);
+      } else {
+        setCollectionShow(-1);
+      }
     }
   };
 
