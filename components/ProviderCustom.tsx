@@ -7,7 +7,7 @@ import Banner from "@components/Banner";
 import NextNProgress from "nextjs-progressbar";
 import { FooterPerso } from "@components/FooterPerso";
 import { FunctionComponent, PropsWithChildren, useState } from "react";
-import { useUser } from "../hooks/useUsers";
+import { useMe } from "../hooks/useUsers";
 
 type Props = PropsWithChildren<{}>;
 
@@ -16,12 +16,12 @@ export const ProviderCustom: FunctionComponent<Props> = ({ children }) => {
   const cookie = new Cookies();
   const token = cookie.get("token");
 
-  useUser({
+  const { data: userData } = useMe({
     onSuccess: () => setIsReady(true),
     enabled: !!token,
   });
 
-  if (!isReady && token) {
+  if (!isReady && userData) {
     return (
       <div
         className={

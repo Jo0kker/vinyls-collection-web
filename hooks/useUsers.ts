@@ -49,7 +49,7 @@ export const useLogin = (username: string, password: string) => {
   });
 };
 
-export const useUser = (options?: UseQueryOptions<User>) =>
+export const useMe = (options?: UseQueryOptions<User>) =>
   useQuery({
     ...options,
     queryKey: ["me"] as QueryKey,
@@ -58,3 +58,11 @@ export const useUser = (options?: UseQueryOptions<User>) =>
         .get<User>("/users/me", { signal })
         .then((res) => res.data),
   });
+
+export const useLogout = () => {
+  const cookies = new Cookies();
+  cookies.remove("token");
+  cookies.remove("refresh_token");
+  cookies.remove("expires_in");
+  window.location.href = "/";
+};

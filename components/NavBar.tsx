@@ -10,14 +10,17 @@ import Lottie from "lottie-react";
 import vinylsAnimation from "@assets/lottieJson/vinyl-loading.json";
 import { useBearStore } from "@store/useBearStore";
 import { showToast } from "@utils/utils";
-import { useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useLogout } from "../hooks/useUsers";
+// @ts-ignore
+import { User } from "@types/User";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 const NavBar: FunctionComponent = () => {
-  const user = useQueryClient().getQueryData(["me"]);
+  const user = useQueryClient().getQueryData<User>(["me"]);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [menuItems, setMenuItems] = useState<{ name: string; href: string }[]>(
     []
@@ -167,8 +170,7 @@ const NavBar: FunctionComponent = () => {
                               "block w-full px-4 py-2 text-left text-sm"
                             )}
                             onClick={() => {
-                              // call state to logout
-                              useBearStore.getState().logout();
+                              useLogout();
                             }}
                           >
                             Déconnexion
@@ -182,7 +184,7 @@ const NavBar: FunctionComponent = () => {
             </Menu>
           ) : (
             <Link
-              href="login"
+              href={"login"}
               className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-3xl bg-black bg-opacity-10 hover:bg-opacity-20 border border-red-700 bg-transparent px-4 py-2 text-base font-medium text-white shadow-sm hover:text-amber-600"
             >
               Connexion / Inscription
