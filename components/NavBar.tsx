@@ -10,13 +10,14 @@ import Lottie from "lottie-react";
 import vinylsAnimation from "@assets/lottieJson/vinyl-loading.json";
 import { useBearStore } from "@store/useBearStore";
 import { showToast } from "@utils/utils";
+import { useQueryClient } from "@tanstack/react-query";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 const NavBar: FunctionComponent = () => {
-  const user = useBearStore((state) => state.user);
+  const user = useQueryClient().getQueryData(["me"]);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [menuItems, setMenuItems] = useState<{ name: string; href: string }[]>(
     []

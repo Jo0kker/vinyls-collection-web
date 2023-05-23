@@ -12,13 +12,16 @@ import { useUser } from "../hooks/useUsers";
 type Props = PropsWithChildren<{}>;
 
 export const ProviderCustom: FunctionComponent<Props> = ({ children }) => {
+  const [isReady, setIsReady] = useState(false);
   const cookie = new Cookies();
   const token = cookie.get("token");
-  const [isReady, setIsReady] = useState(false);
 
-  const { data: userData } = useUser({ onSuccess: () => setIsReady(true) });
+  useUser({
+    onSuccess: () => setIsReady(true),
+    enabled: !!token,
+  });
 
-  if (!isReady) {
+  if (!isReady && token) {
     return (
       <div
         className={
@@ -37,7 +40,7 @@ export const ProviderCustom: FunctionComponent<Props> = ({ children }) => {
   }
 
   return (
-    <Layout initialData={userData}>
+    <Layout>
       <Toaster />
       <Banner />
       <main className={"flex flex-col items-center"}>

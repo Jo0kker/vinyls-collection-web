@@ -4,11 +4,9 @@ import Lottie from "lottie-react";
 import vinylsAnimation from "@assets/lottieJson/17807-sound-animation.json";
 import Link from "next/link";
 
-type Props = PropsWithChildren<{
-  initialData: any;
-}>;
+type Props = PropsWithChildren<{}>;
 
-export const Layout: FunctionComponent<Props> = ({ children, initialData }) => {
+export const Layout: FunctionComponent<Props> = ({ children }) => {
   return (
     <div
       className={

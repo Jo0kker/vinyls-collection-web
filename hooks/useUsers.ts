@@ -1,4 +1,9 @@
-import { QueryKey, UseQueryOptions, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  QueryKey,
+  UseQueryOptions,
+  useMutation,
+  useQuery,
+} from "@tanstack/react-query";
 import axios, { AxiosResponse } from "axios";
 import { Cookies } from "react-cookie";
 import axiosApiInstance from "../services/interceptorService";
@@ -44,8 +49,8 @@ export const useLogin = (username: string, password: string) => {
   });
 };
 
-export const useUser = (options?: UseQueryOptions<User>) => {
-  return useQuery({
+export const useUser = (options?: UseQueryOptions<User>) =>
+  useQuery({
     ...options,
     queryKey: ["me"] as QueryKey,
     queryFn: ({ signal }) =>
@@ -53,4 +58,3 @@ export const useUser = (options?: UseQueryOptions<User>) => {
         .get<User>("/users/me", { signal })
         .then((res) => res.data),
   });
-};
