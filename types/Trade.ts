@@ -1,6 +1,5 @@
-import { User } from "./User";
-import {Vinyl} from "./Vinyl";
-import {DateTime} from "luxon";
+import type { User } from './User';
+import type { Vinyl } from './Vinyl';
 
 export interface Trade {
   id: number;

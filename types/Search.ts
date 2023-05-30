@@ -1,5 +1,5 @@
-import { User } from "./User";
-import {Vinyl} from "./Vinyl";
+import type { User } from './User';
+import type { Vinyl } from './Vinyl';
 
 export interface Search {
   id: number;
