@@ -1,0 +1,70 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:react/jsx-runtime",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "overrides": [
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+          },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint",
+        "react-hooks"
+    ],
+    "rules": {
+        "indent": ["error", 4],
+        "quotes": ["error", "single", { "avoidEscape": true }],
+        "no-multi-spaces": "error",
+        "object-curly-spacing": ["error", "always"],
+        "one-var": ["error", { "var": "always", "let": "never", "const": "never" }],
+        "keyword-spacing": "error",
+        "space-before-function-paren": "error",
+        "spaced-comment": "error",
+        "prefer-const": "error",
+        "no-empty": "off",
+        "no-cond-assign": "error",
+        "no-use-before-define": "warn",
+        "no-unused-vars": "warn",
+        "semi": ["error", "always"],
+        "no-control-regex": "off",
+        "eqeqeq": "warn",
+        "require-await": "error",
+        "no-unmodified-loop-condition": "warn",
+        "no-undef": "off",
+        "no-console": "warn",
+        "no-debugger": "warn",
+        "react/jsx-filename-extension": [ "warn", {"extensions": [".tsx"]} ],
+        "react/no-unescaped-entities": "warn",
+        "react/react-in-jsx-scope": "off",
+        "react/prop-types": "warn",
+        "react/jsx-curly-newline": "off",
+        "react/jsx-one-expression-per-line": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/self-closing-comp": ["error", { "component": true, "html": true }],
+        "@typescript-eslint/no-unused-vars": "warn",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/consistent-type-imports": ["error", { "prefer": "type-imports" }]
+    },
+    "settings": {
+        "import/resolver": {
+          "node": {
+            "extensions": [".js", ".jsx", ".ts", ".tsx"]
+          }
+        }
+    }
+}
