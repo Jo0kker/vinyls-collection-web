@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from 'formik';
-import type { FormikHelpers } from 'formik';
+import type { FormikHelpers, FieldProps } from 'formik';
 import { InputText } from '@components/InputText';
 import Link from 'next/link';
 import { Button } from '@components/Button';
@@ -58,9 +58,9 @@ const Register = () => {
                 <title>Inscription</title>
             </Head>
             <div className={'flex flex-row justify-center font-bold text-2xl mt-6'}>
-                <span className={'mr-3 text-emerald-500'}>//</span>
+                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
                 <h1 className={'text-fuchsia-800'}>Pas de compte ? Inscrivez-vous</h1>
-                <span className={'ml-3 text-orange-400'}>//</span>
+                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
             </div>
             <Formik
                 initialValues={{
@@ -92,7 +92,7 @@ const Register = () => {
                                 }
                             >
                                 <Field name="name">
-                                    {({ field, form, meta }: any) => (
+                                    {({ field, form, meta }: FieldProps) => (
                                         <InputText
                                             field={field}
                                             form={form}
@@ -109,7 +109,7 @@ const Register = () => {
                                     )}
                                 </Field>
                                 <Field name="email">
-                                    {({ field, form, meta }: any) => (
+                                    {({ field, form, meta }: FieldProps) => (
                                         <InputText
                                             field={field}
                                             form={form}
@@ -132,7 +132,7 @@ const Register = () => {
                                 }
                             >
                                 <Field name="password">
-                                    {({ field, form, meta }: any) => (
+                                    {({ field, form, meta }: FieldProps) => (
                                         <InputText
                                             field={field}
                                             form={form}
@@ -149,7 +149,7 @@ const Register = () => {
                                     )}
                                 </Field>
                                 <Field name="password_confirmation">
-                                    {({ field, form, meta }: any) => (
+                                    {({ field, form, meta }: FieldProps) => (
                                         <InputText
                                             field={field}
                                             form={form}
@@ -174,7 +174,7 @@ const Register = () => {
                         }
                     >
                         <Field name="terms">
-                            {({ field, form, meta }: any) => (
+                            {({ field, form, meta }: FieldProps) => (
                                 <div className={'mb-2'}>
                                     <Label
                                         className={'flex flex-row items-center gap-2'}

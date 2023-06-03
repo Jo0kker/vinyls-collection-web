@@ -12,3 +12,5 @@ export interface Vinyl {
   created_at: Date;
   updated_at: Date;
 }
+
+// TODO faire le type de l'objet discogs

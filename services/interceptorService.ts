@@ -1,7 +1,8 @@
 import axios from 'axios';
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { useBearStore } from '@store/useBearStore';
 import jwtDecode from 'jwt-decode';
+import type { JwtPayload } from 'jwt-decode';
 import { Cookies } from 'react-cookie';
 
 const axiosApiInstance = axios.create();
@@ -17,9 +18,9 @@ axiosApiInstance.interceptors.request.use(
 
             if (accessToken) {
                 // check if token is expired
-                const decodedToken: any = jwtDecode(accessToken);
+                const decodedToken = jwtDecode<JwtPayload>(accessToken);
 
-                if (decodedToken.exp * 1000 < Date.now()) {
+                if (!decodedToken.exp || (decodedToken.exp * 1000 < Date.now())) {
                     // token is expired
                     // remove token from COOKIE
                     cookies.remove('token');
@@ -63,7 +64,7 @@ axiosApiInstance.interceptors.request.use(
 
         return config;
     },
-    (error: any) => {
+    (error: AxiosError) => {
         Promise.reject(error);
     }
 );
@@ -73,14 +74,9 @@ axiosApiInstance.interceptors.response.use(
     (response: AxiosResponse) => {
         return response;
     },
-    async function (error: any) {
+    async function (error: AxiosError) {
         const originalRequest = error.config;
-        if (
-            ((error.response?.status !== undefined &&
-        error.response.status === 403) ||
-        error.response.status === 401) &&
-      !originalRequest._retry
-        ) {
+        if (!originalRequest?._retry && [401, 403].includes(error.response?.status || 0)) {
             originalRequest._retry = true;
             const cookies = new Cookies();
             const refreshToken = cookies.get('refreshToken');

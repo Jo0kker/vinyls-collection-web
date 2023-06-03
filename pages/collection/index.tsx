@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react';
 import SideBar from '@components/SideBar';
 import { useBearStore } from '@store/useBearStore';
 import axiosApiInstance from '../../services/interceptorService';
-import type { CollectionVinyl } from '@types/CollectionVinyl';
+import type { CollectionVinyl } from '@definitions/CollectionVinyl';
 import type { AxiosError, AxiosResponse } from 'axios';
 import ListVinyls from '@components/ListVinyls';
 import { Button } from '@components/Button';
 import SlideOvers from '@components/SlideOvers';
 import type { FormikValues } from 'formik';
 import { showToast } from '@utils/utils';
+import type { GetServerSidePropsContext } from 'next';
 
-export function getServerSideProps (context: any) {
+export function getServerSideProps (context: GetServerSidePropsContext) {
     const token = context.req.cookies.token;
     const refresh_token = context.req.cookies.refresh_token;
 
@@ -31,26 +32,16 @@ export function getServerSideProps (context: any) {
 const UserCollection = () => {
     const [collectionShow, setCollectionShow] = useState(0);
     const [collections, setCollections] = useState<{ [key: string]: any }>([]);
-    const [collectionVinyls, setCollectionVinyls] = useState<CollectionVinyl[]>(
-        []
-    );
+    const [collectionVinyls, setCollectionVinyls] = useState<CollectionVinyl[]>([]);
     const [searchPage, setSearchPage] = useState(1);
-    const [searchData, setSearchData] = useState<{
-    title: string;
-    artist: string;
-    year: string;
-  }>({
-      title: '',
-      artist: '',
-      year: '',
-  });
-    const [isLoadingCollectionVinyls, setIsLoadingCollectionVinyls] =
-    useState(true);
+    const [searchData, setSearchData] = useState({ title: '', artist: '', year: '' });
+    const [isLoadingCollectionVinyls, setIsLoadingCollectionVinyls] = useState(true);
     const [vinylSearch, setVinylSearch] = useState([]);
     const [slideIsOpen, setSlideIsOpen] = useState(false);
     const user = useBearStore((state) => state.user);
 
     const getAllCollections = async () => {
+        console.log("user : ", user);
         if (user) {
             const reqCollectionVinyl = await axiosApiInstance.get(
                 `/users/${user.id}/collections`

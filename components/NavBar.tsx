@@ -1,5 +1,5 @@
 import { Menu, Popover, Transition } from '@headlessui/react';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState, useMemo } from 'react';
 import type { FunctionComponent } from 'react';
 import Link from 'next/link';
 import {
@@ -23,7 +23,7 @@ const NavBar: FunctionComponent = () => {
         []
     );
 
-    const menuItemsLogin = [
+    const menuItemsLogin = useMemo(() => ([
         {
             name: 'Les vinyles',
             href: '/vinyls',
@@ -40,9 +40,9 @@ const NavBar: FunctionComponent = () => {
             name: 'Forum',
             href: '/#',
         },
-    ];
+    ]), []);
 
-    const menuItemsNotLogin = [
+    const menuItemsNotLogin = useMemo(() => ([
         {
             name: 'Les vinyles',
             href: '/vinyls',
@@ -55,7 +55,7 @@ const NavBar: FunctionComponent = () => {
             name: 'Forum',
             href: '/#',
         },
-    ];
+    ]), []);
 
     const userMenuItems = [
         {
@@ -74,7 +74,7 @@ const NavBar: FunctionComponent = () => {
         } else {
             setMenuItems(menuItemsNotLogin);
         }
-    }, [user]);
+    }, [user, menuItemsLogin, menuItemsNotLogin]);
 
     return (
         <Popover className="relative bg-transparent z-40 font-roboto">

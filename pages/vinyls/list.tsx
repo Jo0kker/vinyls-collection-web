@@ -5,7 +5,7 @@ import type { AxiosResponse } from 'axios';
 import { useState } from 'react';
 import ListVinyls from '@components/ListVinyls';
 
-export async function getServerSideProps(page = 1) {
+export async function getServerSideProps (page = 1) {
     const reqCollectionVinyl = await axiosApiInstance.post(
         `/collectionVinyl/search?include=vinyl,collection,collection.user&page=${page}`,
         {
@@ -62,9 +62,9 @@ const VinylList = ({
             <div
                 className={'flex flex-row justify-center font-bold text-2xl mt-4 mb-4'}
             >
-                <span className={'mr-3 text-emerald-500'}>//</span>
+                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
                 <h1 className={'text-fuchsia-800'}>Liste des vinyls</h1>
-                <span className={'ml-3 text-orange-400'}>//</span>
+                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
             </div>
 
             <ListVinyls

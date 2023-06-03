@@ -2,12 +2,13 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Formik, Form, Field } from 'formik';
+import type { FieldProps } from 'formik';
 import { InputText } from '@components/InputText';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 
-export default function SlideOvers({
+export default function SlideOvers ({
     open,
     setOpen,
     searchVinyl,
@@ -95,7 +96,7 @@ export default function SlideOvers({
                                                     >
                                                         <Form>
                                                             <Field name="title">
-                                                                {({ field, form, meta }: any) => (
+                                                                {({ field, form, meta }: FieldProps) => (
                                                                     <InputText
                                                                         field={field}
                                                                         form={form}
@@ -112,7 +113,7 @@ export default function SlideOvers({
                                                                 )}
                                                             </Field>
                                                             <Field name="artist">
-                                                                {({ field, form, meta }: any) => (
+                                                                {({ field, form, meta }: FieldProps) => (
                                                                     <InputText
                                                                         field={field}
                                                                         form={form}
@@ -129,7 +130,7 @@ export default function SlideOvers({
                                                                 )}
                                                             </Field>
                                                             <Field name="year">
-                                                                {({ field, form, meta }: any) => (
+                                                                {({ field, form, meta }: FieldProps) => (
                                                                     <InputText
                                                                         field={field}
                                                                         form={form}

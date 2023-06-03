@@ -1,4 +1,5 @@
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
+import type { FieldProps } from 'formik';
 
 type buildInfo = {
   label: string;
@@ -8,9 +9,9 @@ type buildInfo = {
 };
 
 type InputTextProps = {
-  field: any;
-  form: any;
-  meta: any;
+  field: FieldProps['field'];
+  form: FieldProps['form'];
+  meta: FieldProps['meta'];
   buildInfo: buildInfo;
   className?: string;
   inputClassName?: string;

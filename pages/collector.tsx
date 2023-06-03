@@ -7,7 +7,7 @@ import { Button } from '@components/Button';
 import { useState } from 'react';
 import type { AxiosResponse } from 'axios';
 
-export async function getServerSideProps() {
+export async function getServerSideProps () {
     const req = await axiosApiInstance.get('/users');
     const users: User[] = req.data.data;
     const meta = req.data.meta;
@@ -48,9 +48,9 @@ const Collector = ({
             <div
                 className={'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'}
             >
-                <span className={'mr-3 text-emerald-500'}>//</span>
+                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
                 <h1 className={'text-fuchsia-800'}>Liste des collectionneurs</h1>
-                <span className={'ml-3 text-orange-400'}>//</span>
+                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
             </div>
 
             <div className={'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}>

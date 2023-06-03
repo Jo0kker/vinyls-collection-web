@@ -8,7 +8,7 @@ import type { CollectionVinyl } from '../types/CollectionVinyl';
 import axiosApiInstance from '../services/interceptorService';
 import Link from 'next/link';
 
-export async function getServerSideProps() {
+export async function getServerSideProps () {
     // get last 6 vinyls
     const reqCollectionVinyl = await axiosApiInstance.get(
         '/collectionVinyl?include=vinyl,collection,collection.user&limit=6'
@@ -24,7 +24,7 @@ export async function getServerSideProps() {
     };
 }
 
-export default function Home({
+export default function Home ({
     collectionVinyls,
 }: {
   collectionVinyls: CollectionVinyl[];

@@ -1,6 +1,6 @@
 import { useBearStore } from '@store/useBearStore';
 import { Field, Form, Formik } from 'formik';
-import type { FormikHelpers } from 'formik';
+import type { FormikHelpers, FieldProps } from 'formik';
 import { InputText } from '@components/InputText';
 import Link from 'next/link';
 import axios from 'axios';
@@ -84,9 +84,9 @@ const Login = () => {
             <div
                 className={'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'}
             >
-                <span className={'mr-3 text-emerald-500'}>//</span>
+                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
                 <h1 className={'text-fuchsia-800'}>Connectez-vous à votre compte</h1>
-                <span className={'ml-3 text-orange-400'}>//</span>
+                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
             </div>
             <div className={'flex flex-col justify-center items-center lg:mx-32'}>
                 <Formik
@@ -113,7 +113,7 @@ const Login = () => {
                             }
                         >
                             <Field name="email">
-                                {({ field, form, meta }: any) => (
+                                {({ field, form, meta }: FieldProps) => (
                                     <InputText
                                         field={field}
                                         form={form}
@@ -130,7 +130,7 @@ const Login = () => {
                                 )}
                             </Field>
                             <Field name="password">
-                                {({ field, form, meta }: any) => (
+                                {({ field, form, meta }: FieldProps) => (
                                     <InputText
                                         field={field}
                                         form={form}

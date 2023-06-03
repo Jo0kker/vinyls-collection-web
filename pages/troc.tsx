@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useBearStore } from '@store/useBearStore';
-// @ts-ignore
-import type { Trade } from '@types/Trade';
-// @ts-ignore
-import type { Search } from '@types/Search';
+import type { Trade } from '@definitions/Trade';
+import type { Search } from '@definitions/Search';
 import axiosApiInstance from '../services/interceptorService';
+import type { GetServerSidePropsContext } from 'next';
 
-function classNames(...classes: string[]) {
+function classNames (...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
-export function getServerSideProps(context: any) {
+export function getServerSideProps (context: GetServerSidePropsContext) {
     const token = context.req.cookies.token;
     const refresh_token = context.req.cookies.refresh_token;
 
@@ -52,16 +51,14 @@ const Troc = () => {
         }
     };
 
-    useEffect(() => {}, [user]);
-
     return (
         <div className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}>
             <div
                 className={'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'}
             >
-                <span className={'mr-3 text-emerald-500'}>//</span>
+                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
                 <h1 className={'text-fuchsia-800'}>Espace trocs</h1>
-                <span className={'ml-3 text-orange-400'}>//</span>
+                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
             </div>
             <div className={'flex flex-col'}>
                 <div>

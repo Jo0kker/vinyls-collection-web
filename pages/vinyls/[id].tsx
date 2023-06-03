@@ -15,7 +15,7 @@ interface Track {
   type_: string;
 }
 
-export async function getServerSideProps (context: { params: { id: any } }) {
+export async function getServerSideProps (context: { params: { id: number | string } }) {
     const { id } = context.params;
     const vinyl = await axiosApiInstance.get(`/vinyls/${id}`);
 
@@ -36,11 +36,11 @@ const Vinyl = ({ vinyl }: { vinyl: Vinyl }) => {
             <div
                 className={'flex flex-row justify-center font-bold text-2xl mt-4 mb-4'}
             >
-                <span className={'mr-3 text-emerald-500'}>//</span>
+                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
                 <h1 className={'text-fuchsia-800'}>
                     {vinyl.discogs ? vinyl.discogs.title : vinyl.label}
                 </h1>
-                <span className={'ml-3 text-orange-400'}>//</span>
+                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
             </div>
             <div className={'flex flex-col'}>
                 <div

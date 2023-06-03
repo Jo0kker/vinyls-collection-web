@@ -5,7 +5,7 @@ import { Fragment } from 'react';
 import { faChevronDown } from '@fortawesome/pro-light-svg-icons';
 import { Sidebar } from 'flowbite-react';
 
-function classNames (...classes: any) {
+function classNames (...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
 
