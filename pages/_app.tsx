@@ -29,7 +29,7 @@ export default function App ({ Component, pageProps, data }: AppProps | any) {
             });
         }
         setIsReady(true);
-    }, []);
+    }, [token]);
 
     return (
         (isReady && (

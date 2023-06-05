@@ -29,8 +29,6 @@ export async function getServerSideProps (context: { params: { id: number | stri
 const Vinyl = ({ vinyl }: { vinyl: Vinyl }) => {
     const [showMoreVideo, setShowMoreVideo] = useState(false);
 
-    // TODO a tester : les // peuvent être remplacer par &#47;
-
     return (
         <div className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}>
             <div

@@ -4,13 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Fragment } from 'react';
 import { faChevronDown } from '@fortawesome/pro-light-svg-icons';
 import { Sidebar } from 'flowbite-react';
+import type { Collection } from '@definitions/Collection';
 
 function classNames (...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
 
 type SideBarProps = {
-  navItems: { [key: string]: any };
+  navItems: Collection[];
   activeTab: number;
   setActiveTab: (tab: number) => void;
 };
@@ -18,7 +19,7 @@ type SideBarProps = {
 const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
     const getActiveTab = (tab: number) => {
     // search navItems selected whete activeTab is equal to id
-        if (navItems.find((item: any) => item.id === tab)) {
+        if (navItems.find((item) => item.id === tab)) {
             return tab;
         } else {
             if (navItems.length > 0) {
@@ -36,7 +37,7 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
                 <Sidebar aria-label="Default sidebar example">
                     <Sidebar.Items>
                         <Sidebar.ItemGroup className={'space-y-0'}>
-                            {navItems.map((item: any) => (
+                            {navItems.map((item) => (
                                 <Sidebar.Item
                                     href="#"
                                     key={item.id}
@@ -76,7 +77,7 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
                             <span className="block truncate">
                                 {
                                     (
-                                        navItems.find((item: any) => item.id === activeTab) || {
+                                        navItems.find((item) => item.id === activeTab) || {
                                             name: 'Aucune collection',
                                         }
                                     ).name
@@ -93,7 +94,7 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
                             leaveTo="opacity-0"
                         >
                             <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                {navItems.map((item: any, index: number) => (
+                                {navItems.map((item, index) => (
                                     <Listbox.Option
                                         key={item.name}
                                         className={({ active }) =>

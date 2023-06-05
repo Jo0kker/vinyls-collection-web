@@ -37,7 +37,7 @@ const Collector = ({
     const loadMore = () => {
         axiosApiInstance
             .get(`/users?page=${currentPage + 1}`)
-            .then((res: AxiosResponse<any>) => {
+            .then((res: AxiosResponse) => {
                 setCollectors([...collectors, ...res.data.data]);
                 setCurrentPage(res.data.meta.current_page);
             });

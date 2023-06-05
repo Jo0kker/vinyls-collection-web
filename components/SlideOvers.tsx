@@ -2,8 +2,10 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Formik, Form, Field } from 'formik';
-import type { FieldProps } from 'formik';
+import type { FieldProps, FormikValues } from 'formik';
+import type { DiscogResult } from '@definitions/Discog.js';
 import { InputText } from '@components/InputText';
+import type { Dispatch, SetStateAction } from 'react';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
@@ -16,10 +18,10 @@ export default function SlideOvers ({
     addVinylToCollection,
 }: {
   open: boolean;
-  setOpen: any;
-  searchVinyl: any;
-  vinyl: any;
-  addVinylToCollection: any;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  searchVinyl: (data: FormikValues) => Promise<void>;
+  vinyl: DiscogResult[];
+  addVinylToCollection: (idDiscogs: number) => void;
 }) {
     const [loadingForm, setLoadingForm] = useState(false);
 
@@ -174,7 +176,7 @@ export default function SlideOvers ({
                                                         {vinyl && (
                                                             <div className={'mt-4'}>
                                                                 <div className={'flex flex-col gap-2'}>
-                                                                    {vinyl.map((v: any) => (
+                                                                    {vinyl.map((v) => (
                                                                         <div
                                                                             key={v.id}
                                                                             className={

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useBearStore } from '@store/useBearStore';
 import type { Trade } from '@definitions/Trade';
 import type { Search } from '@definitions/Search';

@@ -60,7 +60,7 @@ const PasswordReset = () => {
                             .email('Email invalide')
                             .required('Email requis'),
                     })}
-                    onSubmit={async (values, { setSubmitting }) => {
+                    onSubmit={(values, { setSubmitting }) => {
                         setSubmitting(true);
                         resetPassword(values.email);
                         setSubmitting(false);

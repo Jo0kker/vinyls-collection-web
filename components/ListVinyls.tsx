@@ -5,7 +5,6 @@ import type { CollectionVinyl } from '@definitions/CollectionVinyl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import axiosApiInstance from '../services/interceptorService';
-import type { AxiosResponse } from 'axios';
 import { showToast } from '@utils/utils';
 import type { Trade } from '@definitions/Trade';
 import type { Search } from '@definitions/Search';
@@ -13,15 +12,15 @@ import type { Dispatch, SetStateAction } from 'react';
 import Lottie from 'lottie-react';
 import loading from '@assets/lottieJson/88944-vinyl-loading.json';
 
-type VinylCollectionState = CollectionVinyl[] | Search[] | Trade[];
+type VinylCollectionState = CollectionVinyl | Search | Trade;
 
 const ListVinyls = ({
     collectionVinylsDiff,
     setCollectionVinylsDiff = () => [],
     isLoadingCollectionVinyls,
 }: {
-  collectionVinylsDiff: VinylCollectionState;
-  setCollectionVinylsDiff?: Dispatch<SetStateAction<VinylCollectionState>>;
+  collectionVinylsDiff: VinylCollectionState[];
+  setCollectionVinylsDiff?: Dispatch<SetStateAction<Array<CollectionVinyl | Search | Trade>>>;
   isLoadingCollectionVinyls: boolean;
 }) => {
     const deleteVinyl = (collectionId: number, collectionVinylId: number) => {
@@ -36,7 +35,7 @@ const ListVinyls = ({
             .delete(
                 `/collections/${collectionId}/collectionVinyl/${collectionVinylId}`
             )
-            .then((res: AxiosResponse) => {
+            .then(() => {
                 // remove the vinyl from the list
                 showToast('success', 'Vinyl supprimé de la collection');
             })

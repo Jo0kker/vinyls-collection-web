@@ -7,7 +7,7 @@ import { Button } from '@components/Button';
 import { Form, Formik } from 'formik';
 
 // token in url, define new password
-const resetPassword = () => {
+const ResetPassword = () => {
     const router = useRouter();
     const { token } = router.query;
 
@@ -30,11 +30,11 @@ const resetPassword = () => {
                     },
                 }
             )
-            .then((response: AxiosResponse) => {
+            .then(() => {
                 showToast('success', 'Mot de passe modifié');
                 router.push('/login');
             })
-            .catch((error) => {
+            .catch(() => {
                 showToast('error', 'Une erreur est survenue');
             });
     };
@@ -54,7 +54,7 @@ const resetPassword = () => {
                         password: '',
                         passwordConfirm: '',
                     }}
-                    onSubmit={async (values, { setSubmitting }) => {
+                    onSubmit={(values, { setSubmitting }) => {
                         resetPassword();
                     }}
                 >
@@ -109,4 +109,4 @@ const resetPassword = () => {
     );
 };
 
-export default resetPassword;
+export default ResetPassword;

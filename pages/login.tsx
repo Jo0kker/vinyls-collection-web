@@ -57,7 +57,6 @@ const Login = () => {
                 });
                 // user with zustand
                 axiosApiInstance.get('/users/me').then((res: AxiosResponse) => {
-                    console.log(res.data);
                     useBearStore.setState({ user: res.data });
                     showToast('success', 'Logged in successfully');
                     router.push('/');
