@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { Cookies } from 'react-cookie';
 
-import type { User } from 'types/User';
+import type { User } from '@definitions/User';
 
 interface BearState {
   user: User | null;

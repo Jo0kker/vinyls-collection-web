@@ -1,5 +1,5 @@
 import axiosApiInstance from '../services/interceptorService';
-import type { User } from '../types/User';
+import type { User } from '@definitions/User';
 import Image from 'next/image';
 import Link from 'next/link';
 import { DateTime } from 'luxon';

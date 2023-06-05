@@ -1,3 +1,15 @@
+export interface Track {
+  duration: string;
+  position: string;
+  title: string;
+  type_: string;
+}
+
+export interface Video {
+    title: string;
+    uri: string;
+  }
+
 export interface Vinyl {
   id: number;
   label: string;
@@ -8,9 +20,12 @@ export interface Vinyl {
   image_path: string;
   provenance: string;
   discog_id: number;
-  discogs?: {[key: string]: any};
+  discogs?: {
+    title: string,
+    thumb: string,
+    tracklist: Track[],
+    videos: Video[]
+  };
   created_at: Date;
   updated_at: Date;
 }
-
-// TODO faire le type de l'objet discogs

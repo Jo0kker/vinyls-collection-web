@@ -1,5 +1,5 @@
 import axiosApiInstance from '../../services/interceptorService';
-import { Vinyl } from '../../types/Vinyl';
+import type { Vinyl as IVinyl } from '@definitions/Vinyl';
 import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCompactDisc, faVideo } from '@fortawesome/pro-light-svg-icons';
@@ -7,13 +7,6 @@ import { YoutubeEmbed } from '@components/YoutubeEmbed';
 import { Accordion } from 'flowbite-react';
 import { useState } from 'react';
 import { Button } from '@components/Button';
-
-interface Track {
-  duration: string;
-  position: string;
-  title: string;
-  type_: string;
-}
 
 export async function getServerSideProps (context: { params: { id: number | string } }) {
     const { id } = context.params;
@@ -26,7 +19,7 @@ export async function getServerSideProps (context: { params: { id: number | stri
     };
 }
 
-const Vinyl = ({ vinyl }: { vinyl: Vinyl }) => {
+const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
     const [showMoreVideo, setShowMoreVideo] = useState(false);
 
     return (
@@ -88,7 +81,7 @@ const Vinyl = ({ vinyl }: { vinyl: Vinyl }) => {
                             <table className={'table-auto text-sm'}>
                                 <tbody>
                                     {vinyl.discogs.tracklist.map(
-                                        (track: Track, index: number) => (
+                                        (track, index: number) => (
                                             <tr key={index}>
                                                 <td className={'px-4 py-2'}>{track.position}</td>
                                                 <td className={'px-4 py-2'}>{track.title}</td>
@@ -108,7 +101,7 @@ const Vinyl = ({ vinyl }: { vinyl: Vinyl }) => {
                                 </h2>
                                 <div className={'flex flex-col gap-1'}>
                                     <Accordion>
-                                        {vinyl.discogs.videos.map((video: any, index: number) => {
+                                        {vinyl.discogs.videos.map((video, index: number) => {
                                             if (index < 3) {
                                                 return (
                                                     <Accordion.Panel key={index}>

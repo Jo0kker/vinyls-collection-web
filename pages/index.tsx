@@ -4,7 +4,7 @@ import { Carousel } from 'flowbite-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faCompactDisc } from '@fortawesome/pro-light-svg-icons';
 import { Button } from '@components/Button';
-import type { CollectionVinyl } from '../types/CollectionVinyl';
+import type { CollectionVinyl } from '@definitions/CollectionVinyl';
 import axiosApiInstance from '../services/interceptorService';
 import Link from 'next/link';
 
