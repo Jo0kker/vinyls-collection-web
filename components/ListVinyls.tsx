@@ -1,16 +1,17 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import type { CollectionVinyl } from '@definitions/CollectionVinyl';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
-import axiosApiInstance from '../services/interceptorService';
-import { showToast } from '@utils/utils';
-import type { Trade } from '@definitions/Trade';
-import type { Search } from '@definitions/Search';
-import type { Dispatch, SetStateAction } from 'react';
 import Lottie from 'lottie-react';
+import { useCallback } from 'react';
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { showToast } from '@utils/utils';
+import axiosApiInstance from '@services/interceptorService';
 import loading from '@assets/lottieJson/88944-vinyl-loading.json';
+
+import type { Dispatch, SetStateAction } from 'react';
+import type { CollectionVinyl, Trade, Search } from '@definitions/index';
 
 type VinylCollectionState = CollectionVinyl | Search | Trade;
 
@@ -23,7 +24,7 @@ const ListVinyls = ({
   setCollectionVinylsDiff?: Dispatch<SetStateAction<Array<CollectionVinyl | Search | Trade>>>;
   isLoadingCollectionVinyls: boolean;
 }) => {
-    const deleteVinyl = (collectionId: number, collectionVinylId: number) => {
+    const deleteVinyl = useCallback((collectionId: number, collectionVinylId: number) => {
         setCollectionVinylsDiff(
             collectionVinylsDiff.filter(
                 (vinyl: CollectionVinyl | Search | Trade) =>
@@ -44,7 +45,7 @@ const ListVinyls = ({
                 // if error, add the vinyl back to the list
                 setCollectionVinylsDiff(collectionVinylsDiff);
             });
-    };
+    }, [collectionVinylsDiff, setCollectionVinylsDiff]);
 
     return (
         <>

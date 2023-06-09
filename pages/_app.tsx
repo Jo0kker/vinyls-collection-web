@@ -13,8 +13,7 @@ import { useEffect, useState } from 'react';
 import Lottie from 'lottie-react';
 import loading from '@assets/lottieJson/88944-vinyl-loading.json';
 
-// TODO cf data -> ne me semble pas utilisé, si oui cela correspond à quoi ? (pour la définition du type)
-export default function App ({ Component, pageProps, data }: AppProps | any) {
+export default function App ({ Component, pageProps }: AppProps) {
     const [isReady, setIsReady] = useState(false);
 
     // token in cookie
@@ -33,7 +32,7 @@ export default function App ({ Component, pageProps, data }: AppProps | any) {
 
     return (
         (isReady && (
-            <Layout initialData={data}>
+            <Layout>
                 <Toaster />
                 <Banner />
                 <main className={'flex flex-col items-center'}>

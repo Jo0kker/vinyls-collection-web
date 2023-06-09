@@ -11,7 +11,7 @@ import SlideOvers from '@components/SlideOvers';
 import type { FormikValues } from 'formik';
 import { showToast } from '@utils/utils';
 import type { GetServerSidePropsContext } from 'next';
-import type { DiscogResult } from '@definitions/Discog.js';
+import type { CollectionVinyl, Collection, Search, Trade, DiscogResult } from '@definitions/index';
 
 export function getServerSideProps (context: GetServerSidePropsContext) {
     const token = context.req.cookies.token;
@@ -34,7 +34,7 @@ export function getServerSideProps (context: GetServerSidePropsContext) {
 const UserCollection = () => {
     const [collectionShow, setCollectionShow] = useState(0);
     const [collectionsList, setCollectionsList] = useState<Collection[]>([]);
-    const [collectionVinyls, setCollectionVinyls] = useState<CollectionVinyl[]>([]);
+    const [collectionVinyls, setCollectionVinyls] = useState<Array<CollectionVinyl | Search | Trade>>([]);
     const [searchPage, setSearchPage] = useState(1);
     const [searchData, setSearchData] = useState({ title: '', artist: '', year: '' });
     const [isLoadingCollectionVinyls, setIsLoadingCollectionVinyls] = useState(true);
