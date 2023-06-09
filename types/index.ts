@@ -1,9 +1,9 @@
-export type * from './User.js';
-export type * from './Discog.js';
+export * from './User.js';
+export * from './Discog.js';
 
-export type * from './Collection.js';
-export type * from './CollectionVinyl.js';
+export * from './Collection.js';
+export * from './CollectionVinyl.js';
 
-export type * from './Vinyl.js';
-export type * from './Trade.js';
-export type * from './Search.js';
+export * from './Vinyl.js';
+export * from './Trade.js';
+export * from './Search.js';
