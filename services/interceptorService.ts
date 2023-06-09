@@ -77,7 +77,8 @@ axiosApiInstance.interceptors.response.use(
         return response;
     },
     async function (error: AxiosError) {
-        const originalRequest = error.config;
+        // TODO je ne trouve pas de doc axios avec ce _retry, il faudrait réussir a savoir d'où il vient car n'existant pas sur le type AxiosRequestConfig je suis obliger de le rajouter manuellement
+        const originalRequest: AxiosRequestConfig & { _retry?: boolean } = error.config || {};
         if (!originalRequest?._retry && [401, 403].includes(error.response?.status || 0)) {
             originalRequest._retry = true;
             const cookies = new Cookies();
