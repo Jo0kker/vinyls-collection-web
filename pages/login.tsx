@@ -1,16 +1,18 @@
-import { useBearStore } from '@store/useBearStore';
-import { Field, Form, Formik } from 'formik';
-import type { FormikHelpers, FieldProps } from 'formik';
-import { InputText } from '@components/InputText';
-import Link from 'next/link';
 import axios from 'axios';
-import type { AxiosResponse } from 'axios';
-import axiosApiInstance from '../services/interceptorService';
-import { showToast } from '@utils/utils';
-import { useRouter } from 'next/router';
-import { Button } from '@components/Button';
+import Link from 'next/link';
 import Head from 'next/head';
 import { Cookies } from 'react-cookie';
+import { useRouter } from 'next/router';
+import { Field, Form, Formik } from 'formik';
+
+import { showToast } from '@utils/utils';
+import { Button } from '@components/Button';
+import { InputText } from '@components/InputText';
+import { useBearStore } from '@store/useBearStore';
+import axiosApiInstance from '@services/interceptorService';
+
+import type { AxiosResponse } from 'axios';
+import type { FormikHelpers, FieldProps } from 'formik';
 
 interface LoginProps {
   email: string;

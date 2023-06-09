@@ -1,5 +1,5 @@
-import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 import type { FieldProps } from 'formik';
+import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 
 type buildInfo = {
   label: string;

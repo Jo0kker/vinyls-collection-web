@@ -1,9 +1,10 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Footer } from 'flowbite-react';
-import { faFacebook } from '@fortawesome/free-brands-svg-icons';
-import logo from '@images/logo.png';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Footer } from 'flowbite-react';
+import { faFacebook } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import logo from '@images/logo.png';
 
 export const FooterPerso = () => {
     return (

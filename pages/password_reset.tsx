@@ -1,12 +1,14 @@
-import { Field, Form, Formik } from 'formik';
-import type { FieldProps } from 'formik';
-import { InputText } from '@components/InputText';
-import { Button } from '@components/Button';
 import axios from 'axios';
-import { showToast } from '@utils/utils';
-import { useRouter } from 'next/router';
 import * as Yup from 'yup';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { Field, Form, Formik } from 'formik';
+
+import { showToast } from '@utils/utils';
+import { Button } from '@components/Button';
+import { InputText } from '@components/InputText';
+
+import type { FieldProps } from 'formik';
 
 const PasswordReset = () => {
     const router = useRouter();

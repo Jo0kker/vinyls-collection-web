@@ -1,10 +1,11 @@
+import { Fragment } from 'react';
+import { Sidebar } from 'flowbite-react';
 import { CheckIcon } from '@heroicons/react/20/solid';
 import { Listbox, Transition } from '@headlessui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Fragment } from 'react';
 import { faChevronDown } from '@fortawesome/pro-light-svg-icons';
-import { Sidebar } from 'flowbite-react';
-import type { Collection } from '@definitions/Collection';
+
+import type { Collection } from '@definitions/index';
 
 function classNames (...classes: string[]) {
     return classes.filter(Boolean).join(' ');

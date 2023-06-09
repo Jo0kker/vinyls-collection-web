@@ -1,12 +1,14 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import Image from 'next/image';
 import { Carousel } from 'flowbite-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faCompactDisc } from '@fortawesome/pro-light-svg-icons';
+
 import { Button } from '@components/Button';
+import axiosApiInstance from '@services/interceptorService';
+
 import type { CollectionVinyl } from '@definitions/CollectionVinyl';
-import axiosApiInstance from '../services/interceptorService';
-import Link from 'next/link';
 
 export async function getServerSideProps () {
     // get last 6 vinyls

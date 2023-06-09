@@ -1,9 +1,11 @@
-import type { CollectionVinyl } from '@definitions/CollectionVinyl';
-import axiosApiInstance from '../../services/interceptorService';
-import { Button } from '@components/Button';
-import type { AxiosResponse } from 'axios';
 import { useState } from 'react';
+
+import { Button } from '@components/Button';
 import ListVinyls from '@components/ListVinyls';
+import axiosApiInstance from '@services/interceptorService';
+
+import type { AxiosResponse } from 'axios';
+import type { CollectionVinyl } from '@definitions/index';
 
 export async function getServerSideProps (page = 1) {
     const reqCollectionVinyl = await axiosApiInstance.post(

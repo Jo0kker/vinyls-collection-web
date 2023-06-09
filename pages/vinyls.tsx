@@ -1,13 +1,13 @@
+import Link from 'next/link';
 import Image from 'next/image';
+import { DateTime } from 'luxon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCompactDisc } from '@fortawesome/pro-light-svg-icons';
-import axiosApiInstance from '../services/interceptorService';
-import type { CollectionVinyl } from '@definitions/CollectionVinyl';
-import type { Search } from '@definitions/Search';
-import type { Trade } from '@definitions/Trade';
+
 import { Button } from '@components/Button';
-import Link from 'next/link';
-import { DateTime } from 'luxon';
+import axiosApiInstance from '@services/interceptorService';
+
+import type { CollectionVinyl, Search, Trade } from '@definitions/index';
 
 export async function getServerSideProps () {
     // get last 6 vinyls

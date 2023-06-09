@@ -1,13 +1,16 @@
-import { Field, Form, Formik } from 'formik';
-import type { FormikHelpers, FieldProps } from 'formik';
-import { InputText } from '@components/InputText';
-import Link from 'next/link';
-import { Button } from '@components/Button';
-import { Label } from 'flowbite-react';
 import axios from 'axios';
-import { showToast } from '@utils/utils';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
+import Link from 'next/link';
+import { Label } from 'flowbite-react';
+import { useRouter } from 'next/router';
+import { Field, Form, Formik } from 'formik';
+
+import { showToast } from '@utils/utils';
+import { Button } from '@components/Button';
+import { InputText } from '@components/InputText';
+
+import type { FormikHelpers, FieldProps } from 'formik';
+
 
 interface RegisterProps {
   name: string;

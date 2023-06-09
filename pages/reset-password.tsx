@@ -1,10 +1,11 @@
 import axios from 'axios';
-import type { AxiosResponse } from 'axios';
-import { useRouter } from 'next/router';
+import { Form, Formik } from 'formik';
+
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+
 import { showToast } from '@utils/utils';
 import { Button } from '@components/Button';
-import { Form, Formik } from 'formik';
 
 // token in url, define new password
 const ResetPassword = () => {

@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
-import SideBar from '@components/SideBar';
-import { useBearStore } from '@store/useBearStore';
-import axiosApiInstance from '../../services/interceptorService';
-import type { CollectionVinyl } from '@definitions/CollectionVinyl';
-import type { Collection } from '@definitions/Collection';
-import type { AxiosError } from 'axios';
-import ListVinyls from '@components/ListVinyls';
-import { Button } from '@components/Button';
-import SlideOvers from '@components/SlideOvers';
-import type { FormikValues } from 'formik';
+
 import { showToast } from '@utils/utils';
+import SideBar from '@components/SideBar';
+import { Button } from '@components/Button';
+import ListVinyls from '@components/ListVinyls';
+import SlideOvers from '@components/SlideOvers';
+import { useBearStore } from '@store/useBearStore';
+import axiosApiInstance from '@services/interceptorService';
+
+import type { AxiosError } from 'axios';
+import type { FormikValues } from 'formik';
 import type { GetServerSidePropsContext } from 'next';
 import type { CollectionVinyl, Collection, Search, Trade, DiscogResult } from '@definitions/index';
 

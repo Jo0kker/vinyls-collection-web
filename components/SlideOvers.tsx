@@ -1,14 +1,16 @@
+import Image from 'next/image';
 import { Fragment, useState } from 'react';
+import { Formik, Form, Field } from 'formik';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { Formik, Form, Field } from 'formik';
-import type { FieldProps, FormikValues } from 'formik';
-import type { DiscogResult } from '@definitions/Discog.js';
-import { InputText } from '@components/InputText';
-import type { Dispatch, SetStateAction } from 'react';
-import Image from 'next/image';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { InputText } from '@components/InputText';
+
+import type { Dispatch, SetStateAction } from 'react';
+import type { FieldProps, FormikValues } from 'formik';
+import type { DiscogResult } from '@definitions/index';
 
 export default function SlideOvers ({
     open,

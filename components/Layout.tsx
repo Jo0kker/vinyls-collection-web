@@ -1,8 +1,10 @@
-import type { FunctionComponent, PropsWithChildren } from 'react';
-import NavBar from '@components/NavBar';
-import Lottie from 'lottie-react';
-import vinylsAnimation from '@assets/lottieJson/17807-sound-animation.json';
 import Link from 'next/link';
+import Lottie from 'lottie-react';
+
+import NavBar from '@components/NavBar';
+import vinylsAnimation from '@assets/lottieJson/17807-sound-animation.json';
+
+import type { FunctionComponent, PropsWithChildren } from 'react';
 
 export const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
     return (

@@ -1,16 +1,14 @@
+import Link from 'next/link';
+import Lottie from 'lottie-react';
 import { Menu, Popover, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState, useMemo } from 'react';
-import type { FunctionComponent } from 'react';
-import Link from 'next/link';
-import {
-    Bars3Icon,
-    ChevronDownIcon,
-    XMarkIcon,
-} from '@heroicons/react/20/solid';
-import Lottie from 'lottie-react';
-import vinylsAnimation from '@assets/lottieJson/vinyl-loading.json';
-import { useBearStore } from '@store/useBearStore';
+import { Bars3Icon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid';
+
 import { showToast } from '@utils/utils';
+import { useBearStore } from '@store/useBearStore';
+import vinylsAnimation from '@assets/lottieJson/vinyl-loading.json';
+
+import type { FunctionComponent } from 'react';
 
 function classNames (...classes: string[]) {
     return classes.filter(Boolean).join(' ');

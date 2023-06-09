@@ -1,9 +1,11 @@
 import axios from 'axios';
-import type { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-import { useBearStore } from '@store/useBearStore';
 import jwtDecode from 'jwt-decode';
-import type { JwtPayload } from 'jwt-decode';
 import { Cookies } from 'react-cookie';
+
+import { useBearStore } from '@store/useBearStore';
+
+import type { JwtPayload } from 'jwt-decode';
+import type { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 const axiosApiInstance = axios.create();
 axiosApiInstance.defaults.headers.common['Access-Control-Allow-Origin'] = '*';

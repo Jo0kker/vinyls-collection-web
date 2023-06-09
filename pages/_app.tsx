@@ -1,17 +1,19 @@
-import '@styles/globals.scss';
-import type { AppProps } from 'next/app';
-import { Layout } from '@components/Layout';
-import Banner from '@components/Banner';
-import { FooterPerso } from '@components/FooterPerso';
-import { Toaster } from 'react-hot-toast';
-import NextNProgress from 'nextjs-progressbar';
-import { useBearStore } from '@store/useBearStore';
-import axiosApiInstance from 'services/interceptorService';
-import type { AxiosResponse } from 'axios';
-import { Cookies } from 'react-cookie';
-import { useEffect, useState } from 'react';
 import Lottie from 'lottie-react';
+import { Cookies } from 'react-cookie';
+import { Toaster } from 'react-hot-toast';
+import { useEffect, useState } from 'react';
+import NextNProgress from 'nextjs-progressbar';
+
+import '@styles/globals.scss';
+import Banner from '@components/Banner';
+import { Layout } from '@components/Layout';
+import { useBearStore } from '@store/useBearStore';
+import { FooterPerso } from '@components/FooterPerso';
+import axiosApiInstance from '@services/interceptorService';
 import loading from '@assets/lottieJson/88944-vinyl-loading.json';
+
+import type { AppProps } from 'next/app';
+import type { AxiosResponse } from 'axios';
 
 export default function App ({ Component, pageProps }: AppProps) {
     const [isReady, setIsReady] = useState(false);

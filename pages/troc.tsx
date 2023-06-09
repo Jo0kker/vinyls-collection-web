@@ -1,9 +1,10 @@
 import { useState } from 'react';
+
 import { useBearStore } from '@store/useBearStore';
-import type { Trade } from '@definitions/Trade';
-import type { Search } from '@definitions/Search';
-import axiosApiInstance from '../services/interceptorService';
+import axiosApiInstance from '@services/interceptorService';
+
 import type { GetServerSidePropsContext } from 'next';
+import type { Trade, Search } from '@definitions/index';
 
 function classNames (...classes: string[]) {
     return classes.filter(Boolean).join(' ');

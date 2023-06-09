@@ -1,12 +1,13 @@
-import axiosApiInstance from '../../services/interceptorService';
-import type { Vinyl as IVinyl } from '@definitions/Vinyl';
 import Image from 'next/image';
+import { useState } from 'react';
+import { Accordion } from 'flowbite-react';
+import axiosApiInstance from '@services/interceptorService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCompactDisc, faVideo } from '@fortawesome/pro-light-svg-icons';
-import { YoutubeEmbed } from '@components/YoutubeEmbed';
-import { Accordion } from 'flowbite-react';
-import { useState } from 'react';
+
 import { Button } from '@components/Button';
+import { YoutubeEmbed } from '@components/YoutubeEmbed';
+import type { Vinyl as IVinyl } from '@definitions/index';
 
 export async function getServerSideProps (context: { params: { id: number | string } }) {
     const { id } = context.params;

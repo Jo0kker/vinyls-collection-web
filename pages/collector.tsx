@@ -1,11 +1,13 @@
-import axiosApiInstance from '../services/interceptorService';
-import type { User } from '@definitions/User';
-import Image from 'next/image';
 import Link from 'next/link';
-import { DateTime } from 'luxon';
-import { Button } from '@components/Button';
+import Image from 'next/image';
 import { useState } from 'react';
+import { DateTime } from 'luxon';
+
+import { Button } from '@components/Button';
+import axiosApiInstance from '@services/interceptorService';
+
 import type { AxiosResponse } from 'axios';
+import type { User } from '@definitions/index';
 
 export async function getServerSideProps () {
     const req = await axiosApiInstance.get('/users');
