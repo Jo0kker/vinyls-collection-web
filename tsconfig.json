@@ -17,14 +17,15 @@
     "incremental": true,
     "paths": {
       "@components/*": ["components/*"],
-      "@types/*": ["types/*"],
+      "@definitions/*": ["types/*"],
       "@lib/*": ["lib/*"],
       "@pages/*": ["pages/*"],
       "@styles/*": ["styles/*"],
       "@assets/*": ["assets/*"],
       "@images/*": ["assets/images/*"],
       "@store/*": ["store/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@services/*": ["services/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
