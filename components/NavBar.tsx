@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useBearStore } from '@store/useBearStore';
 import type { FunctionComponent } from 'react';
 import DesktopMenu from '@components/menu/Desktop';
@@ -29,7 +29,7 @@ const NavBar: FunctionComponent = () => {
     const [menuItems, setMenuItems] = useState<{ name: string; href: string; icon: JSX.Element; }[]>(
         []
     );
-  // const user = useQueryClient().getQueryData<User>(["me"]);
+    // const user = useQueryClient().getQueryData<User>(["me"]);
 
 
     const menuItemsLogin = useMemo(() => ([
