@@ -7,27 +7,22 @@ import Banner from '@components/Banner';
 import NextNProgress from 'nextjs-progressbar';
 import { FooterPerso } from '@components/FooterPerso';
 import type { PropsWithChildren } from 'react';
-import { useEffect, useState } from 'react';
 import { useMe } from '../hooks/useUsers';
 import { useBearStore } from '@store/useBearStore';
 
 export const ProviderCustom = ({ children }: PropsWithChildren) => {
-    const [isReady, setIsReady] = useState(false);
     const cookie = new Cookies();
     const login = useBearStore(store => store.login);
     const token = cookie.get('token');
 
-    const { data: userData } = useMe({
-        onSuccess: () => setIsReady(true),
+    const { isSuccess } = useMe({
+        onSuccess: data => {
+            login(data);
+        },
         enabled: !!token
     });
 
-    useEffect(() => {
-        if (userData) login(userData);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userData]);
-
-    if (!isReady && !!token) {
+    if (typeof window === 'undefined' || (!isSuccess && !!token)) {
         return (
             <div
                 className={
