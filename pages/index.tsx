@@ -9,6 +9,7 @@ import { Button } from '@components/Button';
 import axiosApiInstance from '@services/interceptorService';
 
 import type { CollectionVinyl } from '@definitions/CollectionVinyl';
+import process from 'process';
 
 export async function getServerSideProps () {
     // get last 6 vinyls
@@ -87,14 +88,37 @@ export default function Home ({
                     <div className="h-56 sm:hidden">
                         <Carousel>
                             {collectionVinyls.map((collectionVinyl, key) => (
-                                <Image
+                                <Link
+                                    href={`/vinyls/${collectionVinyl.vinyl_id}`}
                                     key={key}
-                                    src={collectionVinyl.vinyl.image_path}
-                                    alt={collectionVinyl.vinyl.label}
-                                    width={300}
-                                    height={300}
-                                    className={'h-full w-full object-cover border-8'}
-                                />
+                                    className={'w-full h-full flex flex-col items-center justify-center'}
+                                >
+                                    {collectionVinyl.vinyl.image ? (
+                                        <Image
+                                            src={collectionVinyl.vinyl.image.startsWith('http') ? collectionVinyl.vinyl.image : process.env.NEXT_PUBLIC_API_URL + collectionVinyl.vinyl.image}
+                                            alt={collectionVinyl.vinyl.title}
+                                            width={200}
+                                            height={200}
+                                            style={{
+                                                objectFit: 'cover',
+                                                width: '100%',
+                                                height: '100%',
+                                            }}
+                                        />
+                                    ): (
+                                        <Image
+                                            src={'https://via.placeholder.com/100x100.png?text=No+Image'}
+                                            alt={collectionVinyl.vinyl.title}
+                                            width={200}
+                                            height={200}
+                                            style={{
+                                                objectFit: 'cover',
+                                                width: '100%',
+                                                height: '100%',
+                                            }}
+                                        />
+                                    )}
+                                </Link>
                             ))}
                         </Carousel>
                     </div>
@@ -109,17 +133,35 @@ export default function Home ({
                                 <Link
                                     href={`/vinyls/${collectionVinyl.vinyl_id}`}
                                     key={collectionVinyl.id}
+                                    className={'w-full h-full flex flex-col items-center justify-center'}
                                 >
-                                    <Image
-                                        src={collectionVinyl.vinyl.image_path}
-                                        alt={collectionVinyl.vinyl.label}
-                                        width={300}
-                                        height={300}
-                                        className={'h-56 w-56 object-cover border-8'}
-                                    />
-                                    <h3>{collectionVinyl.vinyl.label}</h3>
+                                    {collectionVinyl.vinyl.image ? (
+                                        <Image
+                                            src={collectionVinyl.vinyl.image.startsWith('http') ? collectionVinyl.vinyl.image : process.env.NEXT_PUBLIC_API_URL + collectionVinyl.vinyl.image}
+                                            alt={collectionVinyl.vinyl.title}
+                                            width={200}
+                                            height={200}
+                                            style={{
+                                                objectFit: 'cover',
+                                                width: '200px',
+                                                height: '200px',
+                                            }}
+                                        />
+                                    ): (
+                                        <Image
+                                            src={'https://via.placeholder.com/100x100.png?text=No+Image'}
+                                            alt={collectionVinyl.vinyl.title}
+                                            width={200}
+                                            height={200}
+                                            style={{
+                                                objectFit: 'cover',
+                                                width: '200px',
+                                                height: '200px',
+                                            }}
+                                        />
+                                    )}
+                                    <h3 className={'truncate w-1/2 text-center'}>{collectionVinyl.vinyl.title}</h3>
                                     <p className={'text-sm'}>{collectionVinyl.vinyl.artist}</p>
-                                    <p>{collectionVinyl.collection?.user?.name}</p>
                                 </Link>
                             ))
                             : ''}

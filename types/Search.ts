@@ -5,12 +5,9 @@ export interface Search {
   id: number;
   vinyl_id: number;
   vinyl: Vinyl;
-  description: string;
-  discogs_id: number;
-  discogs?: object;
-  image_path: string;
+  description?: string;
   user_id: number;
-  format_vinyl_id: number;
+  format_vinyl_id?: number;
   created_at: string;
   updated_at: string;
   user?: User;

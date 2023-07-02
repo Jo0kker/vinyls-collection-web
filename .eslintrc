@@ -8,6 +8,7 @@
         "next",
         "plugin:react/recommended",
         "plugin:import/recommended",
+        "plugin:import/typescript",
         "plugin:react/jsx-runtime",
         "plugin:@typescript-eslint/recommended"
     ],

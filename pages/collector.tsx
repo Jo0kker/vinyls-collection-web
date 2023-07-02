@@ -7,7 +7,7 @@ import { Button } from '@components/Button';
 import axiosApiInstance from '@services/interceptorService';
 
 import type { AxiosResponse } from 'axios';
-import type { User } from '@definitions/index';
+import type { User } from '@definitions/User';
 
 export async function getServerSideProps () {
     const req = await axiosApiInstance.get('/users');

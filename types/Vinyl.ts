@@ -12,20 +12,16 @@ export interface Video {
 
 export interface Vinyl {
   id: number;
-  label: string;
-  track_list: string;
-  artist: string;
-  genre: string;
-  year_released: string;
-  image_path: string;
-  provenance: string;
-  discog_id: number;
-  discogs?: {
-    title: string,
-    thumb: string,
-    tracklist: Track[],
-    videos: Video[]
-  };
+  title: string;
+  track_list?: string;
+  artist?: string;
+  genre?: string;
+  released?: string;
+  image?: string;
+  provenance?: string;
+  discog_id?: number;
+  discog_url?: string;
+  discog_videos?: string;
   created_at: Date;
-  updated_at: Date;
+  updated_at?: Date;
 }
