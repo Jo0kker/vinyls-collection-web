@@ -8,6 +8,7 @@ import { Button } from '@components/Button';
 import axiosApiInstance from '@services/interceptorService';
 
 import type { CollectionVinyl, Search, Trade } from '@definitions/index';
+import * as process from 'process';
 
 export async function getServerSideProps () {
     // get last 6 vinyls
@@ -83,19 +84,29 @@ const Vinyls = ({
                                 'flex flex-col items-center m-4 p-2 w-48 hover:bg-gray-300'
                             }
                         >
-                            <Image
-                                src={collectionVinyl.vinyl.image_path}
-                                alt={collectionVinyl.vinyl.label}
-                                width={100}
-                                height={100}
-                                className={'object-cover w-full'}
-                            />
+                            {collectionVinyl.vinyl.image ? (
+                                <Image
+                                    src={collectionVinyl.vinyl.image.startsWith('http') ? collectionVinyl.vinyl.image : process.env.NEXT_PUBLIC_API_URL + collectionVinyl.vinyl.image}
+                                    alt={collectionVinyl.vinyl.title}
+                                    width={100}
+                                    height={100}
+                                    className={'object-cover w-full'}
+                                />
+                            ): (
+                                <Image
+                                    src={'https://via.placeholder.com/100x100.png?text=No+Image'}
+                                    alt={collectionVinyl.vinyl.title}
+                                    width={100}
+                                    height={100}
+                                    className={'object-cover w-full'}
+                                />
+                            )}
                             <div className={'flex flex-col items-center'}>
                                 <h3 className={'text-fuchsia-800 font-bold text-lg'}>
                                     {/* cut if string too long */}
-                                    {collectionVinyl.vinyl.label.length > 15
-                                        ? collectionVinyl.vinyl.label.substring(0, 15) + '...'
-                                        : collectionVinyl.vinyl.label}
+                                    {collectionVinyl.vinyl.title.length > 15
+                                        ? collectionVinyl.vinyl.title.substring(0, 15) + '...'
+                                        : collectionVinyl.vinyl.title}
                                 </h3>
                                 <h4 className={'text-fuchsia-800 font-bold text-sm'}>
                                     {collectionVinyl.vinyl.artist}
@@ -127,7 +138,7 @@ const Vinyls = ({
                         >
                             <Image
                                 src={trade.image_path}
-                                alt={trade.vinyl.label}
+                                alt={trade.vinyl.title}
                                 width={100}
                                 height={100}
                                 className={'object-cover w-full'}
@@ -135,9 +146,9 @@ const Vinyls = ({
                             <div className={'flex flex-col items-center'}>
                                 <h3 className={'text-fuchsia-800 font-bold text-lg'}>
                                     {/* cut if string too long */}
-                                    {trade.vinyl.label.length > 15
-                                        ? trade.vinyl.label.substring(0, 15) + '...'
-                                        : trade.vinyl.label}
+                                    {trade.vinyl.title.length > 15
+                                        ? trade.vinyl.title.substring(0, 15) + '...'
+                                        : trade.vinyl.title}
                                 </h3>
                                 <h4
                                     className={
@@ -175,19 +186,29 @@ const Vinyls = ({
                             key={search.id}
                             className={'flex flex-col items-center m-4 w-48'}
                         >
-                            <Image
-                                src={search.image_path}
-                                alt={search.vinyl.label}
-                                width={100}
-                                height={100}
-                                className={'object-cover w-full'}
-                            />
+                            {search.vinyl.image ? (
+                                <Image
+                                    src={search.vinyl.image}
+                                    alt={search.vinyl.title}
+                                    width={100}
+                                    height={100}
+                                    className={'object-cover w-full'}
+                                />
+                            ) : (
+                                <Image
+                                    src={'https://via.placeholder.com/100x100.png?text=No+Image'}
+                                    alt={search.vinyl.title}
+                                    width={100}
+                                    height={100}
+                                    className={'object-cover w-full'}
+                                />
+                            )}
                             <div className={'flex flex-col items-center'}>
                                 <h3 className={'text-fuchsia-800 font-bold text-lg'}>
                                     {/* cut if string too long */}
-                                    {search.vinyl.label.length > 15
-                                        ? search.vinyl.label.substring(0, 15) + '...'
-                                        : search.vinyl.label}
+                                    {search.vinyl.title.length > 15
+                                        ? search.vinyl.title.substring(0, 15) + '...'
+                                        : search.vinyl.title}
                                 </h3>
                                 <h4 className={'text-fuchsia-800 font-bold text-sm'}>
                                     {search.vinyl.artist}
