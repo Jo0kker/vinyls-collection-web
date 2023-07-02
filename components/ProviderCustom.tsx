@@ -27,7 +27,7 @@ export const ProviderCustom = ({ children }: PropsWithChildren) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userData]);
 
-    if (!isReady) {
+    if (!isReady && !!token) {
         return (
             <div
                 className={
