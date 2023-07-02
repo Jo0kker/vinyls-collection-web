@@ -56,21 +56,19 @@ const Register = () => {
 
     return (
         <div
-            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
+            className="pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col"
         >
             <Head>
                 <title>Inscription</title>
             </Head>
             <div
-                className={
-                    'flex flex-row justify-center font-bold text-2xl mt-6'
-                }
+                className="flex flex-row justify-center font-bold text-2xl mt-6"
             >
-                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
-                <h1 className={'text-fuchsia-800'}>
+                <span className="mr-3 text-emerald-500">&#47;&#47;</span>
+                <h1 className="text-fuchsia-800">
                     Pas de compte ? Inscrivez-vous
                 </h1>
-                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
+                <span className="ml-3 text-orange-400">&#47;&#47;</span>
             </div>
             <Formik
                 initialValues={{
@@ -95,17 +93,13 @@ const Register = () => {
             >
                 <Form>
                     <div
-                        className={'flex flex-col justify-center items-center'}
+                        className="flex flex-col justify-center items-center"
                     >
                         <div
-                            className={
-                                'flex flex-col justify-center gap-2 p-4 mt-4 '
-                            }
+                            className="flex flex-col justify-center gap-2 p-4 mt-4 "
                         >
                             <div
-                                className={
-                                    'flex flex-col lg:flex-row justify-center align-middle rounded bg-black bg-opacity-20 p-4 gap-4'
-                                }
+                                className="flex flex-col lg:flex-row justify-center align-middle rounded bg-black bg-opacity-20 p-4 gap-4"
                             >
                                 <Field name="name">
                                     {({ field, form, meta }: FieldProps) => (
@@ -118,9 +112,7 @@ const Register = () => {
                                                 type: 'text',
                                                 placeholder: 'Pseudo'
                                             }}
-                                            className={
-                                                'flex flex-col sm:flex-row sm:justify-between lg:flex-1 items-center content-center gap-4'
-                                            }
+                                            className="flex flex-col sm:flex-row sm:justify-between lg:flex-1 items-center content-center gap-4"
                                         />
                                     )}
                                 </Field>
@@ -135,17 +127,13 @@ const Register = () => {
                                                 type: 'email',
                                                 placeholder: 'Email'
                                             }}
-                                            className={
-                                                'flex flex-col sm:flex-row sm:justify-between lg:flex-1 items-center content-center gap-4 mt-4 lg:mt-0'
-                                            }
+                                            className="flex flex-col sm:flex-row sm:justify-between lg:flex-1 items-center content-center gap-4 mt-4 lg:mt-0"
                                         />
                                     )}
                                 </Field>
                             </div>
                             <div
-                                className={
-                                    'flex flex-col lg:flex-row justify-center align-middle rounded bg-black bg-opacity-20 p-4 gap-4'
-                                }
+                                className="flex flex-col lg:flex-row justify-center align-middle rounded bg-black bg-opacity-20 p-4 gap-4"
                             >
                                 <Field name="password">
                                     {({ field, form, meta }: FieldProps) => (
@@ -158,9 +146,7 @@ const Register = () => {
                                                 type: 'password',
                                                 placeholder: 'Mot de passe'
                                             }}
-                                            className={
-                                                'flex flex-col sm:flex-row sm:justify-between lg:flex-1 items-center content-center gap-4'
-                                            }
+                                            className="flex flex-col sm:flex-row sm:justify-between lg:flex-1 items-center content-center gap-4"
                                         />
                                     )}
                                 </Field>
@@ -175,9 +161,7 @@ const Register = () => {
                                                 type: 'password',
                                                 placeholder: 'Mot de passe'
                                             }}
-                                            className={
-                                                'flex flex-col sm:flex-row sm:justify-between lg:flex-1 items-center content-center gap-4 mt-4 lg:mt-0'
-                                            }
+                                            className="flex flex-col sm:flex-row sm:justify-between lg:flex-1 items-center content-center gap-4 mt-4 lg:mt-0"
                                         />
                                     )}
                                 </Field>
@@ -185,25 +169,21 @@ const Register = () => {
                         </div>
                     </div>
                     <div
-                        className={
-                            'flex flex-col lg:flex-row lg:justify-around justify-center items-center'
-                        }
+                        className="flex flex-col lg:flex-row lg:justify-around justify-center items-center"
                     >
                         <Field name="terms">
                             {({ field }: FieldProps) => (
-                                <div className={'mb-2'}>
+                                <div className="mb-2">
                                     <Label
-                                        className={
-                                            'flex flex-row items-center gap-2'
-                                        }
+                                        className="flex flex-row items-center gap-2"
                                         htmlFor="terms"
                                     >
                                         <input
                                             type="checkbox"
-                                            className={'focus:ring-0'}
+                                            className="focus:ring-0"
                                             {...field}
                                         />
-                                        <span className={'text-gray-700'}>
+                                        <span className="text-gray-700">
                                             J'accepte les conditions générales
                                             d'utilisation
                                         </span>
@@ -213,9 +193,7 @@ const Register = () => {
                         </Field>
                         <div>
                             <button
-                                className={
-                                    'text-white bg-fuchsia-800 h-auto rounded font-roboto px-4 py-2'
-                                }
+                                className="text-white bg-fuchsia-800 h-auto rounded font-roboto px-4 py-2"
                                 type="submit"
                             >
                                 Connexion
@@ -224,8 +202,8 @@ const Register = () => {
                     </div>
                 </Form>
             </Formik>
-            <Button className={'my-12'}>
-                <Link href={'/login'}>Déjà un compte ? Connectez-vous !</Link>
+            <Button className="my-12">
+                <Link href="/login">Déjà un compte ? Connectez-vous !</Link>
             </Button>
         </div>
     );

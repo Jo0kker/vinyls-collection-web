@@ -43,15 +43,13 @@ const ResetPassword = () => {
     return (
         <div className="pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col">
             <div
-                className={
-                    'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'
-                }
+                className="flex flex-row justify-center font-bold text-2xl mt-6 mb-4"
             >
-                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
-                <h1 className={'text-fuchsia-800'}>
+                <span className="mr-3 text-emerald-500">&#47;&#47;</span>
+                <h1 className="text-fuchsia-800">
                     Réinitialisation de mot de passe
                 </h1>
-                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
+                <span className="ml-3 text-orange-400">&#47;&#47;</span>
             </div>
             <div className="flex flex-col justify-center items-center lg:mx-32">
                 <Formik

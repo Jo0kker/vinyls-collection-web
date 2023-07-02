@@ -5,7 +5,6 @@ import SideBar from '@components/SideBar';
 import { Button } from '@components/Button';
 import ListVinyls from '@components/ListVinyls';
 import SlideOvers from '@components/SlideOvers';
-import { useBearStore } from '@store/useBearStore';
 import axiosApiInstance from '@services/interceptorService';
 
 import type { AxiosError } from 'axios';
@@ -18,26 +17,23 @@ import type {
     Trade,
     DiscogResult
 } from '@definitions/index';
+import { useSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@utils/authOptions';
 
-export function getServerSideProps(context: GetServerSidePropsContext) {
-    const token = context.req.cookies.token;
-    const refresh_token = context.req.cookies.refresh_token;
-
-    if (!token || !refresh_token) {
-        return {
-            redirect: {
-                destination: '/login',
-                permanent: false
-            }
-        };
-    }
-
+export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
-        props: {}
+        props: {
+            session: await getServerSession(
+                context.req,
+                context.res,
+                authOptions
+            )
+        }
     };
 }
 
-const UserCollection = () => {
+export default function UserCollection() {
     const [collectionShow, setCollectionShow] = useState(0);
     const [collectionsList, setCollectionsList] = useState<Collection[]>([]);
     const [collectionVinyls, setCollectionVinyls] = useState<
@@ -53,13 +49,14 @@ const UserCollection = () => {
         useState(true);
     const [vinylSearch, setVinylSearch] = useState<DiscogResult[]>([]);
     const [slideIsOpen, setSlideIsOpen] = useState(false);
-    const user = useBearStore(state => state.user);
+
+    const { data: session } = useSession();
 
     const getAllCollections = useCallback(async () => {
-        if (!user) return;
+        if (!session?.user) return;
 
         const reqCollectionVinyl = await axiosApiInstance.get(
-            `/users/${user.id}/collections`
+            `/users/${session.user.id}/collections`
         );
         // add search and trades to collections
         setCollectionsList([
@@ -69,16 +66,16 @@ const UserCollection = () => {
         ]);
 
         setCollectionShow(reqCollectionVinyl.data.data[0].id);
-    }, [user]);
+    }, [session?.user]);
 
     const getCollectionVinyls = useCallback(async () => {
-        if (!user || !collectionShow) return;
+        if (!session?.user || !collectionShow) return;
         setIsLoadingCollectionVinyls(true);
         // Il faudras rajouter une vérification sur -2 lorsque les échanges seront implémentés
         let url: string;
 
         if (collectionShow === -1) {
-            url = `/users/${user.id}/searches?include=vinyl`;
+            url = `/users/${session.user.id}/searches?include=vinyl`;
         } else {
             url = `/collections/${collectionShow}/collectionVinyl?include=vinyl`;
         }
@@ -87,7 +84,7 @@ const UserCollection = () => {
 
         setCollectionVinyls(response.data.data);
         setIsLoadingCollectionVinyls(false);
-    }, [user, collectionShow]);
+    }, [session?.user, collectionShow]);
 
     const searchVinyls = async (data: FormikValues) => {
         const reqVinyls = await axiosApiInstance.post(
@@ -102,7 +99,7 @@ const UserCollection = () => {
     };
 
     const addVinylToCollection = (idDiscogs: number) => {
-        if (user) {
+        if (session?.user) {
             axiosApiInstance
                 .post('/collectionVinyl', {
                     discog_id: idDiscogs,
@@ -131,30 +128,22 @@ const UserCollection = () => {
     }, [getCollectionVinyls]);
 
     return (
-        <div
-            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
-        >
-            <div
-                className={
-                    'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'
-                }
-            >
-                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
-                <h1 className={'text-fuchsia-800'}>
-                    Gestion de vos collections
-                </h1>
-                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
+        <div className="pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col">
+            <div className="flex flex-row justify-center font-bold text-2xl mt-6 mb-4">
+                <span className="mr-3 text-emerald-500">&#47;&#47;</span>
+                <h1 className="text-fuchsia-800">Gestion de vos collections</h1>
+                <span className="ml-3 text-orange-400">&#47;&#47;</span>
             </div>
-            <div className={'flex flex-col sm:flex-row'}>
+            <div className="flex flex-col sm:flex-row">
                 <SideBar
                     navItems={collectionsList}
                     activeTab={collectionShow}
                     setActiveTab={setCollectionShow}
                 />
-                <div className={'flex flex-col flex-1'}>
+                <div className="flex flex-col flex-1">
                     <Button
                         onClick={() => setSlideIsOpen(true)}
-                        className={'my-4'}
+                        className="my-4"
                     >
                         Ajouter un vinyle
                     </Button>
@@ -174,6 +163,4 @@ const UserCollection = () => {
             </div>
         </div>
     );
-};
-
-export default UserCollection;
+}

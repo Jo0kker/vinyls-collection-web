@@ -20,9 +20,7 @@ const MainItem = ({ name, href, icon, subMenu, setSubMenu }: Item) => {
             {!subMenu ? (
                 <Link
                     href={href}
-                    className={
-                        'inline-flex flex-col items-center justify-center p-4 hover:bg-gray-50 dark:hover:bg-gray-800 group'
-                    }
+                    className="inline-flex flex-col items-center justify-center p-4 hover:bg-gray-50 dark:hover:bg-gray-800 group"
                 >
                     {icon}
                     <span className="sr-only">{name}</span>

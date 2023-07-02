@@ -13,7 +13,7 @@ export const YoutubeEmbed = ({ url }: YoutubeEmbedProps) => {
 
     return (
         <iframe
-            className={'w-full h-full'}
+            className="w-full h-full"
             src={`https://www.youtube.com/embed/${youtube_parser(url)}`}
             title="YouTube video player"
             frameBorder="0"

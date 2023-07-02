@@ -8,8 +8,11 @@ import axiosApiInstance from '@services/interceptorService';
 
 import type { AxiosResponse } from 'axios';
 import type { User } from '@definitions/User';
+import { getServerSession } from 'next-auth';
+import { GetServerSidePropsContext } from 'next';
+import { authOptions } from '@utils/authOptions';
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
     const req = await axiosApiInstance.get('/users');
     const users: User[] = req.data.data;
     const meta = req.data.meta;
@@ -17,22 +20,26 @@ export async function getServerSideProps() {
     return {
         props: {
             users,
-            meta
+            meta,
+            session: await getServerSession(
+                context.req,
+                context.res,
+                authOptions
+            )
         }
     };
 }
 
-const Collector = ({
-    users,
-    meta
-}: {
+type CollectorProps = {
     users: User[];
     meta: {
         current_page: number;
         last_page: number;
         total: number;
     };
-}) => {
+};
+
+export default function Collector({ users, meta }: CollectorProps) {
     const [collectors, setCollectors] = useState(users);
     const [currentPage, setCurrentPage] = useState(meta.current_page);
 
@@ -46,58 +53,48 @@ const Collector = ({
     };
 
     return (
-        <div
-            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
-        >
-            <div
-                className={
-                    'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'
-                }
-            >
-                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
-                <h1 className={'text-fuchsia-800'}>
-                    Liste des collectionneurs
-                </h1>
-                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
+        <div className="pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col">
+            <div className="flex flex-row justify-center font-bold text-2xl mt-6 mb-4">
+                <span className="mr-3 text-emerald-500">&#47;&#47;</span>
+                <h1 className="text-fuchsia-800">Liste des collectionneurs</h1>
+                <span className="ml-3 text-orange-400">&#47;&#47;</span>
             </div>
 
-            <div className={'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                 {collectors.map(user => (
                     <Link
                         key={user.id}
                         href={`/users/${user.id}`}
-                        className={
-                            'flex flex-row m-1 border border-gray-300 rounded border-8 hover:bg-gray-400'
-                        }
+                        className="flex flex-row m-1  border-gray-300 rounded border-8 hover:bg-gray-400"
                     >
-                        <Image
-                            src={user.avatar}
-                            alt={user.name}
-                            width={100}
-                            height={100}
-                            className={'cursor-pointer'}
-                        />
-                        <div className={'flex flex-col mx-3 justify-center'}>
+                        {!!user.avatar && (
+                            <Image
+                                src={user.avatar}
+                                alt={user.name}
+                                width={100}
+                                height={100}
+                                className="cursor-pointer"
+                            />
+                        )}
+                        <div className="flex flex-col mx-3 justify-center">
                             <h2>{user.name}</h2>
-                            <p className={'text-sm'}>
+                            <p className="text-sm">
                                 {user.collectionVinyls_count} vinyls
                             </p>
-                            <p className={'text-sm'}>
+                            <p className="text-sm">
                                 Dernière connection :{' '}
-                                {DateTime.fromFormat(
+                                {/* {DateTime.fromFormat(
                                     user.last_activity,
                                     'yyyy-MM-dd HH:mm:ss'
-                                ).toFormat('dd/MM/yyyy')}
+                                ).toFormat('dd/MM/yyyy')} */}
                             </p>
                         </div>
                     </Link>
                 ))}
             </div>
-            <Button className={'my-4'} onClick={loadMore}>
+            <Button className="my-4" onClick={loadMore}>
                 Charger plus
             </Button>
         </div>
     );
-};
-
-export default Collector;
+}

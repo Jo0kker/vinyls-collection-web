@@ -40,7 +40,7 @@ const MobileMenu = ({ menuItems }: MenuItem) => {
     const UserItem = {
         name: 'Settings',
         href: '#',
-        icon: <FontAwesomeIcon icon={faUser} className={'mr-2'} />,
+        icon: <FontAwesomeIcon icon={faUser} className="mr-2" />,
         subMenu: [
             {
                 name: 'Profile',

@@ -9,8 +9,11 @@ import axiosApiInstance from '@services/interceptorService';
 
 import type { CollectionVinyl, Search, Trade } from '@definitions/index';
 import * as process from 'process';
+import { getServerSession } from 'next-auth';
+import { GetServerSidePropsContext } from 'next';
+import { authOptions } from '@utils/authOptions';
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
     // get last 6 vinyls
     const reqCollectionVinyl = await axiosApiInstance.post(
         '/collectionVinyl/search?include=vinyl,collection,collection.user&limit=8',
@@ -43,52 +46,49 @@ export async function getServerSideProps() {
         props: {
             collectionVinyls,
             searchVinyls,
-            tradeVinyls
+            tradeVinyls,
+            session: await getServerSession(
+                context.req,
+                context.res,
+                authOptions
+            )
         }
     };
 }
 
-const Vinyls = ({
-    collectionVinyls,
-    searchVinyls,
-    tradeVinyls
-}: {
+type VinylsProps = {
     collectionVinyls: CollectionVinyl[];
     searchVinyls: Search[];
     tradeVinyls: Trade[];
-}) => {
+};
+
+export default function Vinyls({
+    collectionVinyls,
+    searchVinyls,
+    tradeVinyls
+}: VinylsProps) {
     return (
-        <div
-            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
-        >
-            <div
-                className={
-                    'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'
-                }
-            >
-                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
-                <h1 className={'text-fuchsia-800'}>
-                    Liste des derniers vinyls
-                </h1>
-                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
+        <div className="pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col">
+            <div className="flex flex-row justify-center font-bold text-2xl mt-6 mb-4">
+                <span className="mr-3 text-emerald-500">&#47;&#47;</span>
+                <h1 className="text-fuchsia-800">Liste des derniers vinyls</h1>
+                <span className="ml-3 text-orange-400">&#47;&#47;</span>
             </div>
 
             {/* Les derniers vinyls ajoutés */}
-            <div className={'lg:mx-32'}>
-                <h2 className={'mt-4 mb-2 text-fuchsia-800 font-bold text-xl'}>
-                    <span className={'text-emerald-500'}>
+            <div className="lg:mx-32">
+                <h2 className="mt-4 mb-2 text-fuchsia-800 font-bold text-xl">
+                    <span className="text-emerald-500">
                         <FontAwesomeIcon icon={faCompactDisc} />{' '}
                     </span>{' '}
                     Derniers vinyls ajoutés
                 </h2>
-                <div className={'flex flex-row flex-wrap justify-center'}>
+                <div className="flex flex-row flex-wrap justify-center">
                     {collectionVinyls.map(collectionVinyl => (
                         <Link
                             href={`/vinyls/${collectionVinyl.vinyl.id}`}
                             key={collectionVinyl.id}
-                            className={
-                                'flex flex-col items-center m-4 p-2 w-48 hover:bg-gray-300'
-                            }
+                            className="flex flex-col items-center m-4 p-2 w-48 hover:bg-gray-300"
                         >
                             {collectionVinyl.vinyl.image ? (
                                 <Image
@@ -103,94 +103,74 @@ const Vinyls = ({
                                     alt={collectionVinyl.vinyl.title}
                                     width={100}
                                     height={100}
-                                    className={'object-cover w-full'}
+                                    className="object-cover w-full"
                                 />
                             ) : (
                                 <Image
-                                    src={
-                                        'https://via.placeholder.com/100x100.png?text=No+Image'
-                                    }
+                                    src="https://via.placeholder.com/100x100.png?text=No+Image"
                                     alt={collectionVinyl.vinyl.title}
                                     width={100}
                                     height={100}
-                                    className={'object-cover w-full'}
+                                    className="object-cover w-full"
                                 />
                             )}
-                            <div className={'flex flex-col items-center'}>
-                                <h3
-                                    className={
-                                        'text-fuchsia-800 font-bold text-lg'
-                                    }
-                                >
+                            <div className="flex flex-col items-center">
+                                <h3 className="text-fuchsia-800 font-bold text-lg">
                                     {/* cut if string too long */}
                                     {collectionVinyl.vinyl.title.length > 15
                                         ? collectionVinyl.vinyl.title.substring(
-                                            0,
-                                            15
-                                        ) + '...'
+                                              0,
+                                              15
+                                          ) + '...'
                                         : collectionVinyl.vinyl.title}
                                 </h3>
-                                <h4
-                                    className={
-                                        'text-fuchsia-800 font-bold text-sm'
-                                    }
-                                >
+                                <h4 className="text-fuchsia-800 font-bold text-sm">
                                     {collectionVinyl.vinyl.artist}
                                 </h4>
                             </div>
                         </Link>
                     ))}
                 </div>
-                <Link href={'/vinyls/list'}>
-                    <Button className={'mt-4'}>Voir tous les vinyls</Button>
+                <Link href="/vinyls/list">
+                    <Button className="mt-4">Voir tous les vinyls</Button>
                 </Link>
             </div>
             {/* Les derniers vinyls à échanger */}
-            <div className={'lg:mx-32'}>
-                <h2 className={'mt-4 mb-2 text-fuchsia-800 font-bold text-xl'}>
-                    <span className={'text-emerald-500'}>
+            <div className="lg:mx-32">
+                <h2 className="mt-4 mb-2 text-fuchsia-800 font-bold text-xl">
+                    <span className="text-emerald-500">
                         <FontAwesomeIcon icon={faCompactDisc} />{' '}
                     </span>{' '}
                     Derniers vinyls à échanger
                 </h2>
-                <div className={'flex flex-row flex-wrap justify-center'}>
+                <div className="flex flex-row flex-wrap justify-center">
                     {tradeVinyls.map(trade => (
                         <Link
                             href={`/vinyls/${trade.vinyl.id}`}
                             key={trade.id}
-                            className={
-                                'flex flex-col items-center m-4 p-2 w-48 hover:bg-gray-300'
-                            }
+                            className="flex flex-col items-center m-4 p-2 w-48 hover:bg-gray-300"
                         >
                             <Image
                                 src={trade.image_path}
                                 alt={trade.vinyl.title}
                                 width={100}
                                 height={100}
-                                className={'object-cover w-full'}
+                                className="object-cover w-full"
                             />
-                            <div className={'flex flex-col items-center'}>
-                                <h3
-                                    className={
-                                        'text-fuchsia-800 font-bold text-lg'
-                                    }
-                                >
+                            <div className="flex flex-col items-center">
+                                <h3 className="text-fuchsia-800 font-bold text-lg">
                                     {/* cut if string too long */}
                                     {trade.vinyl.title.length > 15
                                         ? trade.vinyl.title.substring(0, 15) +
                                           '...'
                                         : trade.vinyl.title}
                                 </h3>
-                                <h4
-                                    className={
-                                        'text-fuchsia-800 font-bold text-sm hover:text-amber-600'
-                                    }
-                                >
+                                <h4 className="text-fuchsia-800 font-bold text-sm hover:text-amber-600">
                                     <Link href={`/users/${trade.user_id}`}>
                                         {trade.user?.name}
                                     </Link>
                                 </h4>
-                                <p className={'text-sm'}>
+                                <p className="text-sm">
                                     {DateTime.fromISO(
                                         trade.updated_at
                                     ).toFormat('dd/MM/yyyy')}
@@ -199,25 +179,25 @@ const Vinyls = ({
                         </Link>
                     ))}
                 </div>
-                <Link href={'/trades'}>
-                    <Button className={'mt-4 mb-4'}>
+                <Link href="/trades">
+                    <Button className="mt-4 mb-4">
                         Voir tous les vinyls à échanger
                     </Button>
                 </Link>
             </div>
             {/* Les derniers vinyls recherchés */}
-            <div className={'lg:mx-32'}>
-                <h2 className={'mt-4 mb-2 text-fuchsia-800 font-bold text-xl'}>
-                    <span className={'text-emerald-500'}>
+            <div className="lg:mx-32">
+                <h2 className="mt-4 mb-2 text-fuchsia-800 font-bold text-xl">
+                    <span className="text-emerald-500">
                         <FontAwesomeIcon icon={faCompactDisc} />{' '}
                     </span>{' '}
                     Derniers vinyls recherchés
                 </h2>
-                <div className={'flex flex-row flex-wrap justify-center'}>
+                <div className="flex flex-row flex-wrap justify-center">
                     {searchVinyls.map(search => (
                         <div
                             key={search.id}
-                            className={'flex flex-col items-center m-4 w-48'}
+                            className="flex flex-col items-center m-4 w-48"
                         >
                             {search.vinyl.image ? (
                                 <Image
@@ -225,50 +205,38 @@ const Vinyls = ({
                                     alt={search.vinyl.title}
                                     width={100}
                                     height={100}
-                                    className={'object-cover w-full'}
+                                    className="object-cover w-full"
                                 />
                             ) : (
                                 <Image
-                                    src={
-                                        'https://via.placeholder.com/100x100.png?text=No+Image'
-                                    }
+                                    src="https://via.placeholder.com/100x100.png?text=No+Image"
                                     alt={search.vinyl.title}
                                     width={100}
                                     height={100}
-                                    className={'object-cover w-full'}
+                                    className="object-cover w-full"
                                 />
                             )}
-                            <div className={'flex flex-col items-center'}>
-                                <h3
-                                    className={
-                                        'text-fuchsia-800 font-bold text-lg'
-                                    }
-                                >
+                            <div className="flex flex-col items-center">
+                                <h3 className="text-fuchsia-800 font-bold text-lg">
                                     {/* cut if string too long */}
                                     {search.vinyl.title.length > 15
                                         ? search.vinyl.title.substring(0, 15) +
                                           '...'
                                         : search.vinyl.title}
                                 </h3>
-                                <h4
-                                    className={
-                                        'text-fuchsia-800 font-bold text-sm'
-                                    }
-                                >
+                                <h4 className="text-fuchsia-800 font-bold text-sm">
                                     {search.vinyl.artist}
                                 </h4>
                             </div>
                         </div>
                     ))}
                 </div>
-                <Link href={'/searches'}>
-                    <Button className={'mt-4 mb-4'}>
+                <Link href="/searches">
+                    <Button className="mt-4 mb-4">
                         Voir tous les vinyls recherchés
                     </Button>
                 </Link>
             </div>
         </div>
     );
-};
-
-export default Vinyls;
+}

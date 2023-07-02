@@ -37,7 +37,7 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
             <div className="hidden sm:block w-fit">
                 <Sidebar aria-label="Default sidebar example">
                     <Sidebar.Items>
-                        <Sidebar.ItemGroup className={'space-y-0'}>
+                        <Sidebar.ItemGroup className="space-y-0">
                             {navItems.map(item => (
                                 <Sidebar.Item
                                     href="#"
@@ -70,7 +70,7 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
                     </Sidebar.Items>
                 </Sidebar>
             </div>
-            <div className={'sm:hidden'}>
+            <div className="sm:hidden">
                 <Listbox
                     value={activeTab}
                     onChange={value => {

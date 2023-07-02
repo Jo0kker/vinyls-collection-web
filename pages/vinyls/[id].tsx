@@ -8,44 +8,43 @@ import { faCompactDisc, faVideo } from '@fortawesome/pro-light-svg-icons';
 import { Button } from '@components/Button';
 import { YoutubeEmbed } from '@components/YoutubeEmbed';
 import type { Vinyl as IVinyl } from '@definitions/index';
+import { getServerSession } from 'next-auth';
+import { GetServerSidePropsContext } from 'next';
+import { authOptions } from '@utils/authOptions';
 
-export async function getServerSideProps(context: {
-    params: { id: number | string };
-}) {
-    const { id } = context.params;
-    const vinyl = await axiosApiInstance.get(`/vinyls/${id}`);
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+    const vinyl = await axiosApiInstance.get(`/vinyls/${context.params?.id}`);
 
     return {
         props: {
-            vinyl: vinyl.data.data
+            vinyl: vinyl.data.data,
+            session: await getServerSession(
+                context.req,
+                context.res,
+                authOptions
+            )
         }
     };
 }
 
-const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
+type VinylProps = {
+    vinyl: IVinyl;
+};
+
+export default function Vinyl({ vinyl }: VinylProps) {
     const [showMoreVideo, setShowMoreVideo] = useState(false);
 
     return (
-        <div
-            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
-        >
-            <div
-                className={
-                    'flex flex-row justify-center font-bold text-2xl mt-4 mb-4'
-                }
-            >
-                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
-                <h1 className={'text-fuchsia-800'}>
+        <div className="pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col">
+            <div className="flex flex-row justify-center font-bold text-2xl mt-4 mb-4">
+                <span className="mr-3 text-emerald-500">&#47;&#47;</span>
+                <h1 className="text-fuchsia-800">
                     {vinyl.discogs ? vinyl.discogs.title : vinyl.label}
                 </h1>
-                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
+                <span className="ml-3 text-orange-400">&#47;&#47;</span>
             </div>
-            <div className={'flex flex-col'}>
-                <div
-                    className={
-                        'flex flex-col md:flex-row justify-center items-center'
-                    }
-                >
+            <div className="flex flex-col">
+                <div className="flex flex-col md:flex-row justify-center items-center">
                     <Image
                         src={
                             vinyl.discogs
@@ -56,31 +55,31 @@ const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
                         width={300}
                         height={300}
                     />
-                    <table className={'table-auto text-sm'}>
+                    <table className="table-auto text-sm">
                         <tbody>
                             <tr>
-                                <td className={'px-4 py-2'}>Label</td>
-                                <td className={'px-4 py-2'}>{vinyl.label}</td>
+                                <td className="px-4 py-2">Label</td>
+                                <td className="px-4 py-2">{vinyl.label}</td>
                             </tr>
                             <tr>
-                                <td className={'px-4 py-2'}>Artiste</td>
-                                <td className={'px-4 py-2'}>{vinyl.artist}</td>
+                                <td className="px-4 py-2">Artiste</td>
+                                <td className="px-4 py-2">{vinyl.artist}</td>
                             </tr>
                             <tr>
-                                <td className={'px-4 py-2'}>Provenance</td>
-                                <td className={'px-4 py-2'}>
+                                <td className="px-4 py-2">Provenance</td>
+                                <td className="px-4 py-2">
                                     {vinyl.provenance}
                                 </td>
                             </tr>
                             <tr>
-                                <td className={'px-4 py-2'}>Année</td>
-                                <td className={'px-4 py-2'}>
+                                <td className="px-4 py-2">Année</td>
+                                <td className="px-4 py-2">
                                     {vinyl.year_released}
                                 </td>
                             </tr>
                             <tr>
-                                <td className={'px-4 py-2'}>Genre</td>
-                                <td className={'px-4 py-2'}>{vinyl.genre}</td>
+                                <td className="px-4 py-2">Genre</td>
+                                <td className="px-4 py-2">{vinyl.genre}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -88,30 +87,22 @@ const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
 
                 {vinyl.discogs && (
                     <>
-                        <div
-                            className={
-                                'flex flex-col justify-center items-center'
-                            }
-                        >
-                            <h2
-                                className={
-                                    'mt-4 mb-2 text-fuchsia-800 font-bold text-xl'
-                                }
-                            >
-                                <span className={'text-emerald-500'}>
+                        <div className="flex flex-col justify-center items-center">
+                            <h2 className="mt-4 mb-2 text-fuchsia-800 font-bold text-xl">
+                                <span className="text-emerald-500">
                                     <FontAwesomeIcon icon={faCompactDisc} />{' '}
                                 </span>{' '}
                                 Tracklist
                             </h2>
-                            <table className={'table-auto text-sm'}>
+                            <table className="table-auto text-sm">
                                 <tbody>
                                     {vinyl.discogs.tracklist.map(
                                         (track, index: number) => (
                                             <tr key={index}>
-                                                <td className={'px-4 py-2'}>
+                                                <td className="px-4 py-2">
                                                     {track.position}
                                                 </td>
-                                                <td className={'px-4 py-2'}>
+                                                <td className="px-4 py-2">
                                                     {track.title}
                                                 </td>
                                             </tr>
@@ -121,22 +112,14 @@ const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
                             </table>
                         </div>
                         {vinyl.discogs.videos && (
-                            <div
-                                className={
-                                    'flex flex-col justify-center items-center'
-                                }
-                            >
-                                <h2
-                                    className={
-                                        'mt-4 mb-2 text-fuchsia-800 font-bold text-xl'
-                                    }
-                                >
-                                    <span className={'text-emerald-500'}>
+                            <div className="flex flex-col justify-center items-center">
+                                <h2 className="mt-4 mb-2 text-fuchsia-800 font-bold text-xl">
+                                    <span className="text-emerald-500">
                                         <FontAwesomeIcon icon={faVideo} />{' '}
                                     </span>{' '}
                                     Videos
                                 </h2>
-                                <div className={'flex flex-col gap-1'}>
+                                <div className="flex flex-col gap-1">
                                     <Accordion>
                                         {vinyl.discogs.videos.map(
                                             (video, index: number) => {
@@ -189,7 +172,7 @@ const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
                                     onClick={() =>
                                         setShowMoreVideo(!showMoreVideo)
                                     }
-                                    className={'my-4'}
+                                    className="my-4"
                                 >
                                     {showMoreVideo ? 'Voir moins' : 'Voir plus'}
                                 </Button>
@@ -200,6 +183,4 @@ const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
             </div>
         </div>
     );
-};
-
-export default Vinyl;
+}

@@ -4,8 +4,8 @@ import Lottie from 'lottie-react';
 import vinylsAnimation from '@assets/lottieJson/vinyl-loading.json';
 import { Menu, Popover, Transition } from '@headlessui/react';
 import { Bars3Icon, ChevronDownIcon } from '@heroicons/react/20/solid';
-import { useBearStore } from '@store/useBearStore';
 import type { MenuItem } from '@components/NavBar';
+import { signOut } from 'next-auth/react';
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
@@ -26,7 +26,7 @@ const DesktopMenu = ({
                         <span className="sr-only">Vinyls Collection</span>
                         <Lottie
                             animationData={vinylsAnimation}
-                            className={'w-12'}
+                            className="w-12"
                         />
                     </Link>
                 </div>
@@ -116,12 +116,9 @@ const DesktopMenu = ({
                                                                 : 'text-gray-700',
                                                             'block w-full px-4 py-2 text-left text-sm'
                                                         )}
-                                                        onClick={() => {
-                                                            // call state to logout
-                                                            useBearStore
-                                                                .getState()
-                                                                .logout();
-                                                        }}
+                                                        onClick={() =>
+                                                            signOut()
+                                                        }
                                                     >
                                                         Déconnexion
                                                     </button>

@@ -20,9 +20,7 @@ export const Button = (props: ButtonProps) => {
     } else if (props.type === 'reset') {
         return (
             <button
-                className={
-                    'text-white bg-fuchsia-800 rounded px-3 py-3 w-full sm:w-2/5 font-roboto xl:w-auto xl:px-6'
-                }
+                className="text-white bg-fuchsia-800 rounded px-3 py-3 w-full sm:w-2/5 font-roboto xl:w-auto xl:px-6"
                 type={props.type}
                 onClick={props.onClick}
             >

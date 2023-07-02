@@ -26,17 +26,16 @@ export async function getServerSideProps(page = 1) {
     };
 }
 
-const VinylList = ({
-    collectionVinyls,
-    meta
-}: {
+type VinylListProps = {
     collectionVinyls: CollectionVinyl[];
     meta: {
         current_page: number;
         last_page: number;
         total: number;
     };
-}) => {
+};
+
+export default function VinylList({ collectionVinyls, meta }: VinylListProps) {
     const [collection, setCollection] = useState(collectionVinyls);
     const [currentPage, setCurrentPage] = useState(meta.current_page);
     const [isLoading, setIsLoading] = useState(false);
@@ -60,17 +59,11 @@ const VinylList = ({
     };
 
     return (
-        <div
-            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
-        >
-            <div
-                className={
-                    'flex flex-row justify-center font-bold text-2xl mt-4 mb-4'
-                }
-            >
-                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
-                <h1 className={'text-fuchsia-800'}>Liste des vinyls</h1>
-                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
+        <div className="pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col">
+            <div className="flex flex-row justify-center font-bold text-2xl mt-4 mb-4">
+                <span className="mr-3 text-emerald-500">&#47;&#47;</span>
+                <h1 className="text-fuchsia-800">Liste des vinyls</h1>
+                <span className="ml-3 text-orange-400">&#47;&#47;</span>
             </div>
 
             <ListVinyls
@@ -78,11 +71,9 @@ const VinylList = ({
                 isLoadingCollectionVinyls={isLoading}
             />
 
-            <Button className={'my-4'} onClick={loadMore}>
+            <Button className="my-4" onClick={loadMore}>
                 Charger plus
             </Button>
         </div>
     );
-};
-
-export default VinylList;
+}

@@ -1,73 +1,62 @@
 import { useState } from 'react';
 
-import { useBearStore } from '@store/useBearStore';
 import axiosApiInstance from '@services/interceptorService';
 
 import type { GetServerSidePropsContext } from 'next';
 import type { Trade, Search } from '@definitions/index';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@utils/authOptions';
+import { classNames } from '@utils/classNames';
+import { useSession } from 'next-auth/react';
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ');
-}
-export function getServerSideProps(context: GetServerSidePropsContext) {
-    const token = context.req.cookies.token;
-    const refresh_token = context.req.cookies.refresh_token;
-
-    if (!token || !refresh_token) {
-        return {
-            redirect: {
-                destination: '/login',
-                permanent: false
-            }
-        };
-    }
-
+export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
-        props: {}
+        props: {
+            session: await getServerSession(
+                context.req,
+                context.res,
+                authOptions
+            )
+        }
     };
 }
-const Troc = () => {
+
+export default function Troc() {
     const [trades, setTrades] = useState<Trade[]>([]);
     const [searchPage, setSearchPage] = useState(1);
     const [searches, setSearches] = useState<Search[]>([]);
-    const user = useBearStore(state => state.user);
+    const { data: session } = useSession();
     const [tabs, setTabs] = useState([
         { name: 'Recherche', current: true },
         { name: 'A échanger', current: false }
     ]);
 
     const getAllTrades = async () => {
-        if (user) {
+        if (session?.user) {
             const reqTrades = await axiosApiInstance.get(
-                `/users/${user.id}/trades`
+                `/users/${session.user.id}/trades`
             );
             setTrades(reqTrades.data.data);
         }
     };
 
     const getAllSearches = async () => {
-        if (user) {
+        if (session?.user) {
             const reqSearches = await axiosApiInstance.get(
-                `/users/${user.id}/searches`
+                `/users/${session.user.id}/searches`
             );
             setSearches(reqSearches.data.data);
         }
     };
 
     return (
-        <div
-            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
-        >
-            <div
-                className={
-                    'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'
-                }
-            >
-                <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
-                <h1 className={'text-fuchsia-800'}>Espace trocs</h1>
-                <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
+        <div className="pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col">
+            <div className="flex flex-row justify-center font-bold text-2xl mt-6 mb-4">
+                <span className="mr-3 text-emerald-500">&#47;&#47;</span>
+                <h1 className="text-fuchsia-800">Espace trocs</h1>
+                <span className="ml-3 text-orange-400">&#47;&#47;</span>
             </div>
-            <div className={'flex flex-col'}>
+            <div className="flex flex-col">
                 <div>
                     <div className="sm:hidden">
                         <label htmlFor="tabs" className="sr-only">
@@ -130,19 +119,17 @@ const Troc = () => {
                     </div>
                 </div>
             </div>
-            <div className={'flex flex-col'}>
+            <div className="flex flex-col">
                 {tabs.find(tab => tab.current)?.name === 'Recherche' ? (
-                    <div className={'flex flex-col'}>
+                    <div className="flex flex-col">
                         <h2>Vos recherches</h2>
                     </div>
                 ) : (
-                    <div className={'flex flex-col'}>
+                    <div className="flex flex-col">
                         <h2>Vos échanges</h2>
                     </div>
                 )}
             </div>
         </div>
     );
-};
-
-export default Troc;
+}

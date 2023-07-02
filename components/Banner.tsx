@@ -24,17 +24,17 @@ export default function Banner() {
                         </div>
                         <div className="hidden md:flex gap-1 order-2 flex-shrink-0 sm:order-3 sm:ml-2 ">
                             <Badge>
-                                <span className={'text-orange-500'}>
+                                <span className="text-orange-500">
                                     3878 collectionneurs
                                 </span>
                             </Badge>
                             <Badge>
-                                <span className={'text-green-500'}>
+                                <span className="text-green-500">
                                     13488 collections
                                 </span>
                             </Badge>
                             <Badge>
-                                <span className={'text-blue-400'}>
+                                <span className="text-blue-400">
                                     696766 disques
                                 </span>
                             </Badge>

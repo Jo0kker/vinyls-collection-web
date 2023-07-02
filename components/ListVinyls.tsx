@@ -54,21 +54,19 @@ const ListVinyls = ({
     return (
         <>
             {isLoadingCollectionVinyls ? (
-                <div className={'flex justify-center'}>
+                <div className="flex justify-center">
                     <Lottie
                         animationData={loading}
-                        className={'opacity-40 w-10'}
+                        className="opacity-40 w-10"
                     />
                 </div>
             ) : (
                 <div
-                    className={
-                        'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2'
-                    }
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2"
                 >
                     {collectionVinylsDiff.length === 0 ? (
-                        <div className={'text-center'}>
-                            <p className={''}>Aucun vinyle</p>
+                        <div className="text-center">
+                            <p className="">Aucun vinyle</p>
                         </div>
                     ) : (
                         collectionVinylsDiff.map(
@@ -81,9 +79,7 @@ const ListVinyls = ({
                                 <Link
                                     href={`/vinyls/${collectionVinylItem.vinyl_id}`}
                                     key={collectionVinylItem.id}
-                                    className={
-                                        'grid grid-cols-[2fr_3fr_1fr] m-1 border border-gray-300 rounded border-4 hover:bg-gray-400'
-                                    }
+                                    className="grid grid-cols-[2fr_3fr_1fr] m-1 border border-gray-300 rounded border-4 hover:bg-gray-400"
                                 >
                                     <Image
                                         src={
@@ -92,33 +88,27 @@ const ListVinyls = ({
                                         alt={collectionVinylItem.vinyl.label}
                                         width={100}
                                         height={100}
-                                        className={
-                                            'cursor-pointer h-[100px] object-cover h-full'
-                                        }
+                                        className="cursor-pointer h-[100px] object-cover h-full"
                                     />
-                                    <div className={'grid grid-rows-3 mx-3'}>
+                                    <div className="grid grid-rows-3 mx-3">
                                         <h2
-                                            className={
-                                                'text-fuchsia-80 font-bold text-lg truncate'
-                                            }
+                                            className="text-fuchsia-80 font-bold text-lg truncate"
                                         >
                                             {collectionVinylItem.vinyl.label}
                                         </h2>
                                         <h3
-                                            className={
-                                                'text-fuchsia-800 text-sm truncate'
-                                            }
+                                            className="text-fuchsia-800 text-sm truncate"
                                         >
                                             {collectionVinylItem.vinyl.artist}
                                         </h3>
-                                        <p className={'font-light text-xs'}>
+                                        <p className="font-light text-xs">
                                             {
                                                 collectionVinylItem.vinyl
                                                     .year_released
                                             }
                                         </p>
                                     </div>
-                                    <div className={'flex flex-col'}>
+                                    <div className="flex flex-col">
                                         <button
                                             onClick={event => {
                                                 event.preventDefault();
@@ -133,12 +123,12 @@ const ListVinyls = ({
                                                 } else {
                                                 }
                                             }}
-                                            className={'py-1 px-2'}
+                                            className="py-1 px-2"
                                         >
                                             <FontAwesomeIcon
                                                 icon={faTrash}
-                                                className={'text-fuchsia-800'}
-                                                size={'sm'}
+                                                className="text-fuchsia-800"
+                                                size="sm"
                                             />
                                         </button>
                                     </div>

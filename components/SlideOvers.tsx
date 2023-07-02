@@ -139,9 +139,7 @@ export default function SlideOvers({
                                                                             placeholder:
                                                                                 'Titre du vinyl'
                                                                         }}
-                                                                        className={
-                                                                            'flex flex-col lg:flex-row items-center content-center mt-3'
-                                                                        }
+                                                                        className="flex flex-col lg:flex-row items-center content-center mt-3"
                                                                     />
                                                                 )}
                                                             </Field>
@@ -167,9 +165,7 @@ export default function SlideOvers({
                                                                             placeholder:
                                                                                 'Artiste du vinyl'
                                                                         }}
-                                                                        className={
-                                                                            'flex flex-col lg:flex-row items-center content-center mt-3'
-                                                                        }
+                                                                        className="flex flex-col lg:flex-row items-center content-center mt-3"
                                                                     />
                                                                 )}
                                                             </Field>
@@ -195,46 +191,34 @@ export default function SlideOvers({
                                                                             placeholder:
                                                                                 'Année du vinyl'
                                                                         }}
-                                                                        className={
-                                                                            'flex flex-col lg:flex-row items-center content-center mt-3'
-                                                                        }
+                                                                        className="flex flex-col lg:flex-row items-center content-center mt-3"
                                                                     />
                                                                 )}
                                                             </Field>
                                                             <div
-                                                                className={
-                                                                    'flex justify-center'
-                                                                }
+                                                                className="flex justify-center"
                                                             >
                                                                 <button
                                                                     type="submit"
-                                                                    className={
-                                                                        'flex flex-col lg:flex-row items-center content-center mt-3 bg-fuchsia-800 text-white px-4 py-2 rounded-md'
-                                                                    }
+                                                                    className="flex flex-col lg:flex-row items-center content-center mt-3 bg-fuchsia-800 text-white px-4 py-2 rounded-md"
                                                                     disabled={
                                                                         loadingForm
                                                                     }
                                                                 >
                                                                     {loadingForm ? (
                                                                         <div
-                                                                            className={
-                                                                                'animate-spin'
-                                                                            }
+                                                                            className="animate-spin"
                                                                         >
                                                                             <FontAwesomeIcon
                                                                                 icon={
                                                                                     faPlus
                                                                                 }
-                                                                                className={
-                                                                                    'h-5 w-5'
-                                                                                }
+                                                                                className="h-5 w-5"
                                                                             />
                                                                         </div>
                                                                     ) : (
                                                                         <p
-                                                                            className={
-                                                                                'text-sm'
-                                                                            }
+                                                                            className="text-sm"
                                                                         >
                                                                             Rechercher
                                                                             le
@@ -248,14 +232,10 @@ export default function SlideOvers({
                                                     <div>
                                                         {vinyl && (
                                                             <div
-                                                                className={
-                                                                    'mt-4'
-                                                                }
+                                                                className="mt-4"
                                                             >
                                                                 <div
-                                                                    className={
-                                                                        'flex flex-col gap-2'
-                                                                    }
+                                                                    className="flex flex-col gap-2"
                                                                 >
                                                                     {vinyl.map(
                                                                         v => (
@@ -263,9 +243,7 @@ export default function SlideOvers({
                                                                                 key={
                                                                                     v.id
                                                                                 }
-                                                                                className={
-                                                                                    'flex flex-row m-1 border border-gray-300 rounded border-8 hover:bg-gray-400'
-                                                                                }
+                                                                                className="flex flex-row m-1 border border-gray-300 rounded border-8 hover:bg-gray-400"
                                                                             >
                                                                                 <Image
                                                                                     src={
@@ -280,19 +258,13 @@ export default function SlideOvers({
                                                                                     height={
                                                                                         100
                                                                                     }
-                                                                                    className={
-                                                                                        'rounded-bl rounded-tl object-cover'
-                                                                                    }
+                                                                                    className="rounded-bl rounded-tl object-cover"
                                                                                 />
                                                                                 <div
-                                                                                    className={
-                                                                                        'flex flex-col mx-3 justify-center'
-                                                                                    }
+                                                                                    className="flex flex-col mx-3 justify-center"
                                                                                 >
                                                                                     <h2
-                                                                                        className={
-                                                                                            'text-fuchsia-700'
-                                                                                        }
+                                                                                        className="text-fuchsia-700"
                                                                                     >
                                                                                         {
                                                                                             v.title
@@ -305,14 +277,10 @@ export default function SlideOvers({
                                                                                     </h3>
                                                                                 </div>
                                                                                 <div
-                                                                                    className={
-                                                                                        'flex flex-col mx-3 justify-center items-end flex-grow'
-                                                                                    }
+                                                                                    className="flex flex-col mx-3 justify-center items-end flex-grow"
                                                                                 >
                                                                                     <button
-                                                                                        className={
-                                                                                            'bg-fuchsia-700 hover:bg-gray-700 text-white font-bold px-2 rounded'
-                                                                                        }
+                                                                                        className="bg-fuchsia-700 hover:bg-gray-700 text-white font-bold px-2 rounded"
                                                                                         disabled={
                                                                                             loadingForm
                                                                                         }
@@ -324,9 +292,7 @@ export default function SlideOvers({
                                                                                     >
                                                                                         {loadingForm ? (
                                                                                             <div
-                                                                                                className={
-                                                                                                    'animate-spin'
-                                                                                                }
+                                                                                                className="animate-spin"
                                                                                             >
                                                                                                 <FontAwesomeIcon
                                                                                                     icon={
