@@ -12,18 +12,18 @@ import type { Dispatch, SetStateAction } from 'react';
 import type { FieldProps, FormikValues } from 'formik';
 import type { DiscogResult } from '@definitions/index';
 
-export default function SlideOvers ({
+export default function SlideOvers({
     open,
     setOpen,
     searchVinyl,
     vinyl,
-    addVinylToCollection,
+    addVinylToCollection
 }: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  searchVinyl: (data: FormikValues) => Promise<void>;
-  vinyl: DiscogResult[];
-  addVinylToCollection: (idDiscogs: number) => void;
+    open: boolean;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+    searchVinyl: (data: FormikValues) => Promise<void>;
+    vinyl: DiscogResult[];
+    addVinylToCollection: (idDiscogs: number) => void;
 }) {
     const [loadingForm, setLoadingForm] = useState(false);
 
@@ -69,17 +69,24 @@ export default function SlideOvers ({
                                                 <button
                                                     type="button"
                                                     className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                                                    onClick={() => setOpen(false)}
+                                                    onClick={() =>
+                                                        setOpen(false)
+                                                    }
                                                 >
-                                                    <span className="sr-only">Close panel</span>
-                                                    <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                                                    <span className="sr-only">
+                                                        Close panel
+                                                    </span>
+                                                    <XMarkIcon
+                                                        className="h-6 w-6"
+                                                        aria-hidden="true"
+                                                    />
                                                 </button>
                                             </div>
                                         </Transition.Child>
                                         <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
                                             <div className="px-4 sm:px-6">
                                                 <Dialog.Title className="text-lg font-medium text-gray-900">
-                          Ajouter un vinyl
+                                                    Ajouter un vinyl
                                                 </Dialog.Title>
                                             </div>
                                             <div className="relative flex-1 px-4 sm:px-6">
@@ -88,27 +95,49 @@ export default function SlideOvers ({
                                                         initialValues={{
                                                             title: '',
                                                             artist: '',
-                                                            year: '',
+                                                            year: ''
                                                         }}
-                                                        onSubmit={(values, { setSubmitting }) => {
-                                                            setLoadingForm(true);
-                                                            searchVinyl(values).then(() => {
-                                                                setLoadingForm(false);
-                                                                setSubmitting(false);
+                                                        onSubmit={(
+                                                            values,
+                                                            { setSubmitting }
+                                                        ) => {
+                                                            setLoadingForm(
+                                                                true
+                                                            );
+                                                            searchVinyl(
+                                                                values
+                                                            ).then(() => {
+                                                                setLoadingForm(
+                                                                    false
+                                                                );
+                                                                setSubmitting(
+                                                                    false
+                                                                );
                                                             });
                                                         }}
                                                     >
                                                         <Form>
                                                             <Field name="title">
-                                                                {({ field, form, meta }: FieldProps) => (
+                                                                {({
+                                                                    field,
+                                                                    form,
+                                                                    meta
+                                                                }: FieldProps) => (
                                                                     <InputText
-                                                                        field={field}
-                                                                        form={form}
-                                                                        meta={meta}
+                                                                        field={
+                                                                            field
+                                                                        }
+                                                                        form={
+                                                                            form
+                                                                        }
+                                                                        meta={
+                                                                            meta
+                                                                        }
                                                                         buildInfo={{
                                                                             label: 'Titre :',
                                                                             type: 'text',
-                                                                            placeholder: 'Titre du vinyl',
+                                                                            placeholder:
+                                                                                'Titre du vinyl'
                                                                         }}
                                                                         className={
                                                                             'flex flex-col lg:flex-row items-center content-center mt-3'
@@ -117,15 +146,26 @@ export default function SlideOvers ({
                                                                 )}
                                                             </Field>
                                                             <Field name="artist">
-                                                                {({ field, form, meta }: FieldProps) => (
+                                                                {({
+                                                                    field,
+                                                                    form,
+                                                                    meta
+                                                                }: FieldProps) => (
                                                                     <InputText
-                                                                        field={field}
-                                                                        form={form}
-                                                                        meta={meta}
+                                                                        field={
+                                                                            field
+                                                                        }
+                                                                        form={
+                                                                            form
+                                                                        }
+                                                                        meta={
+                                                                            meta
+                                                                        }
                                                                         buildInfo={{
                                                                             label: 'Artiste :',
                                                                             type: 'text',
-                                                                            placeholder: 'Artiste du vinyl',
+                                                                            placeholder:
+                                                                                'Artiste du vinyl'
                                                                         }}
                                                                         className={
                                                                             'flex flex-col lg:flex-row items-center content-center mt-3'
@@ -134,15 +174,26 @@ export default function SlideOvers ({
                                                                 )}
                                                             </Field>
                                                             <Field name="year">
-                                                                {({ field, form, meta }: FieldProps) => (
+                                                                {({
+                                                                    field,
+                                                                    form,
+                                                                    meta
+                                                                }: FieldProps) => (
                                                                     <InputText
-                                                                        field={field}
-                                                                        form={form}
-                                                                        meta={meta}
+                                                                        field={
+                                                                            field
+                                                                        }
+                                                                        form={
+                                                                            form
+                                                                        }
+                                                                        meta={
+                                                                            meta
+                                                                        }
                                                                         buildInfo={{
                                                                             label: 'Année :',
                                                                             type: 'number',
-                                                                            placeholder: 'Année du vinyl',
+                                                                            placeholder:
+                                                                                'Année du vinyl'
                                                                         }}
                                                                         className={
                                                                             'flex flex-col lg:flex-row items-center content-center mt-3'
@@ -150,24 +201,44 @@ export default function SlideOvers ({
                                                                     />
                                                                 )}
                                                             </Field>
-                                                            <div className={'flex justify-center'}>
+                                                            <div
+                                                                className={
+                                                                    'flex justify-center'
+                                                                }
+                                                            >
                                                                 <button
                                                                     type="submit"
                                                                     className={
                                                                         'flex flex-col lg:flex-row items-center content-center mt-3 bg-fuchsia-800 text-white px-4 py-2 rounded-md'
                                                                     }
-                                                                    disabled={loadingForm}
+                                                                    disabled={
+                                                                        loadingForm
+                                                                    }
                                                                 >
                                                                     {loadingForm ? (
-                                                                        <div className={'animate-spin'}>
+                                                                        <div
+                                                                            className={
+                                                                                'animate-spin'
+                                                                            }
+                                                                        >
                                                                             <FontAwesomeIcon
-                                                                                icon={faPlus}
-                                                                                className={'h-5 w-5'}
+                                                                                icon={
+                                                                                    faPlus
+                                                                                }
+                                                                                className={
+                                                                                    'h-5 w-5'
+                                                                                }
                                                                             />
                                                                         </div>
                                                                     ) : (
-                                                                        <p className={'text-sm'}>
-                                      Rechercher le vinyl
+                                                                        <p
+                                                                            className={
+                                                                                'text-sm'
+                                                                            }
+                                                                        >
+                                                                            Rechercher
+                                                                            le
+                                                                            vinyl
                                                                         </p>
                                                                     )}
                                                                 </button>
@@ -176,61 +247,105 @@ export default function SlideOvers ({
                                                     </Formik>
                                                     <div>
                                                         {vinyl && (
-                                                            <div className={'mt-4'}>
-                                                                <div className={'flex flex-col gap-2'}>
-                                                                    {vinyl.map((v) => (
-                                                                        <div
-                                                                            key={v.id}
-                                                                            className={
-                                                                                'flex flex-row m-1 border border-gray-300 rounded border-8 hover:bg-gray-400'
-                                                                            }
-                                                                        >
-                                                                            <Image
-                                                                                src={v.thumb}
-                                                                                alt={v.title}
-                                                                                width={100}
-                                                                                height={100}
-                                                                                className={
-                                                                                    'rounded-bl rounded-tl object-cover'
-                                                                                }
-                                                                            />
+                                                            <div
+                                                                className={
+                                                                    'mt-4'
+                                                                }
+                                                            >
+                                                                <div
+                                                                    className={
+                                                                        'flex flex-col gap-2'
+                                                                    }
+                                                                >
+                                                                    {vinyl.map(
+                                                                        v => (
                                                                             <div
+                                                                                key={
+                                                                                    v.id
+                                                                                }
                                                                                 className={
-                                                                                    'flex flex-col mx-3 justify-center'
+                                                                                    'flex flex-row m-1 border border-gray-300 rounded border-8 hover:bg-gray-400'
                                                                                 }
                                                                             >
-                                                                                <h2 className={'text-fuchsia-700'}>
-                                                                                    {v.title}
-                                                                                </h2>
-                                                                                <h3>{v.year}</h3>
-                                                                            </div>
-                                                                            <div
-                                                                                className={
-                                                                                    'flex flex-col mx-3 justify-center items-end flex-grow'
-                                                                                }
-                                                                            >
-                                                                                <button
-                                                                                    className={
-                                                                                        'bg-fuchsia-700 hover:bg-gray-700 text-white font-bold px-2 rounded'
+                                                                                <Image
+                                                                                    src={
+                                                                                        v.thumb
                                                                                     }
-                                                                                    disabled={loadingForm}
-                                                                                    onClick={() => {
-                                                                                        addVinylToCollection(v.id);
-                                                                                    }}
+                                                                                    alt={
+                                                                                        v.title
+                                                                                    }
+                                                                                    width={
+                                                                                        100
+                                                                                    }
+                                                                                    height={
+                                                                                        100
+                                                                                    }
+                                                                                    className={
+                                                                                        'rounded-bl rounded-tl object-cover'
+                                                                                    }
+                                                                                />
+                                                                                <div
+                                                                                    className={
+                                                                                        'flex flex-col mx-3 justify-center'
+                                                                                    }
                                                                                 >
-                                                                                    {loadingForm ? (
-                                                                                        <div className={'animate-spin'}>
+                                                                                    <h2
+                                                                                        className={
+                                                                                            'text-fuchsia-700'
+                                                                                        }
+                                                                                    >
+                                                                                        {
+                                                                                            v.title
+                                                                                        }
+                                                                                    </h2>
+                                                                                    <h3>
+                                                                                        {
+                                                                                            v.year
+                                                                                        }
+                                                                                    </h3>
+                                                                                </div>
+                                                                                <div
+                                                                                    className={
+                                                                                        'flex flex-col mx-3 justify-center items-end flex-grow'
+                                                                                    }
+                                                                                >
+                                                                                    <button
+                                                                                        className={
+                                                                                            'bg-fuchsia-700 hover:bg-gray-700 text-white font-bold px-2 rounded'
+                                                                                        }
+                                                                                        disabled={
+                                                                                            loadingForm
+                                                                                        }
+                                                                                        onClick={() => {
+                                                                                            addVinylToCollection(
+                                                                                                v.id
+                                                                                            );
+                                                                                        }}
+                                                                                    >
+                                                                                        {loadingForm ? (
+                                                                                            <div
+                                                                                                className={
+                                                                                                    'animate-spin'
+                                                                                                }
+                                                                                            >
+                                                                                                <FontAwesomeIcon
+                                                                                                    icon={
+                                                                                                        faPlus
+                                                                                                    }
+                                                                                                />
+                                                                                            </div>
+                                                                                        ) : (
                                                                                             <FontAwesomeIcon
-                                                                                                icon={faPlus}
+                                                                                                icon={
+                                                                                                    faPlus
+                                                                                                }
                                                                                             />
-                                                                                        </div>
-                                                                                    ) : (
-                                                                                        <FontAwesomeIcon icon={faPlus} />
-                                                                                    )}
-                                                                                </button>
+                                                                                        )}
+                                                                                    </button>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                    ))}
+                                                                        )
+                                                                    )}
                                                                 </div>
                                                             </div>
                                                         )}
@@ -246,6 +361,5 @@ export default function SlideOvers ({
                 </Dialog>
             </Transition.Root>
         </>
-
     );
 }

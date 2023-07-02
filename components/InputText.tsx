@@ -2,28 +2,27 @@ import type { FieldProps } from 'formik';
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
 
 type buildInfo = {
-  label: string;
-  type: string;
-  placeholder: string;
-  labelClassName?: string;
+    label: string;
+    type: string;
+    placeholder: string;
+    labelClassName?: string;
 };
 
 type InputTextProps = {
-  field: FieldProps['field'];
-  form: FieldProps['form'];
-  meta: FieldProps['meta'];
-  buildInfo: buildInfo;
-  className?: string;
-  inputClassName?: string;
+    field: FieldProps['field'];
+    form: FieldProps['form'];
+    meta: FieldProps['meta'];
+    buildInfo: buildInfo;
+    className?: string;
+    inputClassName?: string;
 };
 
 export const InputText = ({
     field,
-    form,
     meta,
     buildInfo,
     className,
-    inputClassName,
+    inputClassName
 }: InputTextProps) => {
     return (
         <div className={`${className}`}>
@@ -56,7 +55,10 @@ export const InputText = ({
                 )}
             </div>
             {meta.touched && meta.error && (
-                <p className="mt-2 text-sm text-red-600" id={`${field.name}-error`}>
+                <p
+                    className="mt-2 text-sm text-red-600"
+                    id={`${field.name}-error`}
+                >
                     {meta.error}
                 </p>
             )}

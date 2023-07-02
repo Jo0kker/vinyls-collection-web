@@ -4,12 +4,12 @@ module.exports = {
         './app/**/*.{js,ts,jsx,tsx}',
         './pages/**/*.{js,ts,jsx,tsx}',
         './components/**/*.{js,ts,jsx,tsx}',
-        'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
+        'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
     ],
     theme: {
         fontFamily: {
             body: ['Roboto', 'sans-serif'],
-            sans: ['Roboto', 'sans-serif'],
+            sans: ['Roboto', 'sans-serif']
         },
         extend: {
             colors: {
@@ -22,10 +22,10 @@ module.exports = {
                     600: '#D54AB1',
                     700: '#7e1b68',
                     800: '#701455',
-                    900: '#331040',
-                },
-            },
-        },
+                    900: '#331040'
+                }
+            }
+        }
     },
-    plugins: [require('flowbite/plugin')],
+    plugins: [require('flowbite/plugin')]
 };

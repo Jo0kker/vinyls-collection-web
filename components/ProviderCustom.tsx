@@ -6,23 +6,28 @@ import { Toaster } from 'react-hot-toast';
 import Banner from '@components/Banner';
 import NextNProgress from 'nextjs-progressbar';
 import { FooterPerso } from '@components/FooterPerso';
-import type { FunctionComponent, PropsWithChildren } from 'react';
-import { useState } from 'react';
+import type { PropsWithChildren } from 'react';
+import { useEffect, useState } from 'react';
 import { useMe } from '../hooks/useUsers';
+import { useBearStore } from '@store/useBearStore';
 
-type Props = PropsWithChildren<{}>;
-
-export const ProviderCustom: FunctionComponent<Props> = ({ children }) => {
+export const ProviderCustom = ({ children }: PropsWithChildren) => {
     const [isReady, setIsReady] = useState(false);
     const cookie = new Cookies();
+    const login = useBearStore(store => store.login);
     const token = cookie.get('token');
 
     const { data: userData } = useMe({
         onSuccess: () => setIsReady(true),
-        enabled: !!token,
+        enabled: !!token
     });
 
-    if (!isReady && userData) {
+    useEffect(() => {
+        if (userData) login(userData);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userData]);
+
+    if (!isReady) {
         return (
             <div
                 className={
@@ -45,7 +50,11 @@ export const ProviderCustom: FunctionComponent<Props> = ({ children }) => {
             <Toaster />
             <Banner />
             <main className={'flex flex-col items-center'}>
-                <div className={'container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'}>
+                <div
+                    className={
+                        'container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'
+                    }
+                >
                     <div
                         className={
                             'flex flex-col justify-center bg-black bg-opacity-10 p-3 mb-8 rounded'

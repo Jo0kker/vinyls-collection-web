@@ -4,17 +4,18 @@ import { Cookies } from 'react-cookie';
 import type { User } from '@definitions/User';
 
 interface BearState {
-  user: User | null;
-  logout(): void;
+    user: User | null;
+    logout: () => void;
+    login: (user: User) => void;
 }
 
-export const useBearStore = create<BearState>()((set) => ({
+export const useBearStore = create<BearState>()(set => ({
     user: null,
     login: (user: User) => {
         set({ user });
     },
     logout: () => {
-    // remove cookie
+        // remove cookie
         const cookies = new Cookies();
         cookies.remove('token');
         cookies.remove('refresh_token');
@@ -22,5 +23,5 @@ export const useBearStore = create<BearState>()((set) => ({
         set({ user: null });
         // redirect to home
         window.location.href = '/';
-    },
+    }
 }));

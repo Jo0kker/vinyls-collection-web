@@ -24,47 +24,71 @@ export const FooterPerso = () => {
                                 'self-center  text-2xl font-semibold text-gray-300 dark:text-white'
                             }
                         >
-              Vinyls Collection
+                            Vinyls Collection
                         </span>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 lg:mt-4 lg:mb-4 lg:grid-cols-4 lg:gap-6 mr-4">
                         <div>
                             <Footer.LinkGroup col={true}>
-                                <Footer.Link href="#" className={'hover:text-orange-700'}>
-                  Présentation du site
+                                <Footer.Link
+                                    href="#"
+                                    className={'hover:text-orange-700'}
+                                >
+                                    Présentation du site
                                 </Footer.Link>
-                                <Footer.Link href="#" className={'hover:text-orange-700'}>
-                  Besoin d'aide ?
-                                </Footer.Link>
-                            </Footer.LinkGroup>
-                        </div>
-                        <div>
-                            <Footer.LinkGroup col={true}>
-                                <Footer.Link href="#" className={'hover:text-orange-700'}>
-                  Foire aux questions
-                                </Footer.Link>
-                                <Footer.Link href="#" className={'hover:text-orange-700'}>
-                  Contact
+                                <Footer.Link
+                                    href="#"
+                                    className={'hover:text-orange-700'}
+                                >
+                                    Besoin d'aide ?
                                 </Footer.Link>
                             </Footer.LinkGroup>
                         </div>
                         <div>
                             <Footer.LinkGroup col={true}>
-                                <Footer.Link href="#" className={'hover:text-orange-700'}>
-                  Les vinyls du siècle
+                                <Footer.Link
+                                    href="#"
+                                    className={'hover:text-orange-700'}
+                                >
+                                    Foire aux questions
                                 </Footer.Link>
-                                <Footer.Link href="#" className={'hover:text-orange-700'}>
-                  Tous les vinyls
+                                <Footer.Link
+                                    href="#"
+                                    className={'hover:text-orange-700'}
+                                >
+                                    Contact
                                 </Footer.Link>
                             </Footer.LinkGroup>
                         </div>
                         <div>
                             <Footer.LinkGroup col={true}>
-                                <Footer.Link href="#" className={'hover:text-orange-700'}>
-                  Tous les collectionneurs
+                                <Footer.Link
+                                    href="#"
+                                    className={'hover:text-orange-700'}
+                                >
+                                    Les vinyls du siècle
                                 </Footer.Link>
-                                <Footer.Link href="#" className={'hover:text-orange-700'}>
-                  Nos partenaires
+                                <Footer.Link
+                                    href="#"
+                                    className={'hover:text-orange-700'}
+                                >
+                                    Tous les vinyls
+                                </Footer.Link>
+                            </Footer.LinkGroup>
+                        </div>
+                        <div>
+                            <Footer.LinkGroup col={true}>
+                                <Footer.Link
+                                    href="#"
+                                    className={'hover:text-orange-700'}
+                                >
+                                    Tous les collectionneurs
+                                </Footer.Link>
+                                <Footer.Link
+                                    href="#"
+                                    className={'hover:text-orange-700'}
+                                >
+                                    Nos partenaires
                                 </Footer.Link>
                             </Footer.LinkGroup>
                         </div>
@@ -72,7 +96,11 @@ export const FooterPerso = () => {
                 </div>
                 <Footer.Divider className={'my-2'} />
                 <div className="w-full sm:flex sm:items-center sm:justify-between">
-                    <Footer.Copyright href="#" by=" Vinyls-Collection™" year={2022} />
+                    <Footer.Copyright
+                        href="#"
+                        by=" Vinyls-Collection™"
+                        year={2022}
+                    />
                     <div className="mt-4 flex space-x-6 sm:mt-0 sm:justify-center">
                         <FontAwesomeIcon
                             icon={faFacebook}
@@ -92,7 +120,11 @@ export const FooterPerso = () => {
                         />
                     </div>
                 </div>
-                <div className={'flex flex-row justify-center gap-4 opacity-30 mt-4'}>
+                <div
+                    className={
+                        'flex flex-row justify-center gap-4 opacity-30 mt-4'
+                    }
+                >
                     <Link href="#">Mentions légales</Link>
                     <Link href="#">Politique de confidentialité</Link>
                 </div>

@@ -7,11 +7,11 @@ import axiosApiInstance from '@services/interceptorService';
 import type { AxiosResponse } from 'axios';
 import type { CollectionVinyl } from '@definitions/index';
 
-export async function getServerSideProps (page = 1) {
+export async function getServerSideProps(page = 1) {
     const reqCollectionVinyl = await axiosApiInstance.post(
         `/collectionVinyl/search?include=vinyl,collection,collection.user&page=${page}`,
         {
-            sort: [{ field: 'updated_at', direction: 'desc' }],
+            sort: [{ field: 'updated_at', direction: 'desc' }]
         }
     );
 
@@ -21,21 +21,21 @@ export async function getServerSideProps (page = 1) {
     return {
         props: {
             collectionVinyls,
-            meta,
-        },
+            meta
+        }
     };
 }
 
 const VinylList = ({
     collectionVinyls,
-    meta,
+    meta
 }: {
-  collectionVinyls: CollectionVinyl[];
-  meta: {
-    current_page: number;
-    last_page: number;
-    total: number;
-  };
+    collectionVinyls: CollectionVinyl[];
+    meta: {
+        current_page: number;
+        last_page: number;
+        total: number;
+    };
 }) => {
     const [collection, setCollection] = useState(collectionVinyls);
     const [currentPage, setCurrentPage] = useState(meta.current_page);
@@ -49,7 +49,7 @@ const VinylList = ({
                     currentPage + 1
                 }`,
                 {
-                    sort: [{ field: 'updated_at', direction: 'desc' }],
+                    sort: [{ field: 'updated_at', direction: 'desc' }]
                 }
             )
             .then((res: AxiosResponse) => {
@@ -60,9 +60,13 @@ const VinylList = ({
     };
 
     return (
-        <div className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}>
+        <div
+            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
+        >
             <div
-                className={'flex flex-row justify-center font-bold text-2xl mt-4 mb-4'}
+                className={
+                    'flex flex-row justify-center font-bold text-2xl mt-4 mb-4'
+                }
             >
                 <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
                 <h1 className={'text-fuchsia-800'}>Liste des vinyls</h1>
@@ -75,7 +79,7 @@ const VinylList = ({
             />
 
             <Button className={'my-4'} onClick={loadMore}>
-        Charger plus
+                Charger plus
             </Button>
         </div>
     );

@@ -11,29 +11,33 @@ import axiosApiInstance from '@services/interceptorService';
 import type { CollectionVinyl } from '@definitions/CollectionVinyl';
 import process from 'process';
 
-export async function getServerSideProps () {
+export async function getServerSideProps() {
     // get last 6 vinyls
     const reqCollectionVinyl = await axiosApiInstance.get(
         '/collectionVinyl?include=vinyl,collection,collection.user&limit=6'
     );
 
     const collectionVinyls: CollectionVinyl[] =
-    reqCollectionVinyl?.data?.data || [];
+        reqCollectionVinyl?.data?.data || [];
 
     return {
         props: {
-            collectionVinyls,
-        },
+            collectionVinyls
+        }
     };
 }
 
-export default function Home ({
-    collectionVinyls,
+export default function Home({
+    collectionVinyls
 }: {
-  collectionVinyls: CollectionVinyl[];
+    collectionVinyls: CollectionVinyl[];
 }) {
     return (
-        <div className={'pt-44 sm:pt-0 mt-24 px-4 rounded bg-white flex flex-col'}>
+        <div
+            className={
+                'pt-44 sm:pt-0 mt-24 px-4 rounded bg-white flex flex-col'
+            }
+        >
             <Head>
                 <title>Vinyls Collection</title>
                 <meta name="description" content="Vinyls-collection" />
@@ -59,16 +63,23 @@ export default function Home ({
                         }
                     >
                         <span className={'sm:text-white'}>Le vinyl</span>
-                        <FontAwesomeIcon icon={faPlus} className={'text-emerald-500 m-1'} />
+                        <FontAwesomeIcon
+                            icon={faPlus}
+                            className={'text-emerald-500 m-1'}
+                        />
                         <br />
-                        <FontAwesomeIcon icon={faPlus} className={'text-emerald-500 m-1'} />
+                        <FontAwesomeIcon
+                            icon={faPlus}
+                            className={'text-emerald-500 m-1'}
+                        />
                         <span>du mois</span>
                     </h2>
                     <h3 className={'font-bold my-2'}>Lorem ipsum dolor sit.</h3>
                     <p className={'leading-5'}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Consequuntur cupiditate dignissimos doloremque exercitationem nihil
-            placeat quo sapiente ut vel voluptatem!
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit. Consequuntur cupiditate dignissimos doloremque
+                        exercitationem nihil placeat quo sapiente ut vel
+                        voluptatem!
                     </p>
 
                     <div className={'flex flex-row justify-center'}>
@@ -78,11 +89,15 @@ export default function Home ({
             </div>
             {collectionVinyls && collectionVinyls.length > 0 ? (
                 <div>
-                    <h2 className={'mt-4 mb-2 text-fuchsia-800 font-bold text-xl'}>
+                    <h2
+                        className={
+                            'mt-4 mb-2 text-fuchsia-800 font-bold text-xl'
+                        }
+                    >
                         <span className={'text-emerald-500'}>
                             <FontAwesomeIcon icon={faCompactDisc} />{' '}
                         </span>{' '}
-            Derniers vinyls ajoutés
+                        Derniers vinyls ajoutés
                     </h2>
 
                     <div className="h-56 sm:hidden">
@@ -91,30 +106,44 @@ export default function Home ({
                                 <Link
                                     href={`/vinyls/${collectionVinyl.vinyl_id}`}
                                     key={key}
-                                    className={'w-full h-full flex flex-col items-center justify-center'}
+                                    className={
+                                        'w-full h-full flex flex-col items-center justify-center'
+                                    }
                                 >
                                     {collectionVinyl.vinyl.image ? (
                                         <Image
-                                            src={collectionVinyl.vinyl.image.startsWith('http') ? collectionVinyl.vinyl.image : process.env.NEXT_PUBLIC_API_URL + collectionVinyl.vinyl.image}
+                                            src={
+                                                collectionVinyl.vinyl.image.startsWith(
+                                                    'http'
+                                                )
+                                                    ? collectionVinyl.vinyl
+                                                        .image
+                                                    : process.env
+                                                        .NEXT_PUBLIC_API_URL +
+                                                      collectionVinyl.vinyl
+                                                          .image
+                                            }
                                             alt={collectionVinyl.vinyl.title}
                                             width={200}
                                             height={200}
                                             style={{
                                                 objectFit: 'cover',
                                                 width: '100%',
-                                                height: '100%',
+                                                height: '100%'
                                             }}
                                         />
-                                    ): (
+                                    ) : (
                                         <Image
-                                            src={'https://via.placeholder.com/100x100.png?text=No+Image'}
+                                            src={
+                                                'https://via.placeholder.com/100x100.png?text=No+Image'
+                                            }
                                             alt={collectionVinyl.vinyl.title}
                                             width={200}
                                             height={200}
                                             style={{
                                                 objectFit: 'cover',
                                                 width: '100%',
-                                                height: '100%',
+                                                height: '100%'
                                             }}
                                         />
                                     )}
@@ -129,39 +158,61 @@ export default function Home ({
                         }
                     >
                         {collectionVinyls && collectionVinyls.length > 0
-                            ? collectionVinyls.map((collectionVinyl) => (
+                            ? collectionVinyls.map(collectionVinyl => (
                                 <Link
                                     href={`/vinyls/${collectionVinyl.vinyl_id}`}
                                     key={collectionVinyl.id}
-                                    className={'w-full h-full flex flex-col items-center justify-center'}
+                                    className={
+                                        'w-full h-full flex flex-col items-center justify-center'
+                                    }
                                 >
                                     {collectionVinyl.vinyl.image ? (
                                         <Image
-                                            src={collectionVinyl.vinyl.image.startsWith('http') ? collectionVinyl.vinyl.image : process.env.NEXT_PUBLIC_API_URL + collectionVinyl.vinyl.image}
+                                            src={
+                                                collectionVinyl.vinyl.image.startsWith(
+                                                    'http'
+                                                )
+                                                    ? collectionVinyl.vinyl
+                                                        .image
+                                                    : process.env
+                                                        .NEXT_PUBLIC_API_URL +
+                                                        collectionVinyl.vinyl
+                                                            .image
+                                            }
                                             alt={collectionVinyl.vinyl.title}
                                             width={200}
                                             height={200}
                                             style={{
                                                 objectFit: 'cover',
                                                 width: '200px',
-                                                height: '200px',
+                                                height: '200px'
                                             }}
                                         />
-                                    ): (
+                                    ) : (
                                         <Image
-                                            src={'https://via.placeholder.com/100x100.png?text=No+Image'}
+                                            src={
+                                                'https://via.placeholder.com/100x100.png?text=No+Image'
+                                            }
                                             alt={collectionVinyl.vinyl.title}
                                             width={200}
                                             height={200}
                                             style={{
                                                 objectFit: 'cover',
                                                 width: '200px',
-                                                height: '200px',
+                                                height: '200px'
                                             }}
                                         />
                                     )}
-                                    <h3 className={'truncate w-1/2 text-center'}>{collectionVinyl.vinyl.title}</h3>
-                                    <p className={'text-sm'}>{collectionVinyl.vinyl.artist}</p>
+                                    <h3
+                                        className={
+                                            'truncate w-1/2 text-center'
+                                        }
+                                    >
+                                        {collectionVinyl.vinyl.title}
+                                    </h3>
+                                    <p className={'text-sm'}>
+                                        {collectionVinyl.vinyl.artist}
+                                    </p>
                                 </Link>
                             ))
                             : ''}

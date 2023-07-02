@@ -18,13 +18,13 @@ const PasswordReset = () => {
             .post(
                 `${process.env.NEXT_PUBLIC_API_URL}/api/forgot-password`,
                 {
-                    email: email,
+                    email: email
                 },
                 {
                     headers: {
                         Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
+                        'Content-Type': 'application/json'
+                    }
                 }
             )
             .then(() => {
@@ -35,32 +35,38 @@ const PasswordReset = () => {
                     );
                 });
             })
-            .catch((err) => {
+            .catch(err => {
                 showToast('error', err.response.data.error);
             });
     };
 
     return (
-        <div className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}>
+        <div
+            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
+        >
             <Head>
                 <title>Réinitialisation de mot de passe</title>
             </Head>
             <div
-                className={'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'}
+                className={
+                    'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'
+                }
             >
                 <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
                 <h1 className={'text-fuchsia-800'}>Mot de passe oublié</h1>
                 <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
             </div>
-            <div className={'flex flex-col justify-center items-center lg:mx-32'}>
+            <div
+                className={'flex flex-col justify-center items-center lg:mx-32'}
+            >
                 <Formik
                     initialValues={{
-                        email: '',
+                        email: ''
                     }}
                     validationSchema={Yup.object({
                         email: Yup.string()
                             .email('Email invalide')
-                            .required('Email requis'),
+                            .required('Email requis')
                     })}
                     onSubmit={(values, { setSubmitting }) => {
                         setSubmitting(true);
@@ -87,7 +93,7 @@ const PasswordReset = () => {
                                         buildInfo={{
                                             label: 'Email :',
                                             type: 'email',
-                                            placeholder: 'Email',
+                                            placeholder: 'Email'
                                         }}
                                         className={
                                             'flex flex-col md:flex-row justify-center items-center w-full gap-4'

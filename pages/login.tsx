@@ -15,8 +15,8 @@ import type { AxiosResponse } from 'axios';
 import type { FormikHelpers, FieldProps } from 'formik';
 
 interface LoginProps {
-  email: string;
-  password: string;
+    email: string;
+    password: string;
 }
 
 const Login = () => {
@@ -32,13 +32,13 @@ const Login = () => {
                     client_secret: process.env.NEXT_PUBLIC_API_CLIENT_SECRET,
                     username: username,
                     password: password,
-                    scope: '',
+                    scope: ''
                 },
                 {
                     headers: {
                         Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
+                        'Content-Type': 'application/json'
+                    }
                 }
             )
             .then((response: AxiosResponse) => {
@@ -47,15 +47,15 @@ const Login = () => {
                 // set token / refresh token / expires in cookie
                 cookie.set('token', response.data.access_token, {
                     path: '/',
-                    maxAge: 31536000, // Expires after 1year
+                    maxAge: 31536000 // Expires after 1year
                 });
                 cookie.set('refresh_token', response.data.refresh_token, {
                     path: '/',
-                    maxAge: 31536000, // Expires after 1year
+                    maxAge: 31536000 // Expires after 1year
                 });
                 cookie.set('expires_in', response.data.expires_in, {
                     path: '/',
-                    maxAge: 31536000, // Expires after 1year
+                    maxAge: 31536000 // Expires after 1year
                 });
                 // user with zustand
                 axiosApiInstance.get('/users/me').then((res: AxiosResponse) => {
@@ -64,9 +64,12 @@ const Login = () => {
                     router.push('/');
                 });
             })
-            .catch((error) => {
+            .catch(error => {
                 // if status code is 401, then the user is unauthorized
-                if (error.response.status === 401 || error.response.status === 400) {
+                if (
+                    error.response.status === 401 ||
+                    error.response.status === 400
+                ) {
                     showToast('error', 'Identifiants incorrects');
                 } else {
                     showToast(
@@ -78,22 +81,30 @@ const Login = () => {
     };
 
     return (
-        <div className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}>
+        <div
+            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
+        >
             <Head>
                 <title>Connexion</title>
             </Head>
             <div
-                className={'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'}
+                className={
+                    'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'
+                }
             >
                 <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
-                <h1 className={'text-fuchsia-800'}>Connectez-vous à votre compte</h1>
+                <h1 className={'text-fuchsia-800'}>
+                    Connectez-vous à votre compte
+                </h1>
                 <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
             </div>
-            <div className={'flex flex-col justify-center items-center lg:mx-32'}>
+            <div
+                className={'flex flex-col justify-center items-center lg:mx-32'}
+            >
                 <Formik
                     initialValues={{
                         email: '',
-                        password: '',
+                        password: ''
                     }}
                     onSubmit={(
                         values: LoginProps,
@@ -122,7 +133,7 @@ const Login = () => {
                                         buildInfo={{
                                             label: 'Email :',
                                             type: 'email',
-                                            placeholder: 'Email',
+                                            placeholder: 'Email'
                                         }}
                                         className={
                                             'flex flex-col lg:flex-row items-center content-center gap-4'
@@ -139,7 +150,7 @@ const Login = () => {
                                         buildInfo={{
                                             label: 'Password :',
                                             type: 'password',
-                                            placeholder: 'Password',
+                                            placeholder: 'Password'
                                         }}
                                         className={
                                             'flex flex-col lg:flex-row items-center content-center gap-4'
@@ -156,7 +167,7 @@ const Login = () => {
                 className={'sm:ml-48 hover:text-orange-700'}
                 href={'/password_reset'}
             >
-        Mot de passe oubliée ?
+                Mot de passe oubliée ?
             </Link>
             <Button className={'my-12'} type={'button'}>
                 <Link href={'/register'}>Pas de compte ? Inscrivez-vous !</Link>

@@ -32,10 +32,10 @@ export const Layout: FunctionComponent<PropsWithChildren> = ({ children }) => {
                                 'font-black text-transparent text-5xl pb-5 leading-relaxed sm:text-8xl bg-clip-text bg-gradient-to-l bgr from-red-500 via-yellow-500 to-blue-800'
                             }
                         >
-              Vinyls
+                            Vinyls
                         </span>
                         <br />
-            Collection
+                        Collection
                     </h1>
                 </Link>
             </div>

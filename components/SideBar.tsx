@@ -7,30 +7,30 @@ import { faChevronDown } from '@fortawesome/pro-light-svg-icons';
 
 import type { Collection } from '@definitions/index';
 
-function classNames (...classes: string[]) {
+function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
 
 type SideBarProps = {
-  navItems: Collection[];
-  activeTab: number;
-  setActiveTab: (tab: number) => void;
+    navItems: Collection[];
+    activeTab: number;
+    setActiveTab: (tab: number) => void;
 };
 
 const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
-    const getActiveTab = (tab: number) => {
-    // search navItems selected whete activeTab is equal to id
-        if (navItems.find((item) => item.id === tab)) {
-            return tab;
-        } else {
-            if (navItems.length > 0) {
-                return navItems[0].id;
-            }
-        }
-        return {
-            name: 'Aucune collection',
-        };
-    };
+    // const getActiveTab = (tab: number) => {
+    //     // search navItems selected whete activeTab is equal to id
+    //     if (navItems.find(item => item.id === tab)) {
+    //         return tab;
+    //     } else {
+    //         if (navItems.length > 0) {
+    //             return navItems[0].id;
+    //         }
+    //     }
+    //     return {
+    //         name: 'Aucune collection'
+    //     };
+    // };
 
     return (
         <>
@@ -38,7 +38,7 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
                 <Sidebar aria-label="Default sidebar example">
                     <Sidebar.Items>
                         <Sidebar.ItemGroup className={'space-y-0'}>
-                            {navItems.map((item) => (
+                            {navItems.map(item => (
                                 <Sidebar.Item
                                     href="#"
                                     key={item.id}
@@ -54,11 +54,15 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
                                 >
                                     <button
                                         className={classNames(
-                                            activeTab === item.id ? 'font-bold' : 'font-medium',
+                                            activeTab === item.id
+                                                ? 'font-bold'
+                                                : 'font-medium',
                                             ''
                                         )}
                                     >
-                                        <span className="truncate">{item.name}</span>
+                                        <span className="truncate">
+                                            {item.name}
+                                        </span>
                                     </button>
                                 </Sidebar.Item>
                             ))}
@@ -69,7 +73,7 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
             <div className={'sm:hidden'}>
                 <Listbox
                     value={activeTab}
-                    onChange={(value) => {
+                    onChange={value => {
                         setActiveTab(navItems[value].id);
                     }}
                 >
@@ -78,8 +82,10 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
                             <span className="block truncate">
                                 {
                                     (
-                                        navItems.find((item) => item.id === activeTab) || {
-                                            name: 'Aucune collection',
+                                        navItems.find(
+                                            item => item.id === activeTab
+                                        ) || {
+                                            name: 'Aucune collection'
                                         }
                                     ).name
                                 }
@@ -100,7 +106,9 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
                                         key={item.name}
                                         className={({ active }) =>
                                             classNames(
-                                                active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                                                active
+                                                    ? 'text-white bg-indigo-600'
+                                                    : 'text-gray-900',
                                                 'cursor-default select-none relative py-2 pl-10 pr-4'
                                             )
                                         }
@@ -110,7 +118,9 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
                                             <>
                                                 <span
                                                     className={classNames(
-                                                        selected ? 'font-semibold' : 'font-normal',
+                                                        selected
+                                                            ? 'font-semibold'
+                                                            : 'font-normal',
                                                         'block truncate'
                                                     )}
                                                 >
@@ -119,11 +129,16 @@ const SideBar = ({ navItems, activeTab, setActiveTab }: SideBarProps) => {
                                                 {selected ? (
                                                     <span
                                                         className={classNames(
-                                                            active ? 'text-white' : 'text-indigo-600',
+                                                            active
+                                                                ? 'text-white'
+                                                                : 'text-indigo-600',
                                                             'absolute inset-y-0 left-0 flex items-center pl-3'
                                                         )}
                                                     >
-                                                        <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                                                        <CheckIcon
+                                                            className="w-5 h-5"
+                                                            aria-hidden="true"
+                                                        />
                                                     </span>
                                                 ) : null}
                                             </>

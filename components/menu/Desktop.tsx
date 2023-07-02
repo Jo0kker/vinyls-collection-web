@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import Link from 'next/link';
 import Lottie from 'lottie-react';
 import vinylsAnimation from '@assets/lottieJson/vinyl-loading.json';
@@ -7,21 +7,27 @@ import { Bars3Icon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { useBearStore } from '@store/useBearStore';
 import type { MenuItem } from '@components/NavBar';
 
-
-function classNames (...classes: string[]) {
+function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
 }
 
-const DesktopMenu = (
-    { user, isMenuOpen, setIsMenuOpen, menuItems, userMenuItems }: MenuItem
-) => {
+const DesktopMenu = ({
+    user,
+    isMenuOpen,
+    setIsMenuOpen,
+    menuItems,
+    userMenuItems
+}: MenuItem) => {
     return (
         <Popover className="hidden relative bg-transparent z-40 font-roboto md:block">
             <div className="flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
                 <div className="flex justify-start lg:w-0 lg:flex-1">
                     <Link href="/">
                         <span className="sr-only">Vinyls Collection</span>
-                        <Lottie animationData={vinylsAnimation} className={'w-12'} />
+                        <Lottie
+                            animationData={vinylsAnimation}
+                            className={'w-12'}
+                        />
                     </Link>
                 </div>
                 <div className="-my-2 -mr-2 md:hidden">
@@ -47,7 +53,10 @@ const DesktopMenu = (
                 <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
                     {/* dropdown if user connect */}
                     {user ? (
-                        <Menu as="div" className="relative inline-block text-left">
+                        <Menu
+                            as="div"
+                            className="relative inline-block text-left"
+                        >
                             <div>
                                 {/* ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-3xl bg-black bg-opacity-10 hover:bg-opacity-20 border border-red-700 bg-transparent px-4 py-2 text-base font-medium text-white shadow-sm hover:text-orange-700" */}
                                 <Menu.Button className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-3xl bg-black bg-opacity-10 hover:bg-opacity-20 border border-red-700 bg-transparent px-4 py-2 text-base font-medium text-white shadow-sm">
@@ -70,7 +79,9 @@ const DesktopMenu = (
                             >
                                 <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                     <div className="px-4 py-3">
-                                        <p className="text-sm">Connecté en tant que</p>
+                                        <p className="text-sm">
+                                            Connecté en tant que
+                                        </p>
                                         <p className="truncate text-sm font-medium text-gray-900">
                                             {user.name}
                                         </p>
@@ -107,7 +118,9 @@ const DesktopMenu = (
                                                         )}
                                                         onClick={() => {
                                                             // call state to logout
-                                                            useBearStore.getState().logout();
+                                                            useBearStore
+                                                                .getState()
+                                                                .logout();
                                                         }}
                                                     >
                                                         Déconnexion

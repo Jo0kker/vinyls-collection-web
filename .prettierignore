@@ -1,0 +1,11 @@
+.next/**
+**/.next
+.vscode/**
+*.md
+**/*.md
+patches
+.turbo
+public
+**/tsconfig.json
+**/.vscode/settings.json
+assets

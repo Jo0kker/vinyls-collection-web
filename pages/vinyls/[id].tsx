@@ -9,14 +9,16 @@ import { Button } from '@components/Button';
 import { YoutubeEmbed } from '@components/YoutubeEmbed';
 import type { Vinyl as IVinyl } from '@definitions/index';
 
-export async function getServerSideProps (context: { params: { id: number | string } }) {
+export async function getServerSideProps(context: {
+    params: { id: number | string };
+}) {
     const { id } = context.params;
     const vinyl = await axiosApiInstance.get(`/vinyls/${id}`);
 
     return {
         props: {
-            vinyl: vinyl.data.data,
-        },
+            vinyl: vinyl.data.data
+        }
     };
 }
 
@@ -24,9 +26,13 @@ const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
     const [showMoreVideo, setShowMoreVideo] = useState(false);
 
     return (
-        <div className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}>
+        <div
+            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
+        >
             <div
-                className={'flex flex-row justify-center font-bold text-2xl mt-4 mb-4'}
+                className={
+                    'flex flex-row justify-center font-bold text-2xl mt-4 mb-4'
+                }
             >
                 <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
                 <h1 className={'text-fuchsia-800'}>
@@ -36,10 +42,16 @@ const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
             </div>
             <div className={'flex flex-col'}>
                 <div
-                    className={'flex flex-col md:flex-row justify-center items-center'}
+                    className={
+                        'flex flex-col md:flex-row justify-center items-center'
+                    }
                 >
                     <Image
-                        src={vinyl.discogs ? vinyl.discogs.thumb : vinyl.image_path}
+                        src={
+                            vinyl.discogs
+                                ? vinyl.discogs.thumb
+                                : vinyl.image_path
+                        }
                         alt={vinyl.label}
                         width={300}
                         height={300}
@@ -56,11 +68,15 @@ const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
                             </tr>
                             <tr>
                                 <td className={'px-4 py-2'}>Provenance</td>
-                                <td className={'px-4 py-2'}>{vinyl.provenance}</td>
+                                <td className={'px-4 py-2'}>
+                                    {vinyl.provenance}
+                                </td>
                             </tr>
                             <tr>
                                 <td className={'px-4 py-2'}>Année</td>
-                                <td className={'px-4 py-2'}>{vinyl.year_released}</td>
+                                <td className={'px-4 py-2'}>
+                                    {vinyl.year_released}
+                                </td>
                             </tr>
                             <tr>
                                 <td className={'px-4 py-2'}>Genre</td>
@@ -72,20 +88,32 @@ const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
 
                 {vinyl.discogs && (
                     <>
-                        <div className={'flex flex-col justify-center items-center'}>
-                            <h2 className={'mt-4 mb-2 text-fuchsia-800 font-bold text-xl'}>
+                        <div
+                            className={
+                                'flex flex-col justify-center items-center'
+                            }
+                        >
+                            <h2
+                                className={
+                                    'mt-4 mb-2 text-fuchsia-800 font-bold text-xl'
+                                }
+                            >
                                 <span className={'text-emerald-500'}>
                                     <FontAwesomeIcon icon={faCompactDisc} />{' '}
                                 </span>{' '}
-                Tracklist
+                                Tracklist
                             </h2>
                             <table className={'table-auto text-sm'}>
                                 <tbody>
                                     {vinyl.discogs.tracklist.map(
                                         (track, index: number) => (
                                             <tr key={index}>
-                                                <td className={'px-4 py-2'}>{track.position}</td>
-                                                <td className={'px-4 py-2'}>{track.title}</td>
+                                                <td className={'px-4 py-2'}>
+                                                    {track.position}
+                                                </td>
+                                                <td className={'px-4 py-2'}>
+                                                    {track.title}
+                                                </td>
                                             </tr>
                                         )
                                     )}
@@ -93,44 +121,74 @@ const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
                             </table>
                         </div>
                         {vinyl.discogs.videos && (
-                            <div className={'flex flex-col justify-center items-center'}>
-                                <h2 className={'mt-4 mb-2 text-fuchsia-800 font-bold text-xl'}>
+                            <div
+                                className={
+                                    'flex flex-col justify-center items-center'
+                                }
+                            >
+                                <h2
+                                    className={
+                                        'mt-4 mb-2 text-fuchsia-800 font-bold text-xl'
+                                    }
+                                >
                                     <span className={'text-emerald-500'}>
                                         <FontAwesomeIcon icon={faVideo} />{' '}
                                     </span>{' '}
-                  Videos
+                                    Videos
                                 </h2>
                                 <div className={'flex flex-col gap-1'}>
                                     <Accordion>
-                                        {vinyl.discogs.videos.map((video, index: number) => {
-                                            if (index < 3) {
-                                                return (
-                                                    <Accordion.Panel key={index}>
-                                                        <Accordion.Title>{video.title}</Accordion.Title>
-                                                        <Accordion.Content>
-                                                            <YoutubeEmbed url={video.uri} />
-                                                        </Accordion.Content>
-                                                    </Accordion.Panel>
-                                                );
-                                            } else {
-                                                if (showMoreVideo) {
+                                        {vinyl.discogs.videos.map(
+                                            (video, index: number) => {
+                                                if (index < 3) {
                                                     return (
-                                                        <Accordion.Panel key={index}>
-                                                            <Accordion.Title>{video.title}</Accordion.Title>
+                                                        <Accordion.Panel
+                                                            key={index}
+                                                        >
+                                                            <Accordion.Title>
+                                                                {video.title}
+                                                            </Accordion.Title>
                                                             <Accordion.Content>
-                                                                <YoutubeEmbed url={video.uri} />
+                                                                <YoutubeEmbed
+                                                                    url={
+                                                                        video.uri
+                                                                    }
+                                                                />
                                                             </Accordion.Content>
                                                         </Accordion.Panel>
                                                     );
                                                 } else {
-                                                    return <></>;
+                                                    if (showMoreVideo) {
+                                                        return (
+                                                            <Accordion.Panel
+                                                                key={index}
+                                                            >
+                                                                <Accordion.Title>
+                                                                    {
+                                                                        video.title
+                                                                    }
+                                                                </Accordion.Title>
+                                                                <Accordion.Content>
+                                                                    <YoutubeEmbed
+                                                                        url={
+                                                                            video.uri
+                                                                        }
+                                                                    />
+                                                                </Accordion.Content>
+                                                            </Accordion.Panel>
+                                                        );
+                                                    } else {
+                                                        return <></>;
+                                                    }
                                                 }
                                             }
-                                        })}
+                                        )}
                                     </Accordion>
                                 </div>
                                 <Button
-                                    onClick={() => setShowMoreVideo(!showMoreVideo)}
+                                    onClick={() =>
+                                        setShowMoreVideo(!showMoreVideo)
+                                    }
                                     className={'my-4'}
                                 >
                                     {showMoreVideo ? 'Voir moins' : 'Voir plus'}

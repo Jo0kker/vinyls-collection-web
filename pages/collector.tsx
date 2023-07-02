@@ -9,7 +9,7 @@ import axiosApiInstance from '@services/interceptorService';
 import type { AxiosResponse } from 'axios';
 import type { User } from '@definitions/User';
 
-export async function getServerSideProps () {
+export async function getServerSideProps() {
     const req = await axiosApiInstance.get('/users');
     const users: User[] = req.data.data;
     const meta = req.data.meta;
@@ -17,21 +17,21 @@ export async function getServerSideProps () {
     return {
         props: {
             users,
-            meta,
-        },
+            meta
+        }
     };
 }
 
 const Collector = ({
     users,
-    meta,
+    meta
 }: {
-  users: User[];
-  meta: {
-    current_page: number;
-    last_page: number;
-    total: number;
-  };
+    users: User[];
+    meta: {
+        current_page: number;
+        last_page: number;
+        total: number;
+    };
 }) => {
     const [collectors, setCollectors] = useState(users);
     const [currentPage, setCurrentPage] = useState(meta.current_page);
@@ -46,17 +46,23 @@ const Collector = ({
     };
 
     return (
-        <div className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}>
+        <div
+            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
+        >
             <div
-                className={'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'}
+                className={
+                    'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'
+                }
             >
                 <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
-                <h1 className={'text-fuchsia-800'}>Liste des collectionneurs</h1>
+                <h1 className={'text-fuchsia-800'}>
+                    Liste des collectionneurs
+                </h1>
                 <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
             </div>
 
             <div className={'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}>
-                {collectors.map((user) => (
+                {collectors.map(user => (
                     <Link
                         key={user.id}
                         href={`/users/${user.id}`}
@@ -73,9 +79,11 @@ const Collector = ({
                         />
                         <div className={'flex flex-col mx-3 justify-center'}>
                             <h2>{user.name}</h2>
-                            <p className={'text-sm'}>{user.collectionVinyls_count} vinyls</p>
                             <p className={'text-sm'}>
-                Dernière connection :{' '}
+                                {user.collectionVinyls_count} vinyls
+                            </p>
+                            <p className={'text-sm'}>
+                                Dernière connection :{' '}
                                 {DateTime.fromFormat(
                                     user.last_activity,
                                     'yyyy-MM-dd HH:mm:ss'
@@ -86,7 +94,7 @@ const Collector = ({
                 ))}
             </div>
             <Button className={'my-4'} onClick={loadMore}>
-        Charger plus
+                Charger plus
             </Button>
         </div>
     );

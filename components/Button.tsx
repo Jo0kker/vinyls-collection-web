@@ -1,9 +1,9 @@
 import type { PropsWithChildren } from 'react';
 
 type ButtonProps = PropsWithChildren<{
-  className?: string;
-  onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset';
+    className?: string;
+    onClick?: () => void;
+    type?: 'button' | 'submit' | 'reset';
 }>;
 
 export const Button = (props: ButtonProps) => {
@@ -31,7 +31,9 @@ export const Button = (props: ButtonProps) => {
         );
     } else {
         return (
-            <div className={`flex content-center justify-center ${props.className}`}>
+            <div
+                className={`flex content-center justify-center ${props.className}`}
+            >
                 <button
                     className="border border-black py-2 px-4 rounded rounded-3xl"
                     onClick={props.onClick}

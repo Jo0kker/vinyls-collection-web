@@ -11,9 +11,15 @@ import axiosApiInstance from '@services/interceptorService';
 import type { AxiosError } from 'axios';
 import type { FormikValues } from 'formik';
 import type { GetServerSidePropsContext } from 'next';
-import type { CollectionVinyl, Collection, Search, Trade, DiscogResult } from '@definitions/index';
+import type {
+    CollectionVinyl,
+    Collection,
+    Search,
+    Trade,
+    DiscogResult
+} from '@definitions/index';
 
-export function getServerSideProps (context: GetServerSidePropsContext) {
+export function getServerSideProps(context: GetServerSidePropsContext) {
     const token = context.req.cookies.token;
     const refresh_token = context.req.cookies.refresh_token;
 
@@ -21,26 +27,33 @@ export function getServerSideProps (context: GetServerSidePropsContext) {
         return {
             redirect: {
                 destination: '/login',
-                permanent: false,
-            },
+                permanent: false
+            }
         };
     }
 
     return {
-        props: {},
+        props: {}
     };
 }
 
 const UserCollection = () => {
     const [collectionShow, setCollectionShow] = useState(0);
     const [collectionsList, setCollectionsList] = useState<Collection[]>([]);
-    const [collectionVinyls, setCollectionVinyls] = useState<Array<CollectionVinyl | Search | Trade>>([]);
+    const [collectionVinyls, setCollectionVinyls] = useState<
+        Array<CollectionVinyl | Search | Trade>
+    >([]);
     const [searchPage, setSearchPage] = useState(1);
-    const [searchData, setSearchData] = useState({ title: '', artist: '', year: '' });
-    const [isLoadingCollectionVinyls, setIsLoadingCollectionVinyls] = useState(true);
+    const [searchData, setSearchData] = useState({
+        title: '',
+        artist: '',
+        year: ''
+    });
+    const [isLoadingCollectionVinyls, setIsLoadingCollectionVinyls] =
+        useState(true);
     const [vinylSearch, setVinylSearch] = useState<DiscogResult[]>([]);
     const [slideIsOpen, setSlideIsOpen] = useState(false);
-    const user = useBearStore((state) => state.user);
+    const user = useBearStore(state => state.user);
 
     const getAllCollections = useCallback(async () => {
         if (!user) return;
@@ -52,7 +65,7 @@ const UserCollection = () => {
         setCollectionsList([
             { id: -1, name: 'Recherche', type: 'search' },
             // { id: -2, name: 'A échanger', type: 'trade' },
-            ...reqCollectionVinyl.data.data,
+            ...reqCollectionVinyl.data.data
         ]);
 
         setCollectionShow(reqCollectionVinyl.data.data[0].id);
@@ -83,7 +96,7 @@ const UserCollection = () => {
         setSearchData({
             title: data.title,
             artist: data.artist,
-            year: data.year,
+            year: data.year
         });
         setVinylSearch(reqVinyls.data.results);
     };
@@ -93,14 +106,17 @@ const UserCollection = () => {
             axiosApiInstance
                 .post('/collectionVinyl', {
                     discog_id: idDiscogs,
-                    collection_id: collectionShow,
+                    collection_id: collectionShow
                 })
                 .then(() => {
                     getCollectionVinyls();
                 })
                 .catch((err: AxiosError) => {
                     if (err.response?.status === 409) {
-                        showToast('error', 'Vinyle déjà présent dans la collection');
+                        showToast(
+                            'error',
+                            'Vinyle déjà présent dans la collection'
+                        );
                     }
                 });
         }
@@ -115,12 +131,18 @@ const UserCollection = () => {
     }, [getCollectionVinyls]);
 
     return (
-        <div className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}>
+        <div
+            className={'pt-4 sm:pt-0 mt-4 px-4 rounded bg-white flex flex-col'}
+        >
             <div
-                className={'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'}
+                className={
+                    'flex flex-row justify-center font-bold text-2xl mt-6 mb-4'
+                }
             >
                 <span className={'mr-3 text-emerald-500'}>&#47;&#47;</span>
-                <h1 className={'text-fuchsia-800'}>Gestion de vos collections</h1>
+                <h1 className={'text-fuchsia-800'}>
+                    Gestion de vos collections
+                </h1>
                 <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
             </div>
             <div className={'flex flex-col sm:flex-row'}>
@@ -130,8 +152,11 @@ const UserCollection = () => {
                     setActiveTab={setCollectionShow}
                 />
                 <div className={'flex flex-col flex-1'}>
-                    <Button onClick={() => setSlideIsOpen(true)} className={'my-4'}>
-            Ajouter un vinyle
+                    <Button
+                        onClick={() => setSlideIsOpen(true)}
+                        className={'my-4'}
+                    >
+                        Ajouter un vinyle
                     </Button>
                     <ListVinyls
                         collectionVinylsDiff={collectionVinyls}
