@@ -1,118 +1,121 @@
-import { AxiosRequestConfig, AxiosResponse } from "axios";
-import { useBearStore } from "@store/useBearStore";
-import jwtDecode from "jwt-decode";
-import { Cookies } from "react-cookie";
-import axios from 'axios'
+import axios from 'axios';
+import jwtDecode from 'jwt-decode';
+import { Cookies } from 'react-cookie';
+
+import { useBearStore } from '@store/useBearStore';
+
+import type { JwtPayload } from 'jwt-decode';
+import type { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 const axiosApiInstance = axios.create();
+axiosApiInstance.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 // Request interceptor for API calls
 axiosApiInstance.interceptors.request.use(
-  async (config: AxiosRequestConfig) => {
-    if (typeof window !== "undefined") {
-      // get token from COOKIE
-      const cookies = new Cookies();
-      const accessToken = cookies.get("token");
+    async (config: AxiosRequestConfig) => {
+        if (typeof window !== 'undefined') {
+            // get token from COOKIE
+            const cookies = new Cookies();
+            const accessToken = cookies.get('token');
 
-      if (accessToken) {
-        // check if token is expired
-        const decodedToken: any = jwtDecode(accessToken);
+            if (accessToken) {
+                // check if token is expired
+                const decodedToken = jwtDecode<JwtPayload>(accessToken);
 
-        if (decodedToken.exp * 1000 < Date.now()) {
-          // token is expired
-          // remove token from COOKIE
-          cookies.remove("token");
-          // remove token from store
-          useBearStore.getState().logout();
+                if (!decodedToken.exp || (decodedToken.exp * 1000 < Date.now())) {
+                    // token is expired
+                    // remove token from COOKIE
+                    cookies.remove('token');
+                    // remove token from store
+                    useBearStore.getState().logout();
 
-          // try to refresh token
-          const refreshToken = cookies.get("refreshToken");
-          if (refreshToken) {
-            try {
-              const response = await axios.post("/api/auth/refresh", {
-                refreshToken,
-              });
-              const newAccessToken = response.data.accessToken;
-              const newRefreshToken = response.data.refreshToken;
-              // set new token to COOKIE
-              cookies.set("token", newAccessToken);
-              cookies.set("refreshToken", newRefreshToken);
-            } catch (error) {
-              console.log(error);
+                    // try to refresh token
+                    const refreshToken = cookies.get('refreshToken');
+                    if (refreshToken) {
+                        try {
+                            const response = await axios.post('/api/auth/refresh', {
+                                refreshToken,
+                            });
+                            const newAccessToken = response.data.accessToken;
+                            const newRefreshToken = response.data.refreshToken;
+                            // set new token to COOKIE
+                            cookies.set('token', newAccessToken);
+                            cookies.set('refreshToken', newRefreshToken);
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }
+                } else {
+                    config.headers = {
+                        Authorization: `Bearer ${accessToken}`,
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Accept-Encoding': 'identity',
+                    };
+                }
             }
-          }
         } else {
-          config.headers = {
-            Authorization: `Bearer ${accessToken}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          };
+            config.headers = {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Accept-Encoding': 'identity',
+            };
         }
-      }
-    } else {
-      config.headers = {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      };
-    }
-    // set base url
-    config.baseURL = process.env.NEXT_PUBLIC_API_URL + "/api";
+        // set base url
+        config.baseURL = process.env.NEXT_PUBLIC_API_URL + '/api';
 
-    return config;
-  },
-  (error: any) => {
-    Promise.reject(error);
-  }
+        return config;
+    },
+    (error: AxiosError) => {
+        Promise.reject(error);
+    }
 );
 
 // Response interceptor for API calls
 axiosApiInstance.interceptors.response.use(
-  (response: AxiosResponse) => {
-    return response;
-  },
-  async function (error: any) {
-    const originalRequest = error.config;
-    if (
-      ((error.response?.status !== undefined &&
-        error.response.status === 403) ||
-        error.response.status === 401) &&
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
-      const cookies = new Cookies();
-      const refreshToken = cookies.get("refreshToken");
-      const response = await axios.post(
-        "http://localhost:8000/oauth/token/refresh",
-        {
-          refresh: refreshToken,
-        },
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
+    (response: AxiosResponse) => {
+        return response;
+    },
+    async function (error: AxiosError) {
+        // TODO je ne trouve pas de doc axios avec ce _retry, il faudrait réussir a savoir d'où il vient car n'existant pas sur le type AxiosRequestConfig je suis obliger de le rajouter manuellement
+        const originalRequest: AxiosRequestConfig & { _retry?: boolean } = error.config || {};
+        if (!originalRequest?._retry && [401, 403].includes(error.response?.status || 0)) {
+            originalRequest._retry = true;
+            const cookies = new Cookies();
+            const refreshToken = cookies.get('refreshToken');
+            const response = await axiosApiInstance.post(
+                'http://localhost:8000/oauth/token/refresh',
+                {
+                    refresh: refreshToken,
+                },
+                {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'Accept-Encoding': 'identity',
+                    },
+                }
+            );
+            if (response.status === 200) {
+                const newAccessToken = response.data.access;
+                const newRefreshToken = response.data.refresh;
+                // set new token to COOKIE
+                cookies.set('token', newAccessToken);
+                cookies.set('refreshToken', newRefreshToken);
+                axios.defaults.headers.common['Authorization'] =
+          'Bearer ' + newAccessToken;
+                return axiosApiInstance(originalRequest);
+            } else {
+                // remove token from COOKIE
+                cookies.remove('token');
+                cookies.remove('refreshToken');
+                // clear redux store
+                useBearStore.getState().logout();
+                return Promise.reject(error);
+            }
         }
-      );
-      if (response.status === 200) {
-        const newAccessToken = response.data.access;
-        const newRefreshToken = response.data.refresh;
-        // set new token to COOKIE
-        cookies.set("token", newAccessToken);
-        cookies.set("refreshToken", newRefreshToken);
-        axios.defaults.headers.common["Authorization"] =
-          "Bearer " + newAccessToken;
-        return axiosApiInstance(originalRequest);
-      } else {
-        // remove token from COOKIE
-        cookies.remove("token");
-        cookies.remove("refreshToken");
-        //clear redux store
-        useBearStore.getState().logout();
         return Promise.reject(error);
-      }
     }
-    return Promise.reject(error);
-  }
 );
 
 export default axiosApiInstance;

@@ -1,5 +1,5 @@
-import {Vinyl} from "./Vinyl";
-import {Collection} from "./Collection";
+import type { Vinyl } from './Vinyl';
+import type { Collection } from './Collection';
 
 export interface CollectionVinyl {
   id: number;
