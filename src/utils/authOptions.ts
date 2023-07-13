@@ -90,7 +90,7 @@ export const authOptions: AuthOptions = {
 
             return token;
         },
-        session({ session, token, user }) {
+        session({ session, token }) {
             session.user = {
                 ...session.user,
                 ...token,
