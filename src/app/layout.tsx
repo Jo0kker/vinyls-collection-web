@@ -2,6 +2,7 @@ import type { PropsWithChildren } from 'react'
 
 import { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
+import { getServerSession } from 'next-auth'
 
 import { cn } from '@/utils/classNames'
 
@@ -19,7 +20,8 @@ const roboto = Roboto({
     variable: '--font-roboto'
 })
 
-export default function Layout({ children }: PropsWithChildren) {
+export default async function Layout({ children }: PropsWithChildren) {
+    const session = await getServerSession()
     return (
         <html lang="fr">
             <body
@@ -28,7 +30,7 @@ export default function Layout({ children }: PropsWithChildren) {
                     'text-body flex min-h-screen w-screen flex-col bg-gradient-to-tr from-fuchsia-900 via-fuchsia-900 to-fuchsia-800 text-gray-900'
                 )}
             >
-                <Providers>
+                <Providers session={session}>
                     <Header />
                     <main className="mx-auto w-full max-w-screen-xl flex-1 space-y-4 p-4 md:px-0">
                         <Announcement />
