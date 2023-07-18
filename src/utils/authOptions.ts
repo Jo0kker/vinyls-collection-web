@@ -1,4 +1,6 @@
-import { AuthOptions, Awaitable, Session, User, getServerSession } from 'next-auth'
+import console from 'console'
+
+import { AuthOptions, Awaitable, JWT, Session, User, getServerSession } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
 type AuthResponse = {
@@ -6,6 +8,41 @@ type AuthResponse = {
     refresh_token: string
     token_type: string
     expires_in: number
+}
+
+async function refreshToken(token: JWT) {
+    try {
+        const response = await fetch(process.env.API_URL + '/oauth/token', {
+            method: 'POST',
+            body: JSON.stringify({
+                scope: '',
+                refresh_token: token.refresh_token,
+                grant_type: 'refresh_token',
+                client_id: process.env.NEXT_PUBLIC_API_CLIENT_ID,
+                client_secret: process.env.NEXT_PUBLIC_API_CLIENT_SECRET
+            }),
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (response.ok) {
+            const data = (await response.json()) as { accessToken: string; refreshToken: string }
+
+            return {
+                ...token,
+                ...data
+            }
+        } else {
+            throw response
+        }
+    } catch (error) {
+        return {
+            ...token,
+            error: 'RefreshAccessTokenError'
+        }
+    }
 }
 
 export const authOptions: AuthOptions = {
@@ -19,7 +56,6 @@ export const authOptions: AuthOptions = {
                 password: { label: 'Mot de passe', type: 'password' }
             },
             async authorize(credentials) {
-                console.log('authorize')
                 const authResponse = await fetch(process.env.NEXT_PUBLIC_API_URL + '/oauth/token', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -30,8 +66,6 @@ export const authOptions: AuthOptions = {
                         client_secret: process.env.NEXT_PUBLIC_API_CLIENT_SECRET
                     })
                 })
-
-                console.log(authResponse)
 
                 if (!authResponse.ok) return null
 
@@ -67,7 +101,6 @@ export const authOptions: AuthOptions = {
     ],
     callbacks: {
         signIn({ user }) {
-            console.log('signin')
             if (user) return true
             return false
         },
@@ -79,9 +112,11 @@ export const authOptions: AuthOptions = {
                 }
 
                 return token
+            } else if (Date.now() < token.expires_in * 1000) {
+                return token
+            } else {
+                return refreshToken(token)
             }
-
-            return token
         },
         session({ session, token }) {
             session.user = {

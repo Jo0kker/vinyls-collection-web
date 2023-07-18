@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import {
     faCompactDisc,
@@ -49,6 +49,10 @@ const LINKS = (isAuth?: boolean) => [
 export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false)
     const session = useSession()
+
+    useEffect(() => {
+        if (session.data?.user.error === 'RefreshAccessTokenError') signOut()
+    }, [session])
 
     return (
         <header className="w-full">

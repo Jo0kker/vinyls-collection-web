@@ -1,7 +1,7 @@
 import { getSession } from './authOptions'
 
 type FetchResponse<T> = {
-    data?: T
+    data: T
     links?: {
         first: string | null
         last: string | null
@@ -23,9 +23,9 @@ type FetchResponse<T> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchAPI<T = any>(
     url: string,
-    options?: RequestInit
+    options?: RequestInit & { withSession?: boolean }
 ): Promise<FetchResponse<T>> {
-    const session = await getSession()
+    const session = options?.withSession ? await getSession() : null
 
     return fetch(`${process.env.NEXT_PUBLIC_API_URL}/api` + url, {
         ...options,

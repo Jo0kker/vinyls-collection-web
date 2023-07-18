@@ -28,8 +28,6 @@ export function LoginForm() {
                 redirect: false
             })
 
-            console.log(result)
-
             if (!result?.ok) {
                 if (result?.status === 401) {
                     showToast('error', 'Identifiants incorrects')
