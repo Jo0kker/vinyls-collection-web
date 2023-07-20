@@ -89,7 +89,7 @@ export default function Home ({
                             {collectionVinyls.map((collectionVinyl, key) => (
                                 <Image
                                     key={key}
-                                    src={collectionVinyl.vinyl.image_path}
+                                    src={collectionVinyl.vinyl.image}
                                     alt={collectionVinyl.vinyl.label}
                                     width={300}
                                     height={300}
@@ -111,7 +111,7 @@ export default function Home ({
                                     key={collectionVinyl.id}
                                 >
                                     <Image
-                                        src={collectionVinyl.vinyl.image_path}
+                                        src={collectionVinyl.vinyl.image}
                                         alt={collectionVinyl.vinyl.label}
                                         width={300}
                                         height={300}

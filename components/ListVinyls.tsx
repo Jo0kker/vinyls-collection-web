@@ -63,7 +63,7 @@ const ListVinyls = ({
                                     }
                                 >
                                     <Image
-                                        src={collectionVinylItem.vinyl.image_path}
+                                        src={collectionVinylItem.vinyl.image}
                                         alt={collectionVinylItem.vinyl.label}
                                         width={100}
                                         height={100}

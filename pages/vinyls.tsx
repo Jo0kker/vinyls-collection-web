@@ -84,7 +84,7 @@ const Vinyls = ({
                             }
                         >
                             <Image
-                                src={collectionVinyl.vinyl.image_path}
+                                src={collectionVinyl.vinyl.image}
                                 alt={collectionVinyl.vinyl.label}
                                 width={100}
                                 height={100}
@@ -126,7 +126,7 @@ const Vinyls = ({
                             }
                         >
                             <Image
-                                src={trade.image_path}
+                                src={trade.image}
                                 alt={trade.vinyl.label}
                                 width={100}
                                 height={100}
@@ -176,7 +176,7 @@ const Vinyls = ({
                             className={'flex flex-col items-center m-4 w-48'}
                         >
                             <Image
-                                src={search.image_path}
+                                src={search.image}
                                 alt={search.vinyl.label}
                                 width={100}
                                 height={100}

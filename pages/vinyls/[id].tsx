@@ -39,7 +39,7 @@ const Vinyl = ({ vinyl }: { vinyl: IVinyl }) => {
                     className={'flex flex-col md:flex-row justify-center items-center'}
                 >
                     <Image
-                        src={vinyl.discogs ? vinyl.discogs.thumb : vinyl.image_path}
+                        src={vinyl.discogs ? vinyl.discogs.thumb : vinyl.image}
                         alt={vinyl.label}
                         width={300}
                         height={300}

@@ -17,7 +17,7 @@ export interface Vinyl {
   artist: string;
   genre: string;
   year_released: string;
-  image_path: string;
+  image: string;
   provenance: string;
   discog_id: number;
   discogs?: {
@@ -26,6 +26,7 @@ export interface Vinyl {
     tracklist: Track[],
     videos: Video[]
   };
+  format_vinyl: [],
   created_at: Date;
   updated_at: Date;
 }
