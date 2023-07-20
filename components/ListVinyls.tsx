@@ -11,26 +11,19 @@ import axiosApiInstance from '@services/interceptorService';
 import loading from '@assets/lottieJson/88944-vinyl-loading.json';
 
 import type { Dispatch, SetStateAction } from 'react';
-import type { CollectionVinyl, Trade, Search } from '@definitions/index';
-
-type VinylCollectionState = CollectionVinyl | Search | Trade;
+import type { CollectionItem } from '@definitions/index';
 
 const ListVinyls = ({
     collectionVinylsDiff,
     setCollectionVinylsDiff = () => [],
     isLoadingCollectionVinyls,
 }: {
-  collectionVinylsDiff: VinylCollectionState[];
-  setCollectionVinylsDiff?: Dispatch<SetStateAction<Array<CollectionVinyl | Search | Trade>>>;
+  collectionVinylsDiff: CollectionItem[];
+  setCollectionVinylsDiff?: Dispatch<SetStateAction<Array<CollectionItem>>>;
   isLoadingCollectionVinyls: boolean;
 }) => {
     const deleteVinyl = useCallback((collectionId: number, collectionVinylId: number) => {
-        setCollectionVinylsDiff(
-            collectionVinylsDiff.filter(
-                (vinyl: CollectionVinyl | Search | Trade) =>
-                    vinyl.id !== collectionVinylId
-            )
-        );
+        setCollectionVinylsDiff(collectionVinylsDiff.filter(vinyl => vinyl.id !== collectionVinylId));
 
         axiosApiInstance
             .delete(
@@ -61,7 +54,7 @@ const ListVinyls = ({
                         </div>
                     ) : (
                         collectionVinylsDiff.map(
-                            (collectionVinylItem: CollectionVinyl | Trade | Search) => (
+                            collectionVinylItem => (
                                 <Link
                                     href={`/vinyls/${collectionVinylItem.vinyl_id}`}
                                     key={collectionVinylItem.id}

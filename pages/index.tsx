@@ -8,7 +8,7 @@ import { faPlus, faCompactDisc } from '@fortawesome/pro-light-svg-icons';
 import { Button } from '@components/Button';
 import axiosApiInstance from '@services/interceptorService';
 
-import type { CollectionVinyl } from '@definitions/CollectionVinyl';
+import type { CollectionVinyl } from '@definitions/Collection';
 
 export async function getServerSideProps () {
     // get last 6 vinyls
