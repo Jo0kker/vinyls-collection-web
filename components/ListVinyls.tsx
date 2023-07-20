@@ -1,8 +1,8 @@
-
 import Link from 'next/link';
 import Image from 'next/image';
 import Lottie from 'lottie-react';
 import { useCallback } from 'react';
+import { PlusIcon } from '@heroicons/react/20/solid';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -17,10 +17,14 @@ const ListVinyls = ({
     collectionVinylsDiff,
     setCollectionVinylsDiff = () => [],
     isLoadingCollectionVinyls,
+    addVinylAction,
+    listDisplay = 'Grid'
 }: {
   collectionVinylsDiff: CollectionItem[];
   setCollectionVinylsDiff?: Dispatch<SetStateAction<Array<CollectionItem>>>;
   isLoadingCollectionVinyls: boolean;
+  addVinylAction: Dispatch<SetStateAction<boolean>> | undefined;
+  listDisplay?: 'Grid' | 'List'
 }) => {
     const deleteVinyl = useCallback((collectionId: number, collectionVinylId: number) => {
         setCollectionVinylsDiff(collectionVinylsDiff.filter(vinyl => vinyl.id !== collectionVinylId));
@@ -47,19 +51,23 @@ const ListVinyls = ({
                     <Lottie animationData={loading} className={'opacity-40 w-10'} />
                 </div>
             ) : (
-                <div className={'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 my-2'}>
-                    {collectionVinylsDiff.length === 0 ? (
-                        <div className={'text-center'}>
-                            <p className={''}>Aucun vinyle</p>
+                <div className={`box-content ${listDisplay === 'List' ? '' : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
+                    {
+                        typeof addVinylAction !== 'undefined' && 
+                        <div className={ 'grid grid-cols-[1fr] m-1 border border-gray-200 border-dashed rounded border-4 hover:bg-gray-100 text-gray-200/75 hover:text-gray-400 cursor-pointer hover:border-gray-300' }>
+                            <div className={'flex justify-center mx-3'} onClick={() => addVinylAction(true)}>
+                                <PlusIcon className='w-24 ' />
+                            </div>
                         </div>
-                    ) : (
+                    }
+                    {
                         collectionVinylsDiff.map(
                             collectionVinylItem => (
                                 <Link
                                     href={`/vinyls/${collectionVinylItem.vinyl_id}`}
                                     key={collectionVinylItem.id}
                                     className={
-                                        'grid grid-cols-[2fr_3fr_1fr] m-1 border border-gray-300 rounded border-4 hover:bg-gray-400'
+                                        `grid ${listDisplay === 'Grid' ? 'grid-cols-[2fr_3fr_1fr]' : 'grid-cols-[2fr_8fr_1fr]'} m-1 border border-gray-300 rounded border-4 hover:bg-gray-100`
                                     }
                                 >
                                     <Image
@@ -82,7 +90,7 @@ const ListVinyls = ({
                                             {collectionVinylItem.vinyl.year_released}
                                         </p>
                                     </div>
-                                    <div className={'flex flex-col'}>
+                                    <div className={`flex flex-col ${listDisplay === 'List' ? 'justify-center' : ''}`}>
                                         <button
                                             onClick={(event) => {
                                                 event.preventDefault();
@@ -106,7 +114,7 @@ const ListVinyls = ({
                                 </Link>
                             )
                         )
-                    )}
+                    }
                 </div>
             )}
         </>

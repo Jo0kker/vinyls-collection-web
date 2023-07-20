@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGrid, faList } from '@fortawesome/pro-solid-svg-icons';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 
 import { showToast } from '@utils/utils';
 import SideBar from '@components/SideBar';
@@ -32,7 +34,8 @@ export function getServerSideProps (context: GetServerSidePropsContext) {
 }
 
 const UserCollection = () => {
-    const [collectionShow, setCollectionShow] = useState(0);
+    const [collectionShow, setCollectionShow] = useState(-1);
+    const [listDislay, setListDisplay] = useState<'Grid'|'List'>('Grid');
     const [collectionsList, setCollectionsList] = useState<Collection[]>([]);
     const [collectionVinyls, setCollectionVinyls] = useState<Array<CollectionItem>>([]);
     const [searchPage, setSearchPage] = useState(1);
@@ -41,6 +44,17 @@ const UserCollection = () => {
     const [vinylSearch, setVinylSearch] = useState<DiscogResult[]>([]);
     const [slideIsOpen, setSlideIsOpen] = useState(false);
     const user = useBearStore((state) => state.user);
+
+    const collectionEmptyMessage = useMemo(() => {
+        switch (collectionShow) {
+        case -1:
+            return 'Commencez dès maintenant par ajouter les vinyls que vous souhaitez rechercher !';
+        case -2:
+            return 'Faîtes part à la communauté des vinyls que vous souhaitez échanger !';
+        default:
+            return "Cette collection semble vide... Vous pouvez l'enrichir en ajoutant votre premier vinyl !";
+        }
+    }, [collectionShow]);
 
     const getAllCollections = useCallback(async () => {
         if (!user) return;
@@ -51,11 +65,11 @@ const UserCollection = () => {
         // add search and trades to collections
         setCollectionsList([
             { id: -1, name: 'Recherche', type: 'search' },
-            // { id: -2, name: 'A échanger', type: 'trade' },
+            { id: -2, name: 'A échanger', type: 'trade' },
             ...reqCollectionVinyl.data.data,
         ]);
 
-        setCollectionShow(reqCollectionVinyl.data.data[0].id);
+        setCollectionShow(reqCollectionVinyl.data.data[0]?.id || -1);
     }, [user]);
 
     const getCollectionVinyls = useCallback(async () => {
@@ -66,6 +80,8 @@ const UserCollection = () => {
 
         if (collectionShow === -1) {
             url = `/users/${user.id}/searches?include=vinyl`;
+        } else if (collectionShow === -2) {
+            url = `/users/${user.id}/trades?include=vinyl`;
         } else {
             url = `/collections/${collectionShow}/collectionVinyl?include=vinyl`;
         }
@@ -123,20 +139,24 @@ const UserCollection = () => {
                 <h1 className={'text-fuchsia-800 text-xl sm:text-2xl'}>Gestion de vos collections</h1>
                 <span className={'ml-3 text-orange-400'}>&#47;&#47;</span>
             </div>
+            { !collectionVinyls.length && <p className='text-center text-sm italic'> {collectionEmptyMessage}</p> }
             <div className={'flex flex-col sm:flex-row'}>
                 <SideBar
                     navItems={collectionsList}
                     activeTab={collectionShow}
                     setActiveTab={setCollectionShow}
                 />
-                <div className={'flex flex-col flex-1'}>
-                    <Button onClick={() => setSlideIsOpen(true)} className={'my-4'}>
-            Ajouter un vinyle
-                    </Button>
+                <div className={'flex flex-col flex-1 sm:py-4 relative'}>
+                    <div className='flex absolute -top-3 right-3'>
+                        <FontAwesomeIcon icon={faGrid} size="xl" onClick={() => setListDisplay('Grid')} className={`cursor-pointer hover:scale-105 ${listDislay === 'Grid' ? 'text-gray-500' : 'text-gray-400'}`} />
+                        <FontAwesomeIcon icon={faList} size="xl" onClick={() => setListDisplay('List')} className={`cursor-pointer hover:scale-105 ml-2 ${listDislay=== 'List' ? 'text-gray-500' : 'text-gray-400'}`} />
+                    </div>
                     <ListVinyls
                         collectionVinylsDiff={collectionVinyls}
                         setCollectionVinylsDiff={setCollectionVinyls}
                         isLoadingCollectionVinyls={isLoadingCollectionVinyls}
+                        addVinylAction={setSlideIsOpen}
+                        listDisplay={listDislay}
                     />
                 </div>
                 <SlideOvers
