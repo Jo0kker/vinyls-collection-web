@@ -93,9 +93,9 @@ const Vinyls = ({
                             <div className={'flex flex-col items-center'}>
                                 <h3 className={'text-fuchsia-800 font-bold text-lg'}>
                                     {/* cut if string too long */}
-                                    {collectionVinyl.vinyl.label.length > 15
+                                    {/* {collectionVinyl.vinyl.label.length > 15
                                         ? collectionVinyl.vinyl.label.substring(0, 15) + '...'
-                                        : collectionVinyl.vinyl.label}
+                                        : collectionVinyl.vinyl.label} */}
                                 </h3>
                                 <h4 className={'text-fuchsia-800 font-bold text-sm'}>
                                     {collectionVinyl.vinyl.artist}
@@ -135,9 +135,9 @@ const Vinyls = ({
                             <div className={'flex flex-col items-center'}>
                                 <h3 className={'text-fuchsia-800 font-bold text-lg'}>
                                     {/* cut if string too long */}
-                                    {trade.vinyl.label.length > 15
+                                    {/* {trade.vinyl.label.length > 15
                                         ? trade.vinyl.label.substring(0, 15) + '...'
-                                        : trade.vinyl.label}
+                                        : trade.vinyl.label} */}
                                 </h3>
                                 <h4
                                     className={
@@ -185,9 +185,9 @@ const Vinyls = ({
                             <div className={'flex flex-col items-center'}>
                                 <h3 className={'text-fuchsia-800 font-bold text-lg'}>
                                     {/* cut if string too long */}
-                                    {search.vinyl.label.length > 15
+                                    {/* {search.vinyl.label.length > 15
                                         ? search.vinyl.label.substring(0, 15) + '...'
-                                        : search.vinyl.label}
+                                        : search.vinyl.label} */}
                                 </h3>
                                 <h4 className={'text-fuchsia-800 font-bold text-sm'}>
                                     {search.vinyl.artist}
