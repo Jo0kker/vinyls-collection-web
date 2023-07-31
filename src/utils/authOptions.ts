@@ -112,7 +112,7 @@ export const authOptions: AuthOptions = {
                 }
 
                 return token
-            } else if (Date.now() < token.expires_in * 1000) {
+            } else if (Date.now() < token.exp) {
                 return token
             } else {
                 return refreshToken(token)
