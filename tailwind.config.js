@@ -1,15 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: [
-        './app/**/*.{js,ts,jsx,tsx}',
-        './pages/**/*.{js,ts,jsx,tsx}',
-        './components/**/*.{js,ts,jsx,tsx}',
-        'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
-    ],
+    content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', 'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'],
     theme: {
         fontFamily: {
-            body: ['Roboto', 'sans-serif'],
-            sans: ['Roboto', 'sans-serif'],
+            body: 'var(--font-roboto)',
+            sans: 'var(--font-roboto)'
         },
         extend: {
             colors: {
@@ -22,10 +17,10 @@ module.exports = {
                     600: '#D54AB1',
                     700: '#7e1b68',
                     800: '#701455',
-                    900: '#331040',
-                },
-            },
-        },
+                    900: '#331040'
+                }
+            }
+        }
     },
-    plugins: [require('flowbite/plugin')],
-};
+    plugins: [require('flowbite/plugin')]
+}
