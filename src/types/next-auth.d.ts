@@ -38,6 +38,7 @@ declare module 'next-auth' {
         access_token: string
         refresh_token: string
         expires_in: number
+        exp: number
     }
 }
 
@@ -46,6 +47,7 @@ declare module 'next-auth/jwt' {
         username: string
         access_token: string
         refresh_token: string
+        exp: number
         expires_in: number
     }
 }
