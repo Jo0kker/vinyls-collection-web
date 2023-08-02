@@ -112,15 +112,21 @@ export default function Header() {
             </nav>
 
             <div className="flex justify-center">
-                <Link href="/">
-                    <h1 className="relative mt-8 flex flex-col items-center font-bold leading-relaxed text-white shadow-blue-600 drop-shadow-2xl">
-                        <SoundAnimation className="absolute w-56 opacity-50 sm:-top-[89px] sm:w-96" />
-                        <span className="z-10 bg-gradient-to-l from-red-500 via-yellow-500 to-blue-800 bg-clip-text pb-5 text-5xl font-black leading-relaxed text-transparent sm:text-8xl">
-                            Vinyls
-                        </span>
-                        <span className="mt-2">Collection</span>
-                    </h1>
-                </Link>
+                <div className={'mb-14 flex justify-center drop-shadow-2xl'}>
+                    <Link href="/">
+                        <h1
+                            className={
+                                'z-10 mt-8 flex flex-col items-center font-bold leading-relaxed text-white shadow-blue-600 drop-shadow-2xl'
+                            }
+                        >
+                            <SoundAnimation className="absolute -top-11 -z-10 w-56 opacity-50 sm:-top-[89px] sm:w-96" />
+                            <span className="bgr bg-gradient-to-l from-red-500 via-yellow-500 to-blue-800 bg-clip-text pb-5 text-5xl font-black leading-relaxed text-transparent sm:text-8xl">
+                                Vinyls
+                            </span>
+                            <span>Collection</span>
+                        </h1>
+                    </Link>
+                </div>
             </div>
         </header>
     )
