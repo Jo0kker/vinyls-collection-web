@@ -1,7 +1,4 @@
-import Link from 'next/link'
-
 import { RegisterForm } from '@/app/register/RegisterForm'
-import { Button } from '@/components/atom/Button'
 
 export default function RegisterPage() {
     return (

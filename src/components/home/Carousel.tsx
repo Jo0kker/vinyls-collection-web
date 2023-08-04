@@ -74,7 +74,7 @@ export default function Carousel({ vinyls }: CarouselProps) {
                         aria-current={index === i ? 'true' : 'false'}
                         aria-label={`Vinyl ${i}`}
                         onClick={() => setIndex(i)}
-                    ></button>
+                    />
                 ))}
             </div>
 

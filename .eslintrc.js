@@ -43,44 +43,32 @@ module.exports = {
                 pathGroupsExcludedImportTypes: ['builtin']
             }
         ],
-        'quotes': ['error', 'single', { 'avoidEscape': true }],
+        quotes: ['error', 'single', { avoidEscape: true }],
         'no-multi-spaces': 'error',
         'object-curly-spacing': ['error', 'always'],
         'no-useless-escape': 'warn',
-        'one-var': [
-            'error',
-            { 'var': 'always', 'let': 'never', 'const': 'never' }
-        ],
+        'one-var': ['error', { var: 'always', let: 'never', const: 'never' }],
         'keyword-spacing': 'error',
         'spaced-comment': 'error',
-        'prefer-const': 'error',
-        'no-empty': 'off',
-        'no-cond-assign': 'error',
-        'no-use-before-define': 'warn',
-        'no-unused-vars': 'off',
-        'semi': ['error', 'always'],
         'no-control-regex': 'off',
-        'eqeqeq': 'warn',
+        eqeqeq: 'warn',
         'require-await': 'error',
         'no-unmodified-loop-condition': 'warn',
         'no-undef': 'off',
         'no-console': 'warn',
         'no-debugger': 'warn',
-        'react/jsx-filename-extension': ['warn', { 'extensions': ['.tsx'] }],
-        'react/no-unescaped-entities': ['warn', { 'forbid': ['>', '"', '}'] }],
+        'react/jsx-filename-extension': ['warn', { extensions: ['.tsx'] }],
+        'react/no-unescaped-entities': ['warn', { forbid: ['>', '"', '}'] }],
         'react/react-in-jsx-scope': 'off',
         'react/prop-types': 'warn',
         'react/jsx-curly-newline': 'off',
         'react/jsx-one-expression-per-line': 'off',
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'warn',
-        'react/jsx-curly-brace-presence': ['error', { 'props': 'never' }],
-        'react/self-closing-comp': [
-            'error',
-            { 'component': true, 'html': true }
-        ],
+        'react/jsx-curly-brace-presence': ['error', { props: 'never' }],
+        'react/self-closing-comp': ['error', { component: true, html: true }],
         '@typescript-eslint/no-unused-vars': 'warn',
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/no-explicit-any': 'error'
     }
-};
+}

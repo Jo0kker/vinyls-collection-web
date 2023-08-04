@@ -1,0 +1,16 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: install
+    image: node:18.15.0
+    commands:
+      - yarn install
+      - yarn build
+
+  - name: test
+    image: node:18.15.0
+    commands:
+        - yarn lint
+        - yarn prettier
