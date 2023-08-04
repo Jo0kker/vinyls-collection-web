@@ -6,8 +6,12 @@ steps:
   - name: install
     image: node:18.15.0
     commands:
+      - echo $NPMRC > ~/.npmrc
       - yarn install
       - yarn build
+    environment:
+        NPMRC:
+            from_secret: NPMRC
 
   - name: test
     image: node:18.15.0
