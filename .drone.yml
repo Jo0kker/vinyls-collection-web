@@ -6,7 +6,7 @@ steps:
   - name: install
     image: node:18.15.0
     commands:
-      - echo "$NPMRC" > ~/.npmrc
+      - echo "$NPMRC" > .npmrc
       - echo "$NPMRC"
       - yarn install
       - yarn build
