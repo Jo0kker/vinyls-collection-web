@@ -1,5 +1,3 @@
-import console from 'console'
-
 import { AuthOptions, Awaitable, JWT, Session, User, getServerSession } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
@@ -127,7 +125,7 @@ export const authOptions: AuthOptions = {
 
             return session
         },
-        async redirect({ baseUrl }) {
+        redirect({ baseUrl }) {
             return baseUrl
         }
     }

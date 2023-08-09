@@ -1,5 +1,5 @@
-import type { FieldProps } from 'formik'
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid'
+import type { FieldProps } from 'formik'
 
 type buildInfo = {
     label: string
@@ -25,6 +25,8 @@ export const InputText = ({
     className,
     inputClassName
 }: InputTextProps) => {
+    // eslint-disable @typescript-eslint/no-unused-vars
+    form
     return (
         <div className={`${className}`}>
             <label

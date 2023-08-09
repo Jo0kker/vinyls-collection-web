@@ -1,3 +1,3 @@
 export default function TrocPage() {
-    return <></>;
+    return <></>
 }

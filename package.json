@@ -8,6 +8,8 @@
         "start": "next start",
         "lint": "next lint",
         "lint:fix": "next lint --fix",
+        "prettier": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .prettierignore",
+        "prettier:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .prettierignore",
         "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .prettierignore",
         "typecheck": "tsc --noEmit --incremental -p ./tsconfig.json"
     },

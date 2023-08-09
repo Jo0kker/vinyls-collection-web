@@ -1,6 +1,6 @@
 export interface DiscogResult {
-    id: number;
-    thumb: string;
-    title: string;
-    year: string;
+    id: number
+    thumb: string
+    title: string
+    year: string
 }

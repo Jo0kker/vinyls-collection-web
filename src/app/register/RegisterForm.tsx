@@ -1,13 +1,12 @@
 'use client'
 
-import { Button } from '@/components/atom/Button'
-import { Field, Formik } from 'formik'
-import { useRouter } from 'next/navigation'
-import type { FormikHelpers, FieldProps } from 'formik'
-import { Metadata } from 'next'
-import { Form } from 'formik'
-import { InputText } from '@/components/atom/InputText'
 import axios from 'axios'
+import type { FormikHelpers, FieldProps } from 'formik'
+import { Field, Formik, Form } from 'formik'
+import { Metadata } from 'next'
+import { useRouter } from 'next/navigation'
+
+import { InputText } from '@/components/atom/InputText'
 
 interface RegisterProps {
     name: string
@@ -41,7 +40,9 @@ export function RegisterForm() {
                     }
                 }
             )
-            .then(() => {})
+            .then(() => {
+                router.push('/login')
+            })
     }
 
     return (
@@ -58,13 +59,9 @@ export function RegisterForm() {
             }}
         >
             <Form>
-                <div className={'flex flex-col items-center justify-center'}>
-                    <div className={'mt-4 flex flex-col justify-center gap-2 p-4 '}>
-                        <div
-                            className={
-                                'flex flex-col justify-center gap-4 rounded bg-black bg-opacity-20 p-4 align-middle lg:flex-row'
-                            }
-                        >
+                <div className="flex flex-col items-center justify-center">
+                    <div className="mt-4 flex flex-col justify-center gap-2 p-4 ">
+                        <div className="flex flex-col justify-center gap-4 rounded bg-black bg-opacity-20 p-4 align-middle lg:flex-row">
                             <Field name="name">
                                 {({ field, form, meta }: FieldProps) => (
                                     <InputText
@@ -76,9 +73,7 @@ export function RegisterForm() {
                                             type: 'text',
                                             placeholder: 'Pseudo'
                                         }}
-                                        className={
-                                            'flex flex-col content-center items-center gap-4 sm:flex-row sm:justify-between lg:flex-1'
-                                        }
+                                        className="flex flex-col content-center items-center gap-4 sm:flex-row sm:justify-between lg:flex-1"
                                     />
                                 )}
                             </Field>
@@ -93,18 +88,12 @@ export function RegisterForm() {
                                             type: 'email',
                                             placeholder: 'Email'
                                         }}
-                                        className={
-                                            'mt-4 flex flex-col content-center items-center gap-4 sm:flex-row sm:justify-between lg:mt-0 lg:flex-1'
-                                        }
+                                        className="mt-4 flex flex-col content-center items-center gap-4 sm:flex-row sm:justify-between lg:mt-0 lg:flex-1"
                                     />
                                 )}
                             </Field>
                         </div>
-                        <div
-                            className={
-                                'flex flex-col justify-center gap-4 rounded bg-black bg-opacity-20 p-4 align-middle lg:flex-row'
-                            }
-                        >
+                        <div className="flex flex-col justify-center gap-4 rounded bg-black bg-opacity-20 p-4 align-middle lg:flex-row">
                             <Field name="password">
                                 {({ field, form, meta }: FieldProps) => (
                                     <InputText
@@ -116,9 +105,7 @@ export function RegisterForm() {
                                             type: 'password',
                                             placeholder: 'Mot de passe'
                                         }}
-                                        className={
-                                            'flex flex-col content-center items-center gap-4 sm:flex-row sm:justify-between lg:flex-1'
-                                        }
+                                        className="flex flex-col content-center items-center gap-4 sm:flex-row sm:justify-between lg:flex-1"
                                     />
                                 )}
                             </Field>
@@ -133,30 +120,22 @@ export function RegisterForm() {
                                             type: 'password',
                                             placeholder: 'Mot de passe'
                                         }}
-                                        className={
-                                            'mt-4 flex flex-col content-center items-center gap-4 sm:flex-row sm:justify-between lg:mt-0 lg:flex-1'
-                                        }
+                                        className="mt-4 flex flex-col content-center items-center gap-4 sm:flex-row sm:justify-between lg:mt-0 lg:flex-1"
                                     />
                                 )}
                             </Field>
                         </div>
-                        <div
-                            className={
-                                'flex flex-col items-center justify-center lg:flex-row lg:justify-around'
-                            }
-                        >
+                        <div className="flex flex-col items-center justify-center lg:flex-row lg:justify-around">
                             <div>
                                 <button
-                                    className={
-                                        'font-roboto h-auto rounded bg-fuchsia-800 px-3 px-4 py-2 text-white'
-                                    }
+                                    className="font-roboto h-auto rounded bg-fuchsia-800 px-3 px-4 py-2 text-white"
                                     type="submit"
                                 >
                                     S'enregistrer
                                 </button>
                             </div>
                             <div>
-                                <p className={'text-center text-sm italic'}>
+                                <p className="text-center text-sm italic">
                                     En vous inscrivant, vous acceptez les Conditions d'utilisation
                                     et la Politique de confidentialité.
                                 </p>

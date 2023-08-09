@@ -9,6 +9,7 @@ type ErrorBoundaryProps = {
 
 export default function ErrorBoundary({ error }: ErrorBoundaryProps) {
     useEffect(() => {
+        // eslint-disable-next-line no-console
         console.error(error)
     }, [error])
 

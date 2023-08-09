@@ -1,11 +1,11 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 
-import { LoginForm } from './LoginForm'
-
 import { Button } from '@/components/atom/Button'
 
-export default async function LoginPage() {
+import { LoginForm } from './LoginForm'
+
+export default function LoginPage() {
     return (
         <div className="mt-4 flex flex-col rounded bg-white px-4 pt-4 sm:pt-0">
             <div className="mb-4 mt-6 flex flex-row justify-center text-2xl font-bold">
@@ -17,10 +17,10 @@ export default async function LoginPage() {
             <div className="flex flex-col items-center justify-center lg:mx-32">
                 <LoginForm />
             </div>
-            <Link className="text-center hover:text-orange-700" href={'/reset-password'}>
+            <Link className="text-center hover:text-orange-700" href="/reset-password">
                 Mot de passe oubliée ?
             </Link>
-            <Link href={'/register'} className="my-12">
+            <Link href="/register" className="my-12">
                 <Button type="button">Pas de compte ? Inscrivez-vous !</Button>
             </Link>
         </div>
