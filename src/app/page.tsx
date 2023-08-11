@@ -28,7 +28,7 @@ export default async function HomePage() {
                     alt="Vinyl du moins"
                     width={300}
                     height={300}
-                    className="absolute left-1/2 top-96 h-56 w-56 -translate-x-1/2 translate-y-16 -rotate-12 transform border-8 object-cover sm:static sm:translate-x-0 sm:translate-y-0 md:translate-x-8 lg:h-72 lg:w-72 lg:translate-x-12"
+                    className="absolute left-1/2 top-[275px] h-56 w-56 -translate-x-1/2 translate-y-16 -rotate-12 transform border-8 object-cover sm:static sm:translate-x-0 sm:translate-y-0 md:translate-x-8 lg:h-72 lg:w-72 lg:translate-x-12"
                 />
 
                 <div>
