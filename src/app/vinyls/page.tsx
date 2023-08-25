@@ -135,44 +135,30 @@ export default async function VinylsPage() {
 
 async function getData() {
     return await Promise.all([
-        fetchAPI<CollectionVinyl[]>(
-            `/collectionVinyl/search?${queryString.stringify(
-                {
-                    include: ['vinyl', 'collection', 'collection.user'],
-                    limit: 8
-                },
-                { arrayFormat: 'comma' }
-            )}`,
-            {
-                method: 'POST',
-                body: JSON.stringify({ sort: [{ field: 'updated_at', direction: 'desc' }] })
-            }
-        ),
-        fetchAPI<Trade[]>(
-            `/trades/search?${queryString.stringify(
-                {
-                    include: ['vinyl', 'user'],
-                    limit: 8
-                },
-                { arrayFormat: 'comma' }
-            )}`,
-            {
-                method: 'POST',
-                body: JSON.stringify({ sort: [{ field: 'updated_at', direction: 'desc' }] })
-            }
-        ),
-        fetchAPI<Search[]>(
-            `/searches/search?${queryString.stringify(
-                {
-                    include: ['vinyl', 'user'],
-                    limit: 8
-                },
-                { arrayFormat: 'comma' }
-            )}`,
-            {
-                method: 'POST',
-                body: JSON.stringify({ sort: [{ field: 'updated_at', direction: 'desc' }] })
-            }
-        )
+        fetchAPI<CollectionVinyl[]>('/collectionVinyl/search', {
+            method: 'POST',
+            body: JSON.stringify({
+                includes: [
+                    { relation: 'vinyl' },
+                    { relation: 'collection' },
+                    { relation: 'collection.user' }
+                ],
+                sort: [{ field: 'updated_at', direction: 'desc' }]
+            })
+        }),
+        fetchAPI<Trade[]>('/trades/search', {
+            method: 'POST',
+            body: JSON.stringify({
+                includes: [{ relation: 'vinyl' }, { relation: 'user' }],
+                sort: [{ field: 'updated_at', direction: 'desc' }]
+            })
+        }),
+        fetchAPI<Search[]>('/searches/search', {
+            method: 'POST',
+            body: JSON.stringify({
+                includes: [{ relation: 'vinyl' }, { relation: 'user' }],
+                sort: [{ field: 'updated_at', direction: 'desc' }]
+            })
+        })
     ])
 }

@@ -46,11 +46,13 @@ export async function fetchAPI<T = any>(
             const data = await response.json()
             return data
         } else {
+            const errorData = await response.json()
             throw new Error(
                 'Une erreur est survenue: ' +
                     response.status +
                     ': ' +
-                    response.statusText +
+                    errorData.message +
+                    ' ' +
                     response.url
             )
         }

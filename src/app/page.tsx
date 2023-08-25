@@ -10,15 +10,18 @@ import { CollectionVinyl } from '@/types'
 import { fetchAPI } from '@/utils/fetchAPI'
 
 export default async function HomePage() {
-    const vinyls = await fetchAPI<CollectionVinyl[]>(
-        `/collectionVinyl?${qs.stringify(
-            {
-                include: ['vinyl', 'collection', 'collection.user'],
-                limit: 6
-            },
-            { arrayFormat: 'comma' }
-        )}`
-    )
+    const vinyls = await fetchAPI<CollectionVinyl[]>('/collectionVinyl/search', {
+        method: 'POST',
+        body: JSON.stringify({
+            includes: [
+                { relation: 'vinyl' },
+                { relation: 'collection' },
+                { relation: 'collection.user' },
+                { relation: 'format' }
+            ],
+            limit: 6
+        })
+    })
 
     return (
         <div className="mt-24 flex flex-col rounded bg-white px-4 pt-44 sm:pt-0">
@@ -60,7 +63,6 @@ export default async function HomePage() {
                         </span>{' '}
                         Derniers vinyls ajoutés
                     </h2>
-
                     <Carousel vinyls={vinyls.data} />
 
                     <Link href="/vinyls">
