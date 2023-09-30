@@ -50,9 +50,9 @@ export default function Carousel({ vinyls }: CarouselProps) {
                                     className="lg:rounded-lg"
                                 />
 
-                                <div className="absolute inset-x-0 bottom-0 z-10 bg-white/60 px-2 py-1 hover:underline lg:bottom-[-3rem] lg:px-0 lg:py-0">
-                                    <h3 className="truncate">{item.vinyl.title}</h3>
-                                    <p className="truncate text-sm font-medium">
+                                <div className="absolute inset-x-0 bottom-0 z-10 bg-black/70 px-2 py-1 hover:underline lg:bottom-[-3rem] lg:px-0 lg:py-0">
+                                    <h3 className="truncate text-white">{item.vinyl.title}</h3>
+                                    <p className="truncate text-sm font-medium text-white">
                                         {item.vinyl.artist}
                                     </p>
                                 </div>
