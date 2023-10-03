@@ -8,10 +8,31 @@ import { VinylItem } from './components/VinylItem'
 
 export default async function CollectionPage() {
     const session = await getSession()
-    const searchesList = await fetchAPI<Search[]>(
-        `/users/${session?.user.id}/searches?include=vinyl`,
-        { withSession: true }
-    )
+
+    const searchesList = await fetchAPI<Search[]>('/searches/search', {
+        method: 'POST',
+        withSession: true,
+        body: JSON.stringify({
+            filters: [
+                {
+                    field: 'user.id',
+                    operator: '=',
+                    value: session?.user.id
+                }
+            ],
+            includes: [{ relation: 'vinyl' }, { relation: 'format' }],
+            limit: 6
+        })
+    })
+
+    const tradesList = await fetchAPI<Search[]>('/trades/search', {
+        method: 'POST',
+        withSession: true,
+        body: JSON.stringify({
+            includes: [{ relation: 'vinyl' }, { relation: 'format' }],
+            limit: 6
+        })
+    })
 
     return (
         <div

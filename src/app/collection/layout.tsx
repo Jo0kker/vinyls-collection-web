@@ -1,14 +1,30 @@
 import type { PropsWithChildren } from 'react'
 
-import { Collection } from '@/types'
+import { ButtonAddCollection } from '@/app/collection/components/ButtonAddCollection'
+import { Collection, Search } from '@/types'
 import { getSession } from '@/utils/authOptions'
 import { fetchAPI } from '@/utils/fetchAPI'
 
 import { CollectionLink } from './components/CollectionLink'
 
-export default async function CollectionLayoyt({ children }: PropsWithChildren) {
+export default async function CollectionLayout({ children }: PropsWithChildren) {
     const session = await getSession()
-    const collections = await fetchAPI<Collection[]>(`/users/${session?.user.id}/collections`)
+
+    const collections = await fetchAPI<Collection[]>('/collections/search', {
+        method: 'POST',
+        withSession: true,
+        body: JSON.stringify({
+            filters: [
+                {
+                    field: 'user.id',
+                    operator: '=',
+                    value: session?.user.id
+                }
+            ],
+            includes: [{ relation: 'collectionVinyls' }, { relation: 'user' }],
+            limit: 6
+        })
+    })
 
     return (
         <div className="mt-4 flex flex-col rounded bg-white py-4">
@@ -20,6 +36,7 @@ export default async function CollectionLayoyt({ children }: PropsWithChildren) 
 
             <div className="flex flex-col gap-4 md:flex-row md:px-4">
                 <nav className="flex w-full gap-2 overflow-x-auto px-4 md:mx-0 md:w-auto md:flex-col md:p-0">
+                    <ButtonAddCollection />
                     <CollectionLink href="/collection" label="Recherches" />
 
                     {collections.data.map(item => (
