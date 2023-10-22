@@ -1,6 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
 
-import { getSession } from '@/utils/authOptions'
 import { fetchAPI } from '@/utils/fetchAPI'
 
 export const useCollection = () => {

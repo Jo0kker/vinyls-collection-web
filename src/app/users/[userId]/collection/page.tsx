@@ -6,8 +6,15 @@ import { fetchAPI } from '@/utils/fetchAPI'
 import { EmptyList } from './components/EmptyList'
 import { VinylItem } from './components/VinylItem'
 
-export default async function CollectionPage() {
+type CollectionPageProps = {
+    params: {
+        userId: string
+    }
+}
+
+export default async function CollectionPage({ params }: CollectionPageProps) {
     const session = await getSession()
+    const userId: number = parseInt(params.userId)
 
     const searchesList = await fetchAPI<Search[]>('/searches/search', {
         method: 'POST',
@@ -17,7 +24,7 @@ export default async function CollectionPage() {
                 {
                     field: 'user.id',
                     operator: '=',
-                    value: session?.user.id
+                    value: userId
                 }
             ],
             includes: [{ relation: 'vinyl' }, { relation: 'format' }],
@@ -29,6 +36,13 @@ export default async function CollectionPage() {
         method: 'POST',
         withSession: true,
         body: JSON.stringify({
+            filters: [
+                {
+                    field: 'user.id',
+                    operator: '=',
+                    value: params.userId
+                }
+            ],
             includes: [{ relation: 'vinyl' }, { relation: 'format' }],
             limit: 6
         })

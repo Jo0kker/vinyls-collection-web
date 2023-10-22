@@ -53,7 +53,7 @@ const DesktopMenu = ({ session, links }: MenuItem) => {
                     )}
                 >
                     <ul className="mt-4 flex flex-col space-y-2 rounded-lg border border-gray-100 bg-gray-50 p-4 font-medium md:mt-0 md:flex-row md:space-x-8 md:space-y-0 md:border-0 md:bg-transparent md:p-0">
-                        {links(!!session).map(link => (
+                        {links(!!session, session?.user.id).map(link => (
                             <Link
                                 key={link.href}
                                 href={link.href}

@@ -13,6 +13,7 @@ import Providers from './Providers'
 
 import './global.css'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import { getSession } from '@/utils/authOptions'
 
 const roboto = Roboto({
     subsets: ['latin'],
@@ -21,13 +22,13 @@ const roboto = Roboto({
 })
 
 export default async function Layout({ children }: PropsWithChildren) {
-    const session = await getServerSession()
+    const session = await getSession()
     return (
         <html lang="fr">
             <body
                 className={cn(
                     roboto.className,
-                    'text-body flex min-h-screen w-screen flex-col bg-gradient-to-tr from-fuchsia-900 via-fuchsia-900 to-fuchsia-800 text-gray-900'
+                    'text-body flex min-h-screen w-screen flex-col bg-gradient-to-tr from-fuchsia-900 via-fuchsia-900 to-fuchsia-800 text-gray-900 '
                 )}
             >
                 <Providers session={session}>

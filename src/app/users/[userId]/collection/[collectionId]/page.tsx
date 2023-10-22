@@ -6,7 +6,10 @@ import { EmptyList } from '../components/EmptyList'
 import { VinylItem } from '../components/VinylItem'
 
 type CollectionPageProps = {
-    params: { collectionId: string }
+    params: {
+        collectionId: string
+        userId: string
+    }
 }
 
 export default async function CollectionPage({ params }: CollectionPageProps) {

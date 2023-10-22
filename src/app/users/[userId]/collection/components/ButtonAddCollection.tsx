@@ -12,11 +12,14 @@ import { fetchAPI } from '@/utils/fetchAPI'
 import { showToast } from '@/utils/toast'
 
 export function ButtonAddCollection() {
+    const { data: session } = useSession()
     const addCollection = useMutation({
         mutationFn: () =>
             fetchAPI('/collections/mutate', {
                 method: 'POST',
-                withSession: true,
+                headers: {
+                    Authorization: `Bearer ${session?.user.access_token}`
+                },
                 body: JSON.stringify({
                     mutate: [
                         {

@@ -9,6 +9,7 @@ import { Button } from '@/components/atom/Button'
 import { CollectionVinyl, Trade, Search } from '@/types'
 import { fetchAPI } from '@/utils/fetchAPI'
 import { prefixImage } from '@/utils/prefixImage'
+import { getSession } from '@/utils/authOptions'
 
 export default async function VinylsPage() {
     const [collectionVinyls, tradeVinyls, searchVinyls] = await getData()

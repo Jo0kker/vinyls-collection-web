@@ -1,14 +1,23 @@
 import type { PropsWithChildren } from 'react'
 
-import { ButtonAddCollection } from '@/app/collection/components/ButtonAddCollection'
-import { Collection, Search } from '@/types'
+import { ButtonAddCollection } from '@/app/users/[userId]/collection/components/ButtonAddCollection'
+import { Collection, Search, User } from '@/types'
 import { getSession } from '@/utils/authOptions'
 import { fetchAPI } from '@/utils/fetchAPI'
 
 import { CollectionLink } from './components/CollectionLink'
+import { fetchUserData } from '@/utils/fetchUserData'
 
-export default async function CollectionLayout({ children }: PropsWithChildren) {
+type pageProps = {
+    params: {
+        userId: string
+    }
+}
+
+export default async function CollectionLayout({ params, children }: PropsWithChildren<pageProps>) {
     const session = await getSession()
+    const userId: number = parseInt(params.userId)
+    const isOwner = session?.user?.id == userId
 
     const collections = await fetchAPI<Collection[]>('/collections/search', {
         method: 'POST',
@@ -18,7 +27,7 @@ export default async function CollectionLayout({ children }: PropsWithChildren) 
                 {
                     field: 'user.id',
                     operator: '=',
-                    value: session?.user.id
+                    value: userId
                 }
             ],
             includes: [{ relation: 'collectionVinyls' }, { relation: 'user' }],
@@ -26,11 +35,31 @@ export default async function CollectionLayout({ children }: PropsWithChildren) 
         })
     })
 
+    const getOwnerData = async (): Promise<User> => {
+        if (isOwner && session?.user !== undefined) {
+            return session.user
+        } else {
+            const user = await fetchUserData(userId)
+            if (user) {
+                return user
+            } else {
+                throw new Error('User not found')
+            }
+        }
+    }
+
+    const ownerData = await getOwnerData()
+
     return (
         <div className="mt-4 flex flex-col rounded bg-white py-4">
             <div className="mb-4 flex flex-row justify-center px-4 text-2xl font-bold">
                 <span className="mr-3 text-emerald-500">&#47;&#47;</span>
-                <h1 className="text-fuchsia-800">Gestion de vos collections</h1>
+
+                {isOwner ? (
+                    <h1 className="text-emerald-800">Ma collection</h1>
+                ) : (
+                    <h1 className="text-emerald-800">Collection de {ownerData.name}</h1>
+                )}
                 <span className="ml-3 text-orange-400">&#47;&#47;</span>
             </div>
 
