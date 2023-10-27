@@ -1,6 +1,6 @@
 import { getSession } from './authOptions'
 
-type FetchResponse<T> = {
+export type FetchResponse<T> = {
     data: T
     links?: {
         first: string | null

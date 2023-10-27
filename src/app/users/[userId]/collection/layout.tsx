@@ -4,9 +4,9 @@ import { ButtonAddCollection } from '@/app/users/[userId]/collection/components/
 import { Collection, Search, User } from '@/types'
 import { getSession } from '@/utils/authOptions'
 import { fetchAPI } from '@/utils/fetchAPI'
+import { fetchUserData } from '@/utils/fetchUserData'
 
 import { CollectionLink } from './components/CollectionLink'
-import { fetchUserData } from '@/utils/fetchUserData'
 
 type pageProps = {
     params: {
@@ -65,8 +65,12 @@ export default async function CollectionLayout({ params, children }: PropsWithCh
 
             <div className="flex flex-col gap-4 md:flex-row md:px-4">
                 <nav className="flex w-full gap-2 overflow-x-auto px-4 md:mx-0 md:w-auto md:flex-col md:p-0">
-                    <ButtonAddCollection />
-                    <CollectionLink href="/collection" label="Recherches" />
+                    {isOwner && <ButtonAddCollection />}
+                    <CollectionLink
+                        href={'/users/' + userId + '/collection/-1'}
+                        label="Recherches"
+                    />
+                    <CollectionLink href={'/users/' + userId + '/collection/-2'} label="Échanges" />
 
                     {collections.data.map(item => (
                         <CollectionLink

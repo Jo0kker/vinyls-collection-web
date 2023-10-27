@@ -1,6 +1,6 @@
 import { CollectionVinyl } from '@/types'
 import { cn } from '@/utils/classNames'
-import { fetchAPI } from '@/utils/fetchAPI'
+import { fetchAPI, FetchResponse } from '@/utils/fetchAPI'
 
 import { EmptyList } from '../components/EmptyList'
 import { VinylItem } from '../components/VinylItem'
@@ -13,10 +13,59 @@ type CollectionPageProps = {
 }
 
 export default async function CollectionPage({ params }: CollectionPageProps) {
-    const list = await fetchAPI<CollectionVinyl[]>(
-        `/collections/${params.collectionId}/collectionVinyl?include=vinyl`,
-        { withSession: true }
-    )
+    const collectionId = parseInt(params.collectionId)
+    const userId = parseInt(params.userId)
+    let list: FetchResponse<CollectionVinyl[]>
+
+    if (collectionId === -1) {
+        list = await fetchAPI<CollectionVinyl[]>('/searches/search', {
+            method: 'POST',
+            body: JSON.stringify({
+                filters: [
+                    {
+                        field: 'user.id',
+                        operator: '=',
+                        value: userId
+                    }
+                ],
+                includes: [{ relation: 'vinyl' }, { relation: 'format' }],
+                limit: 10
+            })
+        })
+    } else if (collectionId === -2) {
+        list = await fetchAPI<CollectionVinyl[]>('/trades/search', {
+            method: 'POST',
+            body: JSON.stringify({
+                filters: [
+                    {
+                        field: 'user.id',
+                        operator: '=',
+                        value: userId
+                    }
+                ],
+                includes: [{ relation: 'vinyl' }, { relation: 'format' }],
+                limit: 10
+            })
+        })
+    } else {
+        list = await fetchAPI<CollectionVinyl[]>('/collections', {
+            method: 'POST',
+            body: JSON.stringify({
+                filters: [
+                    {
+                        field: 'id',
+                        operator: '=',
+                        value: collectionId
+                    }
+                ],
+                includes: [
+                    { relation: 'collectionVinyls' },
+                    { relation: 'collectionVinyls.vinyl' },
+                    { relation: 'collectionVinyls.format' }
+                ]
+            })
+        })
+    }
 
     return (
         <div

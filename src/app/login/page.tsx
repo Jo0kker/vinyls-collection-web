@@ -17,12 +17,16 @@ export default function LoginPage() {
             <div className="flex flex-col items-center justify-center lg:mx-32">
                 <LoginForm />
             </div>
-            <Link className="text-center hover:text-orange-700" href="/reset-password">
+            <div className="flex flex-col mx-auto mt-3">
+              <Link className="text-center hover:text-orange-700" href="/reset-password">
                 Mot de passe oubliée ?
-            </Link>
-            <Link href="/register" className="my-12">
-                <Button type="button">Pas de compte ? Inscrivez-vous !</Button>
-            </Link>
+              </Link>
+            </div>
+            <div className="flex flex-col mx-auto my-12">
+              <Link href="/register" className="rounded rounded-full border p-2 border-fuchsia-800 hover:bg-fuchsia-700 hover:text-white">
+                Pas de compte ? Inscrivez-vous !
+              </Link>
+            </div>
         </div>
     )
 }

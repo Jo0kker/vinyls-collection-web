@@ -32,22 +32,6 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
         })
     })
 
-    const tradesList = await fetchAPI<Search[]>('/trades/search', {
-        method: 'POST',
-        withSession: true,
-        body: JSON.stringify({
-            filters: [
-                {
-                    field: 'user.id',
-                    operator: '=',
-                    value: params.userId
-                }
-            ],
-            includes: [{ relation: 'vinyl' }, { relation: 'format' }],
-            limit: 6
-        })
-    })
-
     return (
         <div
             className={cn('my-2 grid grid-cols-1', {

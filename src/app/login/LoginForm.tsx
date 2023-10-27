@@ -7,19 +7,17 @@ import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 
 import { Button } from '@/components/atom/Button'
+import { InputText } from '@/components/atom/InputText';
 import { showToast } from '@/utils/toast'
 
 export function LoginForm() {
     const router = useRouter()
-
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false)
     async function handleLogin(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
         setLoading(true)
-
-        const data = new FormData(event.target as HTMLFormElement)
-        const email = data.get('email')
-        const password = data.get('password')
 
         try {
             const result = await signIn('credentials', {
@@ -54,29 +52,24 @@ export function LoginForm() {
     return (
         <form
             onSubmit={handleLogin}
-            className="mx-4 flex w-full flex-col items-center justify-center gap-4 rounded bg-black bg-opacity-20 p-2 xl:flex-row"
+            className="mx-4 flex w-full flex-col items-center justify-center gap-4 rounded bg-black bg-opacity-20 p-2 lg:w-2/3"
         >
-            <div className="flex w-full flex-col md:w-1/2 md:flex-row md:items-center md:justify-center md:gap-4 lg:w-full">
-                <label htmlFor="email" className="font-roboto font-medium text-fuchsia-800">
-                    E-mail :
-                </label>
-                <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    placeholder="exemple@e-mail.fr"
-                    className="flex flex-col content-center items-center gap-4 lg:flex-row"
+            <div className="flex w-full flex-col md:w-1/2 md:flex-row md:items-center md:justify-center md:gap-4 lg:w-full pt-2">
+                <InputText
+                  value={email}
+                  setValue={setEmail}
+                  name="mail"
+                  label="E-mail"
+                  type="email"
+                  className="my-3"
                 />
 
-                <label htmlFor="password" className="font-roboto font-medium text-fuchsia-800">
-                    Mot de passe :
-                </label>
-                <input
-                    id="password"
-                    type="password"
-                    name="password"
-                    placeholder="********"
-                    className="flex flex-col content-center items-center gap-4 lg:flex-row"
+                <InputText
+                  value={password}
+                  setValue={setPassword}
+                  name="password"
+                  label="Mot de passe"
+                  type="password"
                 />
             </div>
             <Button type="submit" disabled={loading}>

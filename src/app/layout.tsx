@@ -3,7 +3,9 @@ import type { PropsWithChildren } from 'react'
 import { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 import { getServerSession } from 'next-auth'
+import NextTopLoader from 'nextjs-toploader';
 
+import { getSession } from '@/utils/authOptions'
 import { cn } from '@/utils/classNames'
 
 import Announcement from './announcement'
@@ -13,7 +15,6 @@ import Providers from './Providers'
 
 import './global.css'
 import '@fortawesome/fontawesome-svg-core/styles.css'
-import { getSession } from '@/utils/authOptions'
 
 const roboto = Roboto({
     subsets: ['latin'],
@@ -33,6 +34,7 @@ export default async function Layout({ children }: PropsWithChildren) {
             >
                 <Providers session={session}>
                     <Header />
+                    <NextTopLoader />
                     <main className="mx-auto w-full max-w-screen-xl flex-1 space-y-4 p-4 md:px-0">
                         <Announcement />
                         <div className="rounded-lg bg-black/10 p-4 shadow-md">{children}</div>
@@ -100,5 +102,6 @@ export const metadata: Metadata = {
     },
     alternates: {
         canonical: 'https://vinyls-collection.com'
-    }
+    },
+    metadataBase: new URL('https://vinyls-collection.com')
 }
