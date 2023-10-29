@@ -1,10 +1,10 @@
 import { Search } from '@/types'
-import { getSession } from '@/utils/authOptions'
 import { cn } from '@/utils/classNames'
 import { fetchAPI } from '@/utils/fetchAPI'
 
 import { EmptyList } from './components/EmptyList'
 import { VinylItem } from './components/VinylItem'
+import { redirect } from 'next/navigation'
 
 type CollectionPageProps = {
     params: {
@@ -13,8 +13,9 @@ type CollectionPageProps = {
 }
 
 export default async function CollectionPage({ params }: CollectionPageProps) {
-    const session = await getSession()
     const userId: number = parseInt(params.userId)
+
+    redirect(`/users/${userId}/collection/-1`)
 
     const searchesList = await fetchAPI<Search[]>('/searches/search', {
         method: 'POST',

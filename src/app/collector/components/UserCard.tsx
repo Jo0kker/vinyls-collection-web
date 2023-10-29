@@ -1,0 +1,39 @@
+import Image from 'next/image';
+import { DateTime } from 'luxon';
+import Link from 'next/link';
+import React from 'react';
+import { User } from '@/types';
+
+type UserCardProps = {
+    user: User
+}
+
+export const UserCard = ({user}: UserCardProps) => {
+
+    return (
+        <Link
+            key={user.id}
+            href={`/users/${user.id}`}
+            className="m-1 flex flex-row rounded border border-8 border-gray-300 hover:bg-gray-400"
+        >
+            <Image
+                src={user.avatar}
+                alt={user.name}
+                width={100}
+                height={100}
+                className="cursor-pointer"
+            />
+            <div className="mx-3 flex flex-col justify-center">
+                <h2>{user.name}</h2>
+                <p className="text-sm">{user.collectionVinyls_count} vinyls</p>
+                <p className="text-sm">
+                    Dernière connection :{' '}
+                    {DateTime.fromFormat(
+                        user.last_activity,
+                        'yyyy-MM-dd HH:mm:ss'
+                    ).toFormat('dd/MM/yyyy')}
+                </p>
+            </div>
+        </Link>
+    )
+}

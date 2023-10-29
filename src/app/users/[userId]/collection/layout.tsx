@@ -7,6 +7,8 @@ import { fetchAPI } from '@/utils/fetchAPI'
 import { fetchUserData } from '@/utils/fetchUserData'
 
 import { CollectionLink } from './components/CollectionLink'
+import { Select } from 'flowbite-react';
+import { SelectorCollectionMobile } from '@/app/users/[userId]/collection/components/SelectorCollectionMobile';
 
 type pageProps = {
     params: {
@@ -22,6 +24,9 @@ export default async function CollectionLayout({ params, children }: PropsWithCh
     const collections = await fetchAPI<Collection[]>('/collections/search', {
         method: 'POST',
         withSession: true,
+        next: {
+            tags: ['collection']
+        },
         body: JSON.stringify({
             filters: [
                 {
@@ -64,7 +69,16 @@ export default async function CollectionLayout({ params, children }: PropsWithCh
             </div>
 
             <div className="flex flex-col gap-4 md:flex-row md:px-4">
-                <nav className="flex w-full gap-2 overflow-x-auto px-4 md:mx-0 md:w-auto md:flex-col md:p-0">
+                <SelectorCollectionMobile userId={userId}>
+                    <option value="-1">Recherches</option>
+                    <option value="-2">Échanges</option>
+                    {collections.data.map(item => (
+                        <option key={item.id} value={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
+                </SelectorCollectionMobile>
+                <nav className="hidden md:flex w-56 gap-2 overflow-x-auto px-4 md:mx-0 md:flex-col md:p-0">
                     {isOwner && <ButtonAddCollection />}
                     <CollectionLink
                         href={'/users/' + userId + '/collection/-1'}
@@ -75,12 +89,15 @@ export default async function CollectionLayout({ params, children }: PropsWithCh
                     {collections.data.map(item => (
                         <CollectionLink
                             key={item.id}
-                            href={`/collection/${item.id}`}
+                            href={`/users/${userId}/collection/${item.id}`}
                             label={item.name}
+                            isDeletable={isOwner}
                         />
                     ))}
                 </nav>
-                <div className="flex flex-1 flex-col px-4 md:px-0">{children}</div>
+                <div className={'flex flex-col flex-auto w-64 gap-3 w-full'}>
+                    <div className="flex flex-1 flex-col px-4 md:px-0">{children}</div>
+                </div>
             </div>
         </div>
     )
