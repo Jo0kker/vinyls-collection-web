@@ -33,7 +33,7 @@ steps:
     image: node:18.15.0
     commands:
       - yarn install
-      - yarn build
+#      - yarn build
     environment:
         NPMRC:
             from_secret: NPMRC
