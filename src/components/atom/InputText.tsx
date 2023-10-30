@@ -1,65 +1,59 @@
-import { ExclamationCircleIcon } from '@heroicons/react/20/solid'
-import type { FieldProps } from 'formik'
-
-type buildInfo = {
-    label: string
-    type: string
-    placeholder: string
-    labelClassName?: string
-}
+import React from 'react'
 
 type InputTextProps = {
-    field: FieldProps['field']
-    form: FieldProps['form']
-    meta: FieldProps['meta']
-    buildInfo: buildInfo
+    value: string
+    setValue: (value: string) => void
+    name: string
+    label: string
+    type?: string
     className?: string
     inputClassName?: string
+    inputStyle?: React.CSSProperties
+    labelClassName?: string
+    tipClassname?: string
+    tipMessage?: string
 }
 
 export const InputText = ({
-    field,
-    form,
-    meta,
-    buildInfo,
+    value,
+    setValue,
+    name,
+    label,
+    type,
     className,
-    inputClassName
+    inputClassName,
+    inputStyle,
+    labelClassName,
+    tipClassname,
+    tipMessage
 }: InputTextProps) => {
-    // eslint-disable @typescript-eslint/no-unused-vars
-    form
     return (
-        <div className={`${className}`}>
+        <div className={'relative z-0 ' + className}>
+            <input
+                type={type ?? 'text'}
+                id={name}
+                onChange={e => setValue(e.target.value)}
+                className={
+                    inputClassName +
+                    ' peer block w-full appearance-none border-0  border-b-2 border-white bg-transparent px-0 py-1.5 text-sm focus:border-fuchsia-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-fuchsia-500'
+                }
+                placeholder={' '}
+                value={value}
+                style={inputStyle}
+                aria-describedby={name + '_help'}
+            />
             <label
-                htmlFor="email"
-                className={`font-roboto block font-medium text-fuchsia-800 ${buildInfo.labelClassName}`}
+                htmlFor={name}
+                className={
+                    labelClassName +
+                    ' text-md absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-fuchsia-800 dark:text-gray-400 peer-focus:dark:text-blue-500'
+                }
             >
-                {buildInfo.label}
+                {label}
             </label>
-            <div className="rounded-md shadow-sm">
-                <input
-                    {...field}
-                    type={buildInfo.type}
-                    placeholder={buildInfo.placeholder}
-                    className={`${
-                        meta.touched && meta.error
-                            ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500'
-                            : 'border-gray-300 focus:border-emerald-500 focus:outline-none focus:ring-emerald-500'
-                    } block h-auto rounded-md border-gray-300 sm:text-sm ${inputClassName}`}
-                    aria-invalid={meta.touched && meta.error ? 'true' : 'false'}
-                    aria-describedby={`${field.name}-error`}
-                />
-                {meta.touched && meta.error && (
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                        <ExclamationCircleIcon
-                            className="h-5 w-5 text-red-500"
-                            aria-hidden="true"
-                        />
-                    </div>
-                )}
-            </div>
-            {meta.touched && meta.error && (
-                <p className="mt-2 text-sm text-red-600" id={`${field.name}-error`}>
-                    {meta.error}
+            {tipMessage && (
+                <p id={name + '_help'} className={tipClassname + ' mt-2 text-xs'}>
+                    {tipMessage}
                 </p>
             )}
         </div>

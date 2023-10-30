@@ -15,7 +15,7 @@ import Mobile from '@/components/navBar/Mobile'
 
 export type MenuItem = {
     session: Session | null
-    links: (isAuth?: boolean) => Link[]
+    links: (isAuth?: boolean, userId?: number) => Link[]
 }
 
 interface Link {
@@ -23,7 +23,7 @@ interface Link {
     href: string
     icon: JSX.Element
 }
-const LINKS = (isAuth?: boolean): Link[] => [
+const LINKS = (isAuth?: boolean, userId?: number): Link[] => [
     {
         name: 'Les vinyles',
         href: '/vinyls',
@@ -38,7 +38,7 @@ const LINKS = (isAuth?: boolean): Link[] => [
         ? [
               {
                   name: 'Votre espace collectionneur',
-                  href: '/collection',
+                  href: `/users/${userId}/collection`,
                   icon: <FontAwesomeIcon icon={faAlbumCollection} color="purple" className="mr-2" />
               }
           ]
@@ -54,10 +54,10 @@ const NavBar: FunctionComponent = () => {
     const session = useSession()
 
     return (
-        <>
+        <div className="mx-auto max-w-screen-xl p-6">
             <Desktop session={session.data} links={LINKS} />
             <Mobile session={session.data} links={LINKS} />
-        </>
+        </div>
     )
 }
 

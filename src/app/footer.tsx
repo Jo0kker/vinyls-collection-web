@@ -19,7 +19,7 @@ const FOOTER_LINKS = [
 
 export default function Footer() {
     return (
-        <footer className="w-full px-4 pb-4 text-white md:px-0">
+        <footer className="mb-10 w-full px-4 pb-4 text-white md:px-0">
             <article className="mx-auto max-w-screen-xl rounded-lg bg-black/10 p-6 shadow-md">
                 <div className="flex flex-col lg:flex-row">
                     <div className="mb-6 flex space-x-3 lg:mb-0 lg:mr-10">

@@ -67,7 +67,7 @@ const MobileMenu = ({ session, links }: MenuItem) => {
             )}
             <div className="mx-auto flex h-full max-w-md justify-between">
                 <MainItem name={homeItem.name} href={homeItem.href} icon={homeItem.icon} />
-                {links(!!session).map(link => (
+                {links(!!session, session?.user?.id).map(link => (
                     <MainItem key={link.href} href={link.href} name={link.name} icon={link.icon} />
                 ))}
                 {session ? (

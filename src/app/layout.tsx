@@ -2,8 +2,9 @@ import type { PropsWithChildren } from 'react'
 
 import { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
-import { getServerSession } from 'next-auth'
+import NextTopLoader from 'nextjs-toploader'
 
+import { getSession } from '@/utils/authOptions'
 import { cn } from '@/utils/classNames'
 
 import Announcement from './announcement'
@@ -21,17 +22,18 @@ const roboto = Roboto({
 })
 
 export default async function Layout({ children }: PropsWithChildren) {
-    const session = await getServerSession()
+    const session = await getSession()
     return (
         <html lang="fr">
             <body
                 className={cn(
                     roboto.className,
-                    'text-body flex min-h-screen w-screen flex-col bg-gradient-to-tr from-fuchsia-900 via-fuchsia-900 to-fuchsia-800 text-gray-900'
+                    'text-body flex min-h-screen w-screen flex-col bg-gradient-to-tr from-fuchsia-900 via-fuchsia-900 to-fuchsia-800 text-gray-900 '
                 )}
             >
                 <Providers session={session}>
                     <Header />
+                    <NextTopLoader />
                     <main className="mx-auto w-full max-w-screen-xl flex-1 space-y-4 p-4 md:px-0">
                         <Announcement />
                         <div className="rounded-lg bg-black/10 p-4 shadow-md">{children}</div>
@@ -99,5 +101,6 @@ export const metadata: Metadata = {
     },
     alternates: {
         canonical: 'https://vinyls-collection.com'
-    }
+    },
+    metadataBase: new URL('https://vinyls-collection.com')
 }

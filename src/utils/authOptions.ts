@@ -1,5 +1,5 @@
 import { AuthOptions, Awaitable, JWT, Session, User, getServerSession } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
+import { default as CredentialsProvider } from 'next-auth/providers/credentials'
 
 type AuthResponse = {
     access_token: string
@@ -110,7 +110,7 @@ export const authOptions: AuthOptions = {
                 }
 
                 return token
-            } else if (Date.now() < token.exp) {
+            } else if (Date.now() < token.exp * 1000) {
                 return token
             } else {
                 return refreshToken(token)

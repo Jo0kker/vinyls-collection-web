@@ -22,6 +22,7 @@ export default function Providers({
             <QueryClientProvider client={queryClient}>
                 {children}
                 <Toaster />
+                {/* <ReactQueryDevtools initialIsOpen={false} /> */}
             </QueryClientProvider>
         </SessionProvider>
     )

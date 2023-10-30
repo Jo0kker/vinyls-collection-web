@@ -68,7 +68,7 @@ export function VinylItem({ item, collectionId }: VinylItemProps) {
                 <button
                     className={cn('h-8 w-8 rounded-md hover:bg-red-200', {
                         'cursor-not-allowed': !collectionId,
-                        'bg-red-200': deleteVinyl.isLoading
+                        'bg-red-200': deleteVinyl.isPending
                     })}
                     disabled={!collectionId}
                     onClick={
@@ -81,7 +81,7 @@ export function VinylItem({ item, collectionId }: VinylItemProps) {
                             : undefined
                     }
                 >
-                    {deleteVinyl.isLoading ? (
+                    {deleteVinyl.isPending ? (
                         <Spinner size="sm" color="failure" />
                     ) : (
                         <FontAwesomeIcon icon={faTrash} className="text-red-800" size="sm" />
