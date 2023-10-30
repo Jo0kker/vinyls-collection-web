@@ -1,11 +1,11 @@
 'use server'
 
-import { revalidateTag } from 'next/cache';
-
-import { fetchAPI } from '@/utils/fetchAPI';
+import { revalidateTag } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-export default async (collectionId: number, userId: number) => {
+import { fetchAPI } from '@/utils/fetchAPI'
+
+const deleteCollection = async (collectionId: number, userId: number) => {
     await fetchAPI('/collections', {
         method: 'DELETE',
         withSession: true,
@@ -17,3 +17,5 @@ export default async (collectionId: number, userId: number) => {
     revalidateTag('collection')
     redirect(`/users/${userId}/collection`)
 }
+
+export default deleteCollection

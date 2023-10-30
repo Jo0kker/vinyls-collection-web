@@ -2,7 +2,6 @@ import { faCompactDisc, faPlus } from '@fortawesome/pro-light-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
-import qs from 'query-string'
 
 import { Button } from '@/components/atom/Button'
 import Carousel from '@/components/home/Carousel'

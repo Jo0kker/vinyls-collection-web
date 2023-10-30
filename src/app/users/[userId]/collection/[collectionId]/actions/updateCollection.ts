@@ -1,10 +1,11 @@
 'use server'
 
-import { revalidateTag } from 'next/cache';
-import { fetchAPI } from '@/utils/fetchAPI';
-import { Collection } from '@/types';
+import { revalidateTag } from 'next/cache'
 
-export default async (collectionId: number, newCollectionName: string) => {
+import { Collection } from '@/types'
+import { fetchAPI } from '@/utils/fetchAPI'
+
+const UpdateCollection = async (collectionId: number, newCollectionName: string) => {
     await fetchAPI<Collection[]>('/collections/mutate', {
         method: 'POST',
         withSession: true,
@@ -23,3 +24,5 @@ export default async (collectionId: number, newCollectionName: string) => {
 
     revalidateTag('collection')
 }
+
+export default UpdateCollection

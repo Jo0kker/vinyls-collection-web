@@ -12,7 +12,6 @@ import { useSession } from 'next-auth/react'
 
 import Desktop from '@/components/navBar/Desktop'
 import Mobile from '@/components/navBar/Mobile'
-import { session } from 'next-auth/core/routes'
 
 export type MenuItem = {
     session: Session | null
@@ -55,7 +54,7 @@ const NavBar: FunctionComponent = () => {
     const session = useSession()
 
     return (
-        <div className={'mx-auto max-w-screen-xl p-6'}>
+        <div className="mx-auto max-w-screen-xl p-6">
             <Desktop session={session.data} links={LINKS} />
             <Mobile session={session.data} links={LINKS} />
         </div>

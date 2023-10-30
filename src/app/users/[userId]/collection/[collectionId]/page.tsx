@@ -1,16 +1,12 @@
-import { Collection, CollectionVinyl } from '@/types';
+import { ButtonDeleteCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonDeleteCollection'
+import { ButtonEditCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonEditCollection'
+import { Collection, CollectionVinyl } from '@/types'
+import { getSession } from '@/utils/authOptions'
 import { cn } from '@/utils/classNames'
 import { fetchAPI, FetchResponse } from '@/utils/fetchAPI'
 
 import { EmptyList } from '../components/EmptyList'
 import { VinylItem } from '../components/VinylItem'
-import { useState } from 'react';
-import { getSession } from '@/utils/authOptions';
-import { ButtonEditCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonEditCollection';
-import {
-    ButtonDeleteCollection
-} from '@/app/users/[userId]/collection/[collectionId]/components/ButtonDeleteCollection';
-import { revalidatePath } from 'next/cache';
 
 type CollectionPageProps = {
     params: {
@@ -26,7 +22,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
     let list: FetchResponse<CollectionVinyl[]>
     let isEditable = false
     let isOwner = false
-    let collectionName;
+    let collectionName
 
     if (session?.user?.id === userId) {
         isOwner = true
@@ -87,8 +83,6 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
         })
         isEditable = false
     } else {
-
-
         list = await fetchAPI<CollectionVinyl[]>('/collectionVinyl/search', {
             method: 'POST',
             body: JSON.stringify({
@@ -115,15 +109,16 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                 'md:grid-cols-2 lg:grid-cols-3': list.data.length > 0
             })}
         >
-            <div className={'flex justify-between'}>
-                <h2 className="hidden md:block text-2xl font-bold mb-2 truncate">{isEditable ? collection.data[0].name : collectionName}</h2>
-                {isEditable &&
-                    <div className="flex flex-row ml-auto">
+            <div className="flex justify-between">
+                <h2 className="mb-2 hidden truncate text-2xl font-bold md:block">
+                    {isEditable ? collection.data[0].name : collectionName}
+                </h2>
+                {isEditable && (
+                    <div className="ml-auto flex flex-row">
                         <ButtonEditCollection collection={collection.data[0]} />
                         <ButtonDeleteCollection collectionId={collectionId} userId={userId} />
                     </div>
-                }
-
+                )}
             </div>
             {list.data.length === 0 && <EmptyList />}
 

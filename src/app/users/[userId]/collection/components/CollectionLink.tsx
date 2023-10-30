@@ -27,9 +27,9 @@ export function CollectionLink({ href, label }: CollectionLinkProps) {
                         : 'bg-fuchsia-100 text-gray-700 hover:bg-fuchsia-200'
                 )}
             >
-                <div className="truncate flex-1 text-left md:pr-3">{label}</div>
-                <ArrowSmallRightIcon className="hidden flex-0 h-[1.5rem] md:block"/>
+                <div className="flex-1 truncate text-left md:pr-3">{label}</div>
+                <ArrowSmallRightIcon className="flex-0 hidden h-[1.5rem] md:block" />
             </button>
         </Link>
-    );
+    )
 }

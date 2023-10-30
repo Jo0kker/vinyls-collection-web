@@ -2,8 +2,7 @@ import type { PropsWithChildren } from 'react'
 
 import { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
-import { getServerSession } from 'next-auth'
-import NextTopLoader from 'nextjs-toploader';
+import NextTopLoader from 'nextjs-toploader'
 
 import { getSession } from '@/utils/authOptions'
 import { cn } from '@/utils/classNames'

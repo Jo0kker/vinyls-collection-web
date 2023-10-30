@@ -1,16 +1,16 @@
-import React from 'react';
+import React from 'react'
 
 type InputTextProps = {
-    value: string,
-    setValue: (value: string) => void,
-    name: string,
-    label: string,
-    type?: string,
+    value: string
+    setValue: (value: string) => void
+    name: string
+    label: string
+    type?: string
     className?: string
     inputClassName?: string
     inputStyle?: React.CSSProperties
     labelClassName?: string
-    tipClassname?: string,
+    tipClassname?: string
     tipMessage?: string
 }
 
@@ -28,24 +28,34 @@ export const InputText = ({
     tipMessage
 }: InputTextProps) => {
     return (
-      <div className={'relative z-0 ' + className}>
-          <input
-            type={type ?? 'text'}
-            id={name}
-            onChange={e => setValue(e.target.value)}
-            className={inputClassName + ' block py-1.5 px-0 w-full text-sm  bg-transparent border-0 border-b-2 border-white appearance-none dark:text-white dark:border-gray-600 dark:focus:border-fuchsia-500 focus:outline-none focus:ring-0 focus:border-fuchsia-600 peer'}
-            placeholder={' '}
-            value={value}
-            style={inputStyle}
-            aria-describedby={name + '_help'}
-          />
-          <label
-            htmlFor={name}
-            className={labelClassName + ' absolute text-md text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-fuchsia-800 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'}
-          >
-            {label}
-          </label>
-          {tipMessage && <p id={name + '_help'} className={tipClassname + ' mt-2 text-xs'}>{tipMessage}</p>}
-      </div>
+        <div className={'relative z-0 ' + className}>
+            <input
+                type={type ?? 'text'}
+                id={name}
+                onChange={e => setValue(e.target.value)}
+                className={
+                    inputClassName +
+                    ' peer block w-full appearance-none border-0  border-b-2 border-white bg-transparent px-0 py-1.5 text-sm focus:border-fuchsia-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-fuchsia-500'
+                }
+                placeholder={' '}
+                value={value}
+                style={inputStyle}
+                aria-describedby={name + '_help'}
+            />
+            <label
+                htmlFor={name}
+                className={
+                    labelClassName +
+                    ' text-md absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-fuchsia-800 dark:text-gray-400 peer-focus:dark:text-blue-500'
+                }
+            >
+                {label}
+            </label>
+            {tipMessage && (
+                <p id={name + '_help'} className={tipClassname + ' mt-2 text-xs'}>
+                    {tipMessage}
+                </p>
+            )}
+        </div>
     )
 }

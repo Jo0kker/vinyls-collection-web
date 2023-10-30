@@ -7,18 +7,17 @@ import { faPlus } from '@fortawesome/pro-light-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useMutation } from '@tanstack/react-query'
 import { Modal } from 'flowbite-react'
-import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
 import { Button } from '@/components/atom/Button'
-import { InputText } from '@/components/atom/InputText';
+import { InputText } from '@/components/atom/InputText'
 import { fetchAPI } from '@/utils/fetchAPI'
 import { showToast } from '@/utils/toast'
 
 export function ButtonAddCollection() {
     const [isOpenModal, setIsOpenModal] = useState(false)
     const { data: session } = useSession()
-    const [collectionName, setCollectionName] = useState('');
+    const [collectionName, setCollectionName] = useState('')
     const addCollection = useMutation({
         mutationFn: () =>
             fetchAPI('/collections/mutate', {
@@ -61,12 +60,12 @@ export function ButtonAddCollection() {
                             Créer une collection
                         </h3>
                         <InputText
-                          value={collectionName}
-                          setValue={setCollectionName}
-                          name="collectionName"
-                          label="Nom de la collection"
+                            value={collectionName}
+                            setValue={setCollectionName}
+                            name="collectionName"
+                            label="Nom de la collection"
                         />
-                       <Button onClick={() => addCollection.mutate()} className="w-full">
+                        <Button onClick={() => addCollection.mutate()} className="w-full">
                             Créer
                         </Button>
                     </div>

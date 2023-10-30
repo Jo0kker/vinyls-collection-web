@@ -1,10 +1,11 @@
+import { redirect } from 'next/navigation'
+
 import { Search } from '@/types'
 import { cn } from '@/utils/classNames'
 import { fetchAPI } from '@/utils/fetchAPI'
 
 import { EmptyList } from './components/EmptyList'
 import { VinylItem } from './components/VinylItem'
-import { redirect } from 'next/navigation'
 
 type CollectionPageProps = {
     params: {

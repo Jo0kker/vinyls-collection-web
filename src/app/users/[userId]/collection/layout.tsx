@@ -1,14 +1,13 @@
 import type { PropsWithChildren } from 'react'
 
 import { ButtonAddCollection } from '@/app/users/[userId]/collection/components/ButtonAddCollection'
-import { Collection, Search, User } from '@/types'
+import { SelectorCollectionMobile } from '@/app/users/[userId]/collection/components/SelectorCollectionMobile'
+import { Collection, User } from '@/types'
 import { getSession } from '@/utils/authOptions'
 import { fetchAPI } from '@/utils/fetchAPI'
 import { fetchUserData } from '@/utils/fetchUserData'
 
 import { CollectionLink } from './components/CollectionLink'
-import { Select } from 'flowbite-react';
-import { SelectorCollectionMobile } from '@/app/users/[userId]/collection/components/SelectorCollectionMobile';
 
 type pageProps = {
     params: {
@@ -19,7 +18,7 @@ type pageProps = {
 export default async function CollectionLayout({ params, children }: PropsWithChildren<pageProps>) {
     const session = await getSession()
     const userId: number = parseInt(params.userId)
-    const isOwner = session?.user?.id == userId
+    const isOwner = session?.user?.id === userId
 
     const collections = await fetchAPI<Collection[]>('/collections/search', {
         method: 'POST',
@@ -78,7 +77,7 @@ export default async function CollectionLayout({ params, children }: PropsWithCh
                         </option>
                     ))}
                 </SelectorCollectionMobile>
-                <nav className="hidden md:flex w-56 gap-2 overflow-x-auto px-4 md:mx-0 md:flex-col md:p-0">
+                <nav className="hidden w-56 gap-2 overflow-x-auto px-4 md:mx-0 md:flex md:flex-col md:p-0">
                     {isOwner && <ButtonAddCollection />}
                     <CollectionLink
                         href={'/users/' + userId + '/collection/-1'}
@@ -95,7 +94,7 @@ export default async function CollectionLayout({ params, children }: PropsWithCh
                         />
                     ))}
                 </nav>
-                <div className={'flex flex-col flex-auto w-64 gap-3 w-full'}>
+                <div className="flex w-64 w-full flex-auto flex-col gap-3">
                     <div className="flex flex-1 flex-col px-4 md:px-0">{children}</div>
                 </div>
             </div>

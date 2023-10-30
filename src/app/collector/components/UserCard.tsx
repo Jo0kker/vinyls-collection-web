@@ -1,15 +1,16 @@
-import Image from 'next/image';
-import { DateTime } from 'luxon';
-import Link from 'next/link';
-import React from 'react';
-import { User } from '@/types';
+import React from 'react'
+
+import { DateTime } from 'luxon'
+import Image from 'next/image'
+import Link from 'next/link'
+
+import { User } from '@/types'
 
 type UserCardProps = {
     user: User
 }
 
-export const UserCard = ({user}: UserCardProps) => {
-
+export const UserCard = ({ user }: UserCardProps) => {
     return (
         <Link
             key={user.id}
@@ -28,10 +29,9 @@ export const UserCard = ({user}: UserCardProps) => {
                 <p className="text-sm">{user.collectionVinyls_count} vinyls</p>
                 <p className="text-sm">
                     Dernière connection :{' '}
-                    {DateTime.fromFormat(
-                        user.last_activity,
-                        'yyyy-MM-dd HH:mm:ss'
-                    ).toFormat('dd/MM/yyyy')}
+                    {DateTime.fromFormat(user.last_activity, 'yyyy-MM-dd HH:mm:ss').toFormat(
+                        'dd/MM/yyyy'
+                    )}
                 </p>
             </div>
         </Link>

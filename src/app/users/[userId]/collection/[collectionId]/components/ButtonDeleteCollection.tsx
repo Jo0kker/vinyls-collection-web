@@ -1,21 +1,23 @@
 'use client'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faCircleExclamation } from '@fortawesome/pro-thin-svg-icons';
-import { Modal } from 'flowbite-react';
-import { useState } from 'react';
-import deleteCollection from '@/app/users/[userId]/collection/[collectionId]/actions/deleteCollection';
+import { useState } from 'react'
+
+import { faTrash, faCircleExclamation } from '@fortawesome/pro-thin-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Modal } from 'flowbite-react'
+
+import deleteCollection from '@/app/users/[userId]/collection/[collectionId]/actions/deleteCollection'
 
 type ButtonDeleteCollectionProps = {
-    collectionId: number,
+    collectionId: number
     userId: number
 }
 
 export const ButtonDeleteCollection = ({ collectionId, userId }: ButtonDeleteCollectionProps) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false)
 
     const handleDeleteCollection = () => {
-        deleteCollection(collectionId, userId).then(r => {
+        deleteCollection(collectionId, userId).then(() => {
             setIsOpen(false)
         })
     }
@@ -25,7 +27,7 @@ export const ButtonDeleteCollection = ({ collectionId, userId }: ButtonDeleteCol
             <button
                 onClick={() => setIsOpen(true)}
                 type="button"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400"
+                className="inline-flex items-center rounded-md border border-transparent bg-red-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2"
             >
                 <FontAwesomeIcon icon={faTrash} />
             </button>

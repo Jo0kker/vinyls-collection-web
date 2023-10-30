@@ -1,6 +1,7 @@
 .next/**
 **/.next
 .vscode/**
+.fleet
 *.md
 **/*.md
 patches

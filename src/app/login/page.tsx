@@ -1,8 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 
-import { Button } from '@/components/atom/Button'
-
 import { LoginForm } from './LoginForm'
 
 export default function LoginPage() {
@@ -17,15 +15,18 @@ export default function LoginPage() {
             <div className="flex flex-col items-center justify-center lg:mx-32">
                 <LoginForm />
             </div>
-            <div className="flex flex-col mx-auto mt-3">
-              <Link className="text-center hover:text-orange-700" href="/reset-password">
-                Mot de passe oubliée ?
-              </Link>
+            <div className="mx-auto mt-3 flex flex-col">
+                <Link className="text-center hover:text-orange-700" href="/reset-password">
+                    Mot de passe oubliée ?
+                </Link>
             </div>
-            <div className="flex flex-col mx-auto my-12">
-              <Link href="/register" className="rounded rounded-full border p-2 border-fuchsia-800 hover:bg-fuchsia-700 hover:text-white">
-                Pas de compte ? Inscrivez-vous !
-              </Link>
+            <div className="mx-auto my-12 flex flex-col">
+                <Link
+                    href="/register"
+                    className="rounded rounded-full border border-fuchsia-800 p-2 hover:bg-fuchsia-700 hover:text-white"
+                >
+                    Pas de compte ? Inscrivez-vous !
+                </Link>
             </div>
         </div>
     )
