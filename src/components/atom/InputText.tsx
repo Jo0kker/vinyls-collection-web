@@ -1,3 +1,4 @@
+import React from 'react';
 
 type InputTextProps = {
     value: string,
@@ -7,6 +8,7 @@ type InputTextProps = {
     type?: string,
     className?: string
     inputClassName?: string
+    inputStyle?: React.CSSProperties
     labelClassName?: string
     tipClassname?: string,
     tipMessage?: string
@@ -20,6 +22,7 @@ export const InputText = ({
     type,
     className,
     inputClassName,
+    inputStyle,
     labelClassName,
     tipClassname,
     tipMessage
@@ -33,6 +36,7 @@ export const InputText = ({
             className={inputClassName + ' block py-1.5 px-0 w-full text-sm  bg-transparent border-0 border-b-2 border-white appearance-none dark:text-white dark:border-gray-600 dark:focus:border-fuchsia-500 focus:outline-none focus:ring-0 focus:border-fuchsia-600 peer'}
             placeholder={' '}
             value={value}
+            style={inputStyle}
             aria-describedby={name + '_help'}
           />
           <label

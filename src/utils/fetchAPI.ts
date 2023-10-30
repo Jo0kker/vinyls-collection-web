@@ -2,22 +2,12 @@ import { getSession } from './authOptions'
 
 export type FetchResponse<T> = {
     data: T
-    links?: {
-        first: string | null
-        last: string | null
-        prev: string | null
-        next: string | null
-    }
-    meta?: Partial<{
-        current_page: number
-        from: number
-        last_page: number
-        links: string[]
-        path: string
-        per_page: number
-        to: number
-        total: number
-    }>
+    current_page: number
+    from: number
+    last_page: number
+    per_page: number
+    to: number
+    total: number
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
