@@ -18,7 +18,11 @@ export const UserCard = ({ user }: UserCardProps) => {
             className="m-1 flex flex-row rounded border border-8 border-gray-300 hover:bg-gray-400"
         >
             <Image
-                src={user.avatar}
+                src={
+                    user.avatar
+                        ? user.avatar
+                        : 'https://vinyls-collection.fra1.cdn.digitaloceanspaces.com/default_image_vinyl.png'
+                }
                 alt={user.name}
                 width={100}
                 height={100}

@@ -6,7 +6,13 @@ const nextConfig = {
         serverActions: true
     },
     images: {
-        domains: ['picsum.photos', 'via.placeholder.com', 'i.discogs.com', 'localhost']
+        domains: [
+            'picsum.photos',
+            'via.placeholder.com',
+            'i.discogs.com',
+            'localhost',
+            'vinyls-collection.fra1.cdn.digitaloceanspaces.com'
+        ]
     },
     eslint: {
         // On peut désactiver pour l'instant le temps de se familiariser avec les différentes règles
