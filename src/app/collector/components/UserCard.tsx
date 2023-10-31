@@ -28,10 +28,12 @@ export const UserCard = ({ user }: UserCardProps) => {
                 <h2>{user.name}</h2>
                 <p className="text-sm">{user.collectionVinyls_count} vinyls</p>
                 <p className="text-sm">
-                    Dernière connection :{' '}
-                    {DateTime.fromFormat(user.last_activity, 'yyyy-MM-dd HH:mm:ss').toFormat(
-                        'dd/MM/yyyy'
-                    )}
+                    Dernière connection :
+                    {user.last_activity === null
+                        ? ' Jamais'
+                        : DateTime.fromFormat(user.last_activity, 'yyyy-MM-dd HH:mm:ss').toFormat(
+                              ' dd/MM/yyyy'
+                          )}
                 </p>
             </div>
         </Link>

@@ -21,10 +21,6 @@ export default function CollectorPage() {
     })
     const [isLoading, setIsLoading] = useState(true)
 
-    // const getCollectors = async () => {
-    //
-    // }
-
     const getCollectors = useCallback(async () => {
         const body: { [key: string]: unknown } = {
             sort: [
