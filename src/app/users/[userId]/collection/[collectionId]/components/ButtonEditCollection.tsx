@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 import { faPenToSquare } from '@fortawesome/pro-thin-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Modal } from 'flowbite-react'
+import { Modal, Tooltip } from 'flowbite-react'
 
 import updateCollection from '@/app/users/[userId]/collection/[collectionId]/actions/updateCollection'
 import { InputText } from '@/components/atom/InputText'
@@ -24,12 +24,14 @@ export const ButtonEditCollection = ({ collection }: ButtonEditCollectionProps) 
 
     return (
         <>
-            <button
-                className="inline-flex items-center rounded-md border border-transparent bg-emerald-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
-                onClick={() => setIsOpen(true)}
-            >
-                <FontAwesomeIcon icon={faPenToSquare} />
-            </button>
+            <Tooltip content="Modifier la collection" placement="top" className="mr-1">
+                <button
+                    className="mr-1 inline-flex items-center rounded-md border px-2 py-2 hover:bg-emerald-600 hover:bg-opacity-30 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
+                    onClick={() => setIsOpen(true)}
+                >
+                    <FontAwesomeIcon icon={faPenToSquare} />
+                </button>
+            </Tooltip>
             <Modal show={isOpen} size="md" popup onClose={() => setIsOpen(false)}>
                 <Modal.Header />
                 <Modal.Body>

@@ -1,7 +1,13 @@
 // eslint-disable-next-line import/no-named-as-default
 import toast from 'react-hot-toast'
 
-export function showToast(type: string, message: string, icon?: string) {
+type showToastProps = {
+    type: 'success' | 'error'
+    message: string
+    icon?: string
+}
+
+export function showToast({ type, message, icon }: showToastProps) {
     toast(message, {
         position: 'top-left',
         duration: 3000,

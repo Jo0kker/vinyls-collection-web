@@ -6,8 +6,13 @@ import { useRouter } from 'next/navigation'
 
 type Props = {
     userId: number
+    defaultValue: number
 }
-export const SelectorCollectionMobile = ({ userId, children }: PropsWithChildren<Props>) => {
+export const SelectorCollectionMobile = ({
+    userId,
+    defaultValue,
+    children
+}: PropsWithChildren<Props>) => {
     const router = useRouter()
 
     const mobileOnChangeCollection = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -16,7 +21,11 @@ export const SelectorCollectionMobile = ({ userId, children }: PropsWithChildren
     }
 
     return (
-        <select className="md:hidden" onChange={mobileOnChangeCollection}>
+        <select
+            className="md:hidden"
+            onChange={mobileOnChangeCollection}
+            defaultValue={defaultValue}
+        >
             {children}
         </select>
     )

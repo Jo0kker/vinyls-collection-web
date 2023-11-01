@@ -1,14 +1,14 @@
 'use client'
 
+import { useState } from 'react'
+
 import { faTrash } from '@fortawesome/pro-light-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useMutation } from '@tanstack/react-query'
 import { Spinner } from 'flowbite-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
 
+import deleteVinyl from '@/app/users/[userId]/collection/[collectionId]/actions/deleteVinyl'
 import { CollectionVinyl, Search } from '@/types'
 import { cn } from '@/utils/classNames'
 import { prefixImage } from '@/utils/prefixImage'
@@ -20,26 +20,7 @@ type VinylItemProps = {
 }
 
 export function VinylItem({ item, collectionId }: VinylItemProps) {
-    const router = useRouter()
-    const session = useSession()
-
-    const deleteVinyl = useMutation({
-        mutationFn: () =>
-            fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/collections/${collectionId}/collectionVinyl/${item.id}`,
-                {
-                    method: 'delete',
-                    headers: {
-                        Authorization: `Bearer ${session.data?.user.access_token}`
-                    }
-                }
-            ),
-        onSuccess: () => {
-            showToast('success', 'Vinyl supprimé de la collection')
-            router.refresh()
-        },
-        onError: () => showToast('error', 'Une erreur est survenue')
-    })
+    const [isLoadingDelete, setIsLoadingDelete] = useState(false)
 
     return (
         <Link
@@ -68,20 +49,19 @@ export function VinylItem({ item, collectionId }: VinylItemProps) {
                 <button
                     className={cn('h-8 w-8 rounded-md hover:bg-red-200', {
                         'cursor-not-allowed': !collectionId,
-                        'bg-red-200': deleteVinyl.isPending
+                        'bg-red-200': isLoadingDelete
                     })}
                     disabled={!collectionId}
-                    onClick={
-                        collectionId
-                            ? e => {
-                                  e.stopPropagation()
-                                  e.preventDefault()
-                                  deleteVinyl.mutate()
-                              }
-                            : undefined
-                    }
+                    onClick={e => {
+                        e.preventDefault()
+                        setIsLoadingDelete(true)
+                        deleteVinyl(item.id).then(() => {
+                            setIsLoadingDelete(false)
+                            showToast({ type: 'success', message: 'Vinyle supprimé' })
+                        })
+                    }}
                 >
-                    {deleteVinyl.isPending ? (
+                    {isLoadingDelete ? (
                         <Spinner size="sm" color="failure" />
                     ) : (
                         <FontAwesomeIcon icon={faTrash} className="text-red-800" size="sm" />

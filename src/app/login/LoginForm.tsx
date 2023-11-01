@@ -28,22 +28,16 @@ export function LoginForm() {
 
             if (!result?.ok) {
                 if (result?.status === 401) {
-                    showToast('error', 'Identifiants incorrects')
+                    showToast({ type: 'error', message: 'Identifiants incorrects' })
                 } else {
-                    showToast(
-                        'error',
-                        'Une erreur est survenue, merci de réessayer ou de contacter le support'
-                    )
+                    showToast({ type: 'error', message: 'Une erreur est survenue' })
                 }
             } else {
-                showToast('success', 'Vous êtes connectés ')
+                showToast({ type: 'success', message: 'Vous êtes connectés' })
                 router.replace('/')
             }
         } catch (error) {
-            showToast(
-                'error',
-                'Une erreur est survenue, merci de réessayer ou de contacter le support'
-            )
+            showToast({ type: 'error', message: 'Une erreur est survenue' })
         } finally {
             setLoading(false)
         }

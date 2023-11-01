@@ -38,9 +38,9 @@ export function ButtonAddCollection() {
                 })
             }),
         onSuccess: () => {
-            showToast('success', 'Collection créée')
+            showToast({ type: 'success', message: 'Collection ajoutée' })
         },
-        onError: () => showToast('error', 'Une erreur est survenue')
+        onError: () => showToast({ type: 'error', message: 'Une erreur est survenue' })
     })
 
     return (
