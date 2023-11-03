@@ -14,8 +14,8 @@ export const UserCard = ({ user }: UserCardProps) => {
     return (
         <Link
             key={user.id}
-            href={`/users/${user.id}`}
-            className="m-1 flex flex-row rounded border border-8 border-gray-300 hover:bg-gray-400"
+            href={`/users/${user.id}/collection/-1`}
+            className="m-1 flex flex-row rounded border-8 border-gray-300 hover:bg-gray-400"
         >
             <Image
                 src={

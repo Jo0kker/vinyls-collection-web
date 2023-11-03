@@ -1,47 +1,20 @@
 'use client'
 
-// button to add collection
 import { useState } from 'react'
 
 import { faPlus } from '@fortawesome/pro-light-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useMutation } from '@tanstack/react-query'
 import { Modal } from 'flowbite-react'
-import { useSession } from 'next-auth/react'
 
+import addCollection from '@/app/users/[userId]/collection/[collectionId]/actions/addCollection'
 import { Button } from '@/components/atom/Button'
 import { InputText } from '@/components/atom/InputText'
-import { fetchAPI } from '@/utils/fetchAPI'
 import { showToast } from '@/utils/toast'
 
 export function ButtonAddCollection() {
     const [isOpenModal, setIsOpenModal] = useState(false)
-    const { data: session } = useSession()
     const [collectionName, setCollectionName] = useState('')
-    const addCollection = useMutation({
-        mutationFn: () =>
-            fetchAPI('/collections/mutate', {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${session?.user.access_token}`
-                },
-                body: JSON.stringify({
-                    mutate: [
-                        {
-                            operation: 'create',
-                            attributes: {
-                                name: 'Ma collection',
-                                description: 'Ma collection de vinyles'
-                            }
-                        }
-                    ]
-                })
-            }),
-        onSuccess: () => {
-            showToast({ type: 'success', message: 'Collection ajoutée' })
-        },
-        onError: () => showToast({ type: 'error', message: 'Une erreur est survenue' })
-    })
+    const [collectionDescription, setCollectionDescription] = useState('')
 
     return (
         <>
@@ -65,7 +38,24 @@ export function ButtonAddCollection() {
                             name="collectionName"
                             label="Nom de la collection"
                         />
-                        <Button onClick={() => addCollection.mutate()} className="w-full">
+                        <InputText
+                            value={collectionDescription}
+                            setValue={setCollectionDescription}
+                            name="collectionDescription"
+                            label="Description de la collection"
+                        />
+                        <Button
+                            onClick={() => {
+                                addCollection(collectionName, collectionDescription).then(() => {
+                                    showToast({
+                                        type: 'success',
+                                        message: 'Collection créée avec succès'
+                                    })
+                                    setIsOpenModal(false)
+                                })
+                            }}
+                            className="w-full"
+                        >
                             Créer
                         </Button>
                     </div>

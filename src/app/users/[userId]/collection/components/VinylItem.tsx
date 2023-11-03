@@ -17,9 +17,10 @@ import { showToast } from '@/utils/toast'
 type VinylItemProps = {
     item: Search | CollectionVinyl
     collectionId?: string
+    isOwner?: boolean
 }
 
-export function VinylItem({ item, collectionId }: VinylItemProps) {
+export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
     const [isLoadingDelete, setIsLoadingDelete] = useState(false)
 
     return (
@@ -44,30 +45,31 @@ export function VinylItem({ item, collectionId }: VinylItemProps) {
                 <h3 className="mb-2 truncate text-sm text-fuchsia-800">{item.vinyl.artist}</h3>
                 <p className="text-xs font-light">{item.vinyl.released}</p>
             </div>
-
-            <div className="flex justify-center px-0.5 pt-0.5">
-                <button
-                    className={cn('h-8 w-8 rounded-md hover:bg-red-200', {
-                        'cursor-not-allowed': !collectionId,
-                        'bg-red-200': isLoadingDelete
-                    })}
-                    disabled={!collectionId}
-                    onClick={e => {
-                        e.preventDefault()
-                        setIsLoadingDelete(true)
-                        deleteVinyl(item.id).then(() => {
-                            setIsLoadingDelete(false)
-                            showToast({ type: 'success', message: 'Vinyle supprimé' })
-                        })
-                    }}
-                >
-                    {isLoadingDelete ? (
-                        <Spinner size="sm" color="failure" />
-                    ) : (
-                        <FontAwesomeIcon icon={faTrash} className="text-red-800" size="sm" />
-                    )}
-                </button>
-            </div>
+            {isOwner && (
+                <div className="flex justify-center px-0.5 pt-0.5">
+                    <button
+                        className={cn('h-8 w-8 rounded-md hover:bg-red-200', {
+                            'cursor-not-allowed': !collectionId,
+                            'bg-red-200': isLoadingDelete
+                        })}
+                        disabled={!collectionId}
+                        onClick={e => {
+                            e.preventDefault()
+                            setIsLoadingDelete(true)
+                            deleteVinyl(item.id).then(() => {
+                                setIsLoadingDelete(false)
+                                showToast({ type: 'success', message: 'Vinyle supprimé' })
+                            })
+                        }}
+                    >
+                        {isLoadingDelete ? (
+                            <Spinner size="sm" color="failure" />
+                        ) : (
+                            <FontAwesomeIcon icon={faTrash} className="text-red-800" size="sm" />
+                        )}
+                    </button>
+                </div>
+            )}
         </Link>
     )
 }
