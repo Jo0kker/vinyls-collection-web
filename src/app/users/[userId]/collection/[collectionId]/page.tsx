@@ -193,14 +193,18 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                             <h2 className="mb-2 hidden self-end truncate text-2xl font-bold md:block">
                                 {isEditable ? collection.data[0].name : collectionName}
                             </h2>
-                            {isEditable && (
+                            {isOwner && (
                                 <div className="mb-1 ml-auto mt-2 flex flex-row">
-                                    <ButtonAddVinyl collectionId={collection.data[0].id} />
-                                    <ButtonEditCollection collection={collection.data[0]} />
-                                    <ButtonDeleteCollection
-                                        collectionId={collectionId}
-                                        userId={userId}
-                                    />
+                                    <ButtonAddVinyl collectionId={collectionId} />
+                                    {isEditable && (
+                                        <>
+                                            <ButtonEditCollection collection={collection.data[0]} />
+                                            <ButtonDeleteCollection
+                                                collectionId={collectionId}
+                                                userId={userId}
+                                            />
+                                        </>
+                                    )}
                                 </div>
                             )}
                         </div>

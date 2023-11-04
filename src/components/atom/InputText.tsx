@@ -1,4 +1,5 @@
 import React from 'react'
+import { cn } from '@/utils/classNames'
 
 type InputTextProps = {
     value: string
@@ -28,15 +29,15 @@ export const InputText = ({
     tipMessage
 }: InputTextProps) => {
     return (
-        <div className={'relative z-0 ' + className}>
+        <div className={cn('relative z-0', className)}>
             <input
                 type={type ?? 'text'}
                 id={name}
                 onChange={e => setValue(e.target.value)}
-                className={
-                    inputClassName +
-                    ' peer block w-full appearance-none border-0  border-b-2 border-white bg-transparent px-0 py-1.5 text-sm focus:border-fuchsia-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-fuchsia-500'
-                }
+                className={cn(
+                    'peer block w-full appearance-none border-0  border-b-2 bg-transparent px-0 py-1.5 text-sm focus:border-fuchsia-700 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-fuchsia-500',
+                    inputClassName ?? 'border-white'
+                )}
                 placeholder={' '}
                 value={value}
                 style={inputStyle}
