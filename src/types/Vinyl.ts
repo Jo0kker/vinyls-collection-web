@@ -1,3 +1,5 @@
+import { array } from 'yup'
+
 export interface Track {
     duration: string
     position: string
@@ -18,6 +20,7 @@ export interface Vinyl {
     genre?: string
     released?: string
     image?: string
+    formats?: JSON
     provenance?: string
     discog_id?: number
     discog_url?: string

@@ -9,18 +9,31 @@ import { InputText } from '@/components/atom/InputText'
 import { fetchAPI } from '@/utils/fetchAPI'
 import Selector from '@/components/atom/Selector'
 import { Vinyl } from '@/types'
-import { Accordion } from 'flowbite-react'
+import { Accordion, AccordionItem } from '@/components/atom/accordion'
 
 const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
     const [isOpen, setIsOpen] = useState(false)
-    const [state, setState] = useState('Ajouter un vinyls')
+    const [titleStep, setTitleStep] = useState('Ajouter un vinyls')
+    const [indexStep, setIndexStep] = useState(0)
     const [searchName, setSearchName] = useState('')
     const [searchArtist, setSearchArtist] = useState('')
     const [searchYear, setSearchYear] = useState('')
-    const [searchFormat, setSearchFormat] = useState('')
     const [formats, setFormats] = useState<{ id?: number; name?: string }[]>([])
     const [vinylsResult, setVinylsResult] = useState<Vinyl[]>()
-    const [accOpen, setAccOpen] = useState(2)
+    const [openIndex, setOpenIndex] = useState<number | null>(0)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [hasMorePage, setHasMorePage] = useState(false)
+    const [nextStep, setNextStep] = useState('Recherche sur discogs')
+
+    const handleToggle = (index: number) => {
+        if (openIndex === index) {
+            // If the same index is clicked again, close the panel
+            setOpenIndex(null)
+        } else {
+            // Open the panel at the current index
+            setOpenIndex(index)
+        }
+    }
 
     useEffect(() => {
         fetchAPI('/formats/search', {
@@ -30,39 +43,85 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         })
     }, [])
 
-    const handleSearch = () => {
-        setState('Recherche en cours...')
-        fetchAPI('/vinyls/search', {
+    const resetAll = () => {
+        setSearchName('')
+        setSearchArtist('')
+        setSearchYear('')
+        setVinylsResult(undefined)
+        setOpenIndex(0)
+        setCurrentPage(1)
+        setHasMorePage(false)
+    }
+
+    const searchDiscogs = async (page = 1) => {
+        return fetchAPI('/discogs/search', {
+            method: 'POST',
+            body: JSON.stringify({
+                title: searchName,
+                artist: searchArtist,
+                year: searchYear,
+                page: page,
+                per_page: 10
+            })
+        })
+    }
+
+    const searchVinyls = async (page = 1) => {
+        return fetchAPI('/vinyls/search', {
             method: 'POST',
             body: JSON.stringify({
                 filters: [
                     {
-                        field: 'name',
+                        field: 'title',
                         operator: 'like',
-                        value: searchName
+                        value: `%${searchName}%`
                     },
                     {
                         field: 'artist',
                         operator: 'like',
-                        value: searchArtist
+                        value: `%${searchArtist}%`
                     },
                     {
-                        field: 'year',
+                        field: 'released',
                         operator: 'like',
-                        value: searchYear
-                    },
-                    {
-                        field: 'format.id',
-                        operator: '=',
-                        value: searchFormat
+                        value: `%${searchYear}%`
                     }
                 ],
-                includes: [{ relation: 'format' }],
-                limit: 10
+                limit: 10,
+                page: page
             })
-        }).then(r => {
-            setState('Résultat de la recherche')
-            setFormats(r.data)
+        })
+    }
+
+    const handleSearch = (e: { preventDefault: () => void }) => {
+        e.preventDefault()
+        setTitleStep('Recherche en cours...')
+        searchVinyls().then(r => {
+            setTitleStep('Résultat de la recherche')
+            setOpenIndex(1)
+            setVinylsResult(r.data)
+            setCurrentPage(1)
+            if (r.last_page > 1) {
+                setHasMorePage(true)
+            } else {
+                setHasMorePage(false)
+            }
+        })
+    }
+
+    const handleSearchDiscogs = () => {
+        setIndexStep(1)
+        setTitleStep('Recherche en cours...')
+        searchDiscogs().then(r => {
+            setTitleStep('Résultat de la recherche')
+            setOpenIndex(1)
+            setVinylsResult(r.data)
+            setCurrentPage(1)
+            if (r.last_page > 1) {
+                setHasMorePage(true)
+            } else {
+                setHasMorePage(false)
+            }
         })
     }
 
@@ -77,97 +136,175 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                 </button>
             </Tooltip>
             <Modal
+                style={{ height: '100%' }}
                 show={isOpen}
                 position={'center'}
-                onClose={() => setIsOpen(false)}
-                className={'h-full'}
+                onClose={() => {
+                    setIsOpen(false)
+                    setTitleStep('Ajouter un vinyls')
+                    resetAll()
+                }}
             >
-                <Modal.Header>{state}</Modal.Header>
-                <Modal.Body className={'p-0'}>
-                    <button
-                        onClick={() => {
-                            if (accOpen === 1) {
-                                setAccOpen(2)
-                            } else {
-                                setAccOpen(1)
-                            }
-                        }}
-                    >
-                        test {accOpen}
-                    </button>
-                    <p>open 1 : {accOpen === 1 ? 'true' : 'false'}</p>
-                    <p>open 2 : {accOpen === 2 ? 'true' : 'false'}</p>
-                    <Accordion>
-                        <Accordion.Panel isOpen={accOpen === 2}>
-                            <Accordion.Title>Formulaire de recherche</Accordion.Title>
-                            <Accordion.Content>
-                                <form action="" className={'center flex flex-col gap-4'}>
-                                    <InputText
-                                        className={'h-14'}
-                                        value={searchName}
-                                        setValue={setSearchName}
-                                        name={'name'}
-                                        inputClassName={'border-gray-200'}
-                                        label={'Titre'}
-                                    />
-                                    <InputText
-                                        className={'h-14'}
-                                        value={searchArtist}
-                                        setValue={setSearchArtist}
-                                        inputClassName={'border-gray-200'}
-                                        name={'artist'}
-                                        label={'Artiste'}
-                                    />
-                                    <InputText
-                                        className={'h-14'}
-                                        value={searchYear}
-                                        inputClassName={'border-gray-200'}
-                                        setValue={setSearchYear}
-                                        name={'year'}
-                                        label={'Année'}
-                                    />
-                                    <div className={'mb-4'}>
-                                        <Selector options={formats} label={'Format'} />
-                                    </div>
-                                    <div className={'flex justify-center'}>
-                                        <button
-                                            className={
-                                                'rounded-md bg-fuchsia-900 px-2 py-3 text-white hover:bg-opacity-80'
-                                            }
-                                            onClick={handleSearch}
-                                        >
-                                            Rechercher
-                                        </button>
-                                    </div>
-                                </form>
-                            </Accordion.Content>
-                        </Accordion.Panel>
-                        <Accordion.Panel isOpen={accOpen === 1}>
-                            <Accordion.Title>Is there a Figma file available?</Accordion.Title>
-                            <Accordion.Content>
-                                <p className="mb-2 text-gray-500 dark:text-gray-400">
-                                    Flowbite is first conceptualized and designed using the Figma
-                                    software so everything you see in the library has a design
-                                    equivalent in our Figma file.
-                                </p>
-                                <p className="text-gray-500 dark:text-gray-400">
-                                    Check out the
-                                    <a
-                                        href="https://flowbite.com/figma/"
-                                        className="text-cyan-600 hover:underline dark:text-cyan-500"
+                <Modal.Header>{titleStep}</Modal.Header>
+                <Modal.Body className={'p-0 pb-4'}>
+                    <Accordion openIndex={openIndex} onToggle={handleToggle}>
+                        <AccordionItem
+                            title="Rechercher un vinyls"
+                            isOpen={openIndex === 0}
+                            onToggle={() => {}}
+                        >
+                            <form
+                                onSubmit={handleSearch}
+                                className={'center flex flex-col gap-2 px-2 pt-3'}
+                            >
+                                <InputText
+                                    className={'h-14'}
+                                    value={searchName}
+                                    setValue={setSearchName}
+                                    name={'name'}
+                                    inputClassName={'border-gray-200'}
+                                    label={'Titre'}
+                                />
+                                <InputText
+                                    className={'h-14'}
+                                    value={searchArtist}
+                                    setValue={setSearchArtist}
+                                    inputClassName={'border-gray-200'}
+                                    name={'artist'}
+                                    label={'Artiste'}
+                                />
+                                <InputText
+                                    className={'h-14'}
+                                    value={searchYear}
+                                    inputClassName={'border-gray-200'}
+                                    setValue={setSearchYear}
+                                    name={'year'}
+                                    label={'Année'}
+                                />
+                                <div className={'flex justify-center'}>
+                                    <button
+                                        className={
+                                            'mb-1 rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80'
+                                        }
+                                        onClick={handleSearch}
                                     >
-                                        Figma design system
-                                    </a>
-                                    based on the utility classes from Tailwind CSS and components
-                                    from Flowbite.
-                                </p>
-                            </Accordion.Content>
-                        </Accordion.Panel>
+                                        Rechercher
+                                    </button>
+                                </div>
+                            </form>
+                        </AccordionItem>
+                        <AccordionItem
+                            title="Résultat de la recherche"
+                            isOpen={openIndex === 1}
+                            onToggle={() => {}}
+                            className={'mt-2'}
+                        >
+                            {vinylsResult && (
+                                <>
+                                    <div className={'flex flex-col gap-4'}>
+                                        {vinylsResult.map(item => (
+                                            <div
+                                                key={item.id}
+                                                className={
+                                                    'grid grid-cols-4 gap-4 rounded-xl border-2 border-purple-900 p-2'
+                                                }
+                                            >
+                                                <div className={'col-span-1'}>
+                                                    <img
+                                                        src={item.image ?? '/images/vinyl.svg'}
+                                                        alt={item.title}
+                                                        className={'h-20 w-20'}
+                                                    />
+                                                </div>
+                                                <div className={'col-span-2 flex flex-col'}>
+                                                    <h2 className={'text-lg font-bold'}>
+                                                        {item.title}
+                                                    </h2>
+                                                    <h3 className={'text-sm text-gray-500'}>
+                                                        {item.artist}
+                                                    </h3>
+                                                </div>
+                                                <div
+                                                    className={
+                                                        'col-span-1 flex flex-col items-center gap-4'
+                                                    }
+                                                >
+                                                    <Selector label={'Format'} options={formats} />
+                                                    <button
+                                                        className={
+                                                            'rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80'
+                                                        }
+                                                    >
+                                                        Ajouter
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <div>
+                                            {hasMorePage && (
+                                                <button
+                                                    onClick={() => {
+                                                        if (indexStep === 0) {
+                                                            searchVinyls(currentPage + 1).then(
+                                                                r => {
+                                                                    setVinylsResult([
+                                                                        ...vinylsResult,
+                                                                        ...r.data
+                                                                    ])
+                                                                    if (
+                                                                        r.last_page >
+                                                                        currentPage + 1
+                                                                    ) {
+                                                                        setHasMorePage(true)
+                                                                    } else {
+                                                                        setHasMorePage(false)
+                                                                    }
+                                                                    setCurrentPage(currentPage + 1)
+                                                                }
+                                                            )
+                                                        } else {
+                                                            searchDiscogs(currentPage + 1).then(
+                                                                r => {
+                                                                    setVinylsResult([...r.data])
+                                                                    if (
+                                                                        r.last_page >
+                                                                        currentPage + 1
+                                                                    ) {
+                                                                        setHasMorePage(true)
+                                                                    } else {
+                                                                        setHasMorePage(false)
+                                                                    }
+                                                                    setCurrentPage(currentPage + 1)
+                                                                }
+                                                            )
+                                                        }
+                                                    }}
+                                                >
+                                                    <FontAwesomeIcon icon={faPlus} />
+                                                </button>
+                                            )}
+                                            <button
+                                                onClick={() => {
+                                                    searchDiscogs(1).then(r => {
+                                                        setVinylsResult([...r.data])
+                                                        if (r.last_page > 1) {
+                                                            setHasMorePage(true)
+                                                        } else {
+                                                            setHasMorePage(false)
+                                                        }
+                                                        setCurrentPage(1)
+                                                    })
+                                                }}
+                                            >
+                                                {nextStep}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </AccordionItem>
                     </Accordion>
-
-                    <hr />
                 </Modal.Body>
-                <Modal.Footer />
             </Modal>
         </>
     )
