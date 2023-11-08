@@ -4,14 +4,15 @@ import React, { useEffect, useState } from 'react'
 
 import { faPlus } from '@fortawesome/pro-duotone-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Modal, Progress, Tooltip } from 'flowbite-react'
+import { Modal, Tooltip } from 'flowbite-react'
+
+import { Accordion, AccordionItem } from '@/components/atom/accordion'
 import { InputText } from '@/components/atom/InputText'
-import { fetchAPI } from '@/utils/fetchAPI'
 import Selector from '@/components/atom/Selector'
 import { Vinyl } from '@/types'
-import { Accordion, AccordionItem } from '@/components/atom/accordion'
+import { fetchAPI } from '@/utils/fetchAPI'
 
-const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
+export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [titleStep, setTitleStep] = useState('Ajouter un vinyls')
     const [indexStep, setIndexStep] = useState(0)
@@ -54,7 +55,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
     }
 
     const searchDiscogs = async (page = 1) => {
-        return fetchAPI('/discogs/search', {
+        return await fetchAPI('/discogs/search', {
             method: 'POST',
             body: JSON.stringify({
                 title: searchName,
@@ -67,7 +68,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
     }
 
     const searchVinyls = async (page = 1) => {
-        return fetchAPI('/vinyls/search', {
+        return await fetchAPI('/vinyls/search', {
             method: 'POST',
             body: JSON.stringify({
                 filters: [
@@ -138,7 +139,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
             <Modal
                 style={{ height: '100%' }}
                 show={isOpen}
-                position={'center'}
+                position="center"
                 onClose={() => {
                     setIsOpen(false)
                     setTitleStep('Ajouter un vinyls')
@@ -146,7 +147,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                 }}
             >
                 <Modal.Header>{titleStep}</Modal.Header>
-                <Modal.Body className={'p-0 pb-4'}>
+                <Modal.Body className="px-1 pb-4">
                     <Accordion openIndex={openIndex} onToggle={handleToggle}>
                         <AccordionItem
                             title="Rechercher un vinyls"
@@ -155,37 +156,35 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                         >
                             <form
                                 onSubmit={handleSearch}
-                                className={'center flex flex-col gap-2 px-2 pt-3'}
+                                className="center flex flex-col gap-2 px-2 pt-3"
                             >
                                 <InputText
-                                    className={'h-14'}
+                                    className="h-14"
                                     value={searchName}
                                     setValue={setSearchName}
-                                    name={'name'}
-                                    inputClassName={'border-gray-200'}
-                                    label={'Titre'}
+                                    name="name"
+                                    inputClassName="border-gray-200"
+                                    label="Titre"
                                 />
                                 <InputText
-                                    className={'h-14'}
+                                    className="h-14"
                                     value={searchArtist}
                                     setValue={setSearchArtist}
-                                    inputClassName={'border-gray-200'}
-                                    name={'artist'}
-                                    label={'Artiste'}
+                                    inputClassName="border-gray-200"
+                                    name="artist"
+                                    label="Artiste"
                                 />
                                 <InputText
-                                    className={'h-14'}
+                                    className="h-14"
                                     value={searchYear}
-                                    inputClassName={'border-gray-200'}
+                                    inputClassName="border-gray-200"
                                     setValue={setSearchYear}
-                                    name={'year'}
-                                    label={'Année'}
+                                    name="year"
+                                    label="Année"
                                 />
-                                <div className={'flex justify-center'}>
+                                <div className="flex justify-center">
                                     <button
-                                        className={
-                                            'mb-1 rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80'
-                                        }
+                                        className="mb-1 rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80"
                                         onClick={handleSearch}
                                     >
                                         Rechercher
@@ -197,52 +196,43 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                             title="Résultat de la recherche"
                             isOpen={openIndex === 1}
                             onToggle={() => {}}
-                            className={'mt-2'}
+                            className="mt-2"
                         >
                             {vinylsResult && (
                                 <>
-                                    <div className={'flex flex-col gap-4'}>
+                                    <div className="m-1 flex flex-col gap-4">
                                         {vinylsResult.map(item => (
                                             <div
                                                 key={item.id}
-                                                className={
-                                                    'grid grid-cols-4 gap-4 rounded-xl border-2 border-purple-900 p-2'
-                                                }
+                                                className="grid grid-cols-4 gap-4 rounded-xl border-2 p-2"
                                             >
-                                                <div className={'col-span-1'}>
+                                                <div className="col-span-1">
                                                     <img
                                                         src={item.image ?? '/images/vinyl.svg'}
                                                         alt={item.title}
-                                                        className={'h-20 w-20'}
+                                                        className="h-20 w-20"
                                                     />
                                                 </div>
-                                                <div className={'col-span-2 flex flex-col'}>
-                                                    <h2 className={'text-lg font-bold'}>
+                                                <div className="col-span-2 flex flex-col">
+                                                    <h2 className="text-lg font-bold">
                                                         {item.title}
                                                     </h2>
-                                                    <h3 className={'text-sm text-gray-500'}>
+                                                    <h3 className="text-sm text-gray-500">
                                                         {item.artist}
                                                     </h3>
                                                 </div>
-                                                <div
-                                                    className={
-                                                        'col-span-1 flex flex-col items-center gap-4'
-                                                    }
-                                                >
-                                                    <Selector label={'Format'} options={formats} />
-                                                    <button
-                                                        className={
-                                                            'rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80'
-                                                        }
-                                                    >
+                                                <div className="col-span-1 flex flex-col items-center gap-4">
+                                                    <Selector label="Format" options={formats} />
+                                                    <button className="rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80">
                                                         Ajouter
                                                     </button>
                                                 </div>
                                             </div>
                                         ))}
-                                        <div>
+                                        <div className="flex flex-row justify-center gap-4">
                                             {hasMorePage && (
                                                 <button
+                                                    className="rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80"
                                                     onClick={() => {
                                                         if (indexStep === 0) {
                                                             searchVinyls(currentPage + 1).then(
@@ -280,20 +270,25 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                         }
                                                     }}
                                                 >
-                                                    <FontAwesomeIcon icon={faPlus} />
+                                                    Voir plus
                                                 </button>
                                             )}
                                             <button
+                                                className="rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80"
                                                 onClick={() => {
-                                                    searchDiscogs(1).then(r => {
-                                                        setVinylsResult([...r.data])
-                                                        if (r.last_page > 1) {
-                                                            setHasMorePage(true)
-                                                        } else {
-                                                            setHasMorePage(false)
-                                                        }
-                                                        setCurrentPage(1)
-                                                    })
+                                                    if (indexStep === 0) {
+                                                        searchDiscogs(1).then(r => {
+                                                            setVinylsResult([...r.data])
+                                                            if (r.last_page > 1) {
+                                                                setHasMorePage(true)
+                                                            } else {
+                                                                setHasMorePage(false)
+                                                            }
+                                                            setCurrentPage(1)
+                                                            setIndexStep(1)
+                                                            setNextStep('Création manuelle')
+                                                        })
+                                                    }
                                                 }}
                                             >
                                                 {nextStep}
@@ -309,5 +304,3 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         </>
     )
 }
-
-export default ButtonAddVinyl

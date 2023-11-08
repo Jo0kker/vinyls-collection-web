@@ -1,4 +1,4 @@
-import ButtonAddVinyl from '@/app/users/[userId]/collection/[collectionId]/components/ButtonAddVinyl'
+import { ButtonAddVinyl } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonAddVinyl'
 import { ButtonDeleteCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonDeleteCollection'
 import { ButtonEditCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonEditCollection'
 import { ButtonAddCollection } from '@/app/users/[userId]/collection/components/ButtonAddCollection'

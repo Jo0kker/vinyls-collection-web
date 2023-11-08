@@ -7,6 +7,7 @@ import React, {
     PropsWithChildren,
     cloneElement
 } from 'react'
+
 import { cn } from '@/utils/classNames'
 
 interface AccordionItemProps {
@@ -37,11 +38,8 @@ export const AccordionItem = ({
     }, [isOpen, children])
 
     return (
-        <div className={cn('rounded-t-xl border-2 border-purple-900', className)}>
-            <button
-                className={' w-full rounded-t-lg bg-gray-200 py-2 text-left'}
-                onClick={onToggle}
-            >
+        <div className={cn('rounded-t-xl border-2', className)}>
+            <button className=" w-full rounded-t-lg bg-gray-200 py-2 text-left" onClick={onToggle}>
                 {title}
             </button>
             <div
