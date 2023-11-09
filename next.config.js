@@ -33,6 +33,12 @@ const nextConfig = {
                 hostname: 'via.placeholder.com',
                 port: '',
                 pathname: '/**'
+            },
+            {
+                protocol: 'https',
+                hostname: 'i.discogs.com',
+                port: '',
+                pathname: '/**'
             }
         ]
     },

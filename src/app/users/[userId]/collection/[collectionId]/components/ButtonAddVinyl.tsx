@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { faPlus } from '@fortawesome/pro-duotone-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Modal, Tooltip } from 'flowbite-react'
+import Image from 'next/image'
 
 import { Accordion, AccordionItem } from '@/components/atom/accordion'
 import { InputText } from '@/components/atom/InputText'
@@ -96,9 +97,11 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
 
     const handleSearch = (e: { preventDefault: () => void }) => {
         e.preventDefault()
+        setIndexStep(0)
+        setNextStep('Recherche sur discogs')
         setTitleStep('Recherche en cours...')
         searchVinyls().then(r => {
-            setTitleStep('Résultat de la recherche')
+            setTitleStep('Résultat de Vinyls-collection')
             setOpenIndex(1)
             setVinylsResult(r.data)
             setCurrentPage(1)
@@ -114,7 +117,7 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         setIndexStep(1)
         setTitleStep('Recherche en cours...')
         searchDiscogs().then(r => {
-            setTitleStep('Résultat de la recherche')
+            setTitleStep('Résultat de discogs')
             setOpenIndex(1)
             setVinylsResult(r.data)
             setCurrentPage(1)
@@ -193,7 +196,7 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                             </form>
                         </AccordionItem>
                         <AccordionItem
-                            title="Résultat de la recherche"
+                            title={titleStep}
                             isOpen={openIndex === 1}
                             onToggle={() => {}}
                             className="mt-2"
@@ -207,13 +210,15 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                 className="grid grid-cols-4 gap-4 rounded-xl border-2 p-2"
                                             >
                                                 <div className="col-span-1">
-                                                    <img
+                                                    <Image
                                                         src={item.image ?? '/images/vinyl.svg'}
                                                         alt={item.title}
-                                                        className="h-20 w-20"
+                                                        width={100}
+                                                        height={100}
+                                                        className="w-full h-full rounded-xl"
                                                     />
                                                 </div>
-                                                <div className="col-span-2 flex flex-col">
+                                                <div className="col-span-2 flex flex-col self-center">
                                                     <h2 className="text-lg font-bold">
                                                         {item.title}
                                                     </h2>
@@ -223,7 +228,7 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                 </div>
                                                 <div className="col-span-1 flex flex-col items-center gap-4">
                                                     <Selector label="Format" options={formats} />
-                                                    <button className="rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80">
+                                                    <button className="rounded-md bg-fuchsia-900 p-1 text-white hover:bg-opacity-80">
                                                         Ajouter
                                                     </button>
                                                 </div>

@@ -28,7 +28,7 @@ export default async function Layout({ children }: PropsWithChildren) {
             <body
                 className={cn(
                     roboto.className,
-                    'text-body flex min-h-screen w-screen flex-col bg-gradient-to-tr from-fuchsia-900 via-fuchsia-900 to-fuchsia-800 text-gray-900 '
+                    'text-body flex min-h-screen w-full flex-col bg-gradient-to-tr from-fuchsia-900 via-fuchsia-900 to-fuchsia-800 text-gray-900 '
                 )}
             >
                 <Providers session={session}>
