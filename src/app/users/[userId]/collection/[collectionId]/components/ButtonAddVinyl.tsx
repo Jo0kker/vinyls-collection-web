@@ -5,23 +5,32 @@ import React, { useEffect, useState } from 'react'
 import { faPlus } from '@fortawesome/pro-duotone-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Modal, Tooltip } from 'flowbite-react'
+import { Formik } from 'formik'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
 
+import revalidateCacheClient from '@/components/actions/revalidateCacheClient'
 import { Accordion, AccordionItem } from '@/components/atom/accordion'
 import { InputText } from '@/components/atom/InputText'
-import Selector from '@/components/atom/Selector'
 import { Vinyl } from '@/types'
 import { fetchAPI } from '@/utils/fetchAPI'
+import { prefixImage } from '@/utils/prefixImage'
+import { showToast } from '@/utils/toast'
 
 export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
+    const session = useSession()
     const [isOpen, setIsOpen] = useState(false)
     const [titleStep, setTitleStep] = useState('Ajouter un vinyls')
+    // step 0: search vinyls in vinyls-collection
+    // step 1: search vinyls in discogs
+    // step 2: create vinyls manually
     const [indexStep, setIndexStep] = useState(0)
     const [searchName, setSearchName] = useState('')
     const [searchArtist, setSearchArtist] = useState('')
     const [searchYear, setSearchYear] = useState('')
     const [formats, setFormats] = useState<{ id?: number; name?: string }[]>([])
     const [vinylsResult, setVinylsResult] = useState<Vinyl[]>()
+    // for the accordion component
     const [openIndex, setOpenIndex] = useState<number | null>(0)
     const [currentPage, setCurrentPage] = useState(1)
     const [hasMorePage, setHasMorePage] = useState(false)
@@ -72,25 +81,27 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         return await fetchAPI('/vinyls/search', {
             method: 'POST',
             body: JSON.stringify({
-                filters: [
-                    {
-                        field: 'title',
-                        operator: 'like',
-                        value: `%${searchName}%`
-                    },
-                    {
-                        field: 'artist',
-                        operator: 'like',
-                        value: `%${searchArtist}%`
-                    },
-                    {
-                        field: 'released',
-                        operator: 'like',
-                        value: `%${searchYear}%`
-                    }
-                ],
-                limit: 10,
-                page: page
+                search: {
+                    filters: [
+                        {
+                            field: 'title',
+                            operator: 'like',
+                            value: `%${searchName}%`
+                        },
+                        {
+                            field: 'artist',
+                            operator: 'like',
+                            value: `%${searchArtist}%`
+                        },
+                        {
+                            field: 'released',
+                            operator: 'like',
+                            value: `%${searchYear}%`
+                        }
+                    ],
+                    limit: 10,
+                    page: page
+                }
             })
         })
     }
@@ -113,20 +124,82 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         })
     }
 
-    const handleSearchDiscogs = () => {
-        setIndexStep(1)
-        setTitleStep('Recherche en cours...')
-        searchDiscogs().then(r => {
-            setTitleStep('Résultat de discogs')
-            setOpenIndex(1)
-            setVinylsResult(r.data)
-            setCurrentPage(1)
-            if (r.last_page > 1) {
-                setHasMorePage(true)
-            } else {
-                setHasMorePage(false)
+    const handleAddVinyl = async (data: { vinyl_id: string; format: string }) => {
+        // if data.vinyl_id contains 'vc_' then it's a vinyls-collection vinyl
+        // else it's a discogs vinyl
+        const token = session?.data?.user.access_token
+        const sourceVinyl = data.vinyl_id.includes('vc_') ? 'vc' : 'discogs'
+        const vinylId = data.vinyl_id.replace('vc_', '').replace('discogs_', '')
+        const revalidateCacheClientSearch = revalidateCacheClient.bind('searchVinyls')
+
+        if (sourceVinyl === 'vc') {
+            switch (collectionId) {
+                case -1:
+                    await fetchAPI('/searches/mutate', {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            mutate: [
+                                {
+                                    operation: 'create',
+                                    attributes: {
+                                        vinyl_id: parseInt(vinylId),
+                                        format_vinyl_id: parseInt(data.format)
+                                    }
+                                }
+                            ]
+                        })
+                    })
+                    await revalidateCacheClientSearch({ tag: 'searchVinyls' })
+                    break
+                case -2:
+                    // add to trade
+                    await fetchAPI('/trades/mutate', {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            mutate: [
+                                {
+                                    operation: 'create',
+                                    attributes: {
+                                        vinyl_id: parseInt(vinylId),
+                                        format_vinyl_id: parseInt(data.format)
+                                    }
+                                }
+                            ]
+                        })
+                    })
+                    break
+                default:
+                    await fetchAPI('/collectionVinyl/mutate', {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            mutate: [
+                                {
+                                    operation: 'create',
+                                    attributes: {
+                                        collection_id: collectionId,
+                                        vinyl_id: parseInt(vinylId),
+                                        format_vinyl_id: parseInt(data.format)
+                                    }
+                                }
+                            ]
+                        })
+                    })
             }
-        })
+        } else {
+            // le vinyl est présent sur discogs mais pas sur vinyls-collection
+            // on récup les datas du vinyl sur discogs dans vinylResult
+            const vinylData = vinylsResult?.find(v => v.discog_id === parseInt(vinylId))
+            console.log(vinylData)
+        }
     }
 
     return (
@@ -202,105 +275,139 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                             className="mt-2"
                         >
                             {vinylsResult && (
-                                <>
-                                    <div className="m-1 flex flex-col gap-4">
-                                        {vinylsResult.map(item => (
-                                            <div
-                                                key={item.id}
-                                                className="grid grid-cols-4 gap-4 rounded-xl border-2 p-2"
-                                            >
-                                                <div className="col-span-1">
-                                                    <Image
-                                                        src={item.image ?? '/images/vinyl.svg'}
-                                                        alt={item.title}
-                                                        width={100}
-                                                        height={100}
-                                                        className="w-full h-full rounded-xl"
-                                                    />
-                                                </div>
-                                                <div className="col-span-2 flex flex-col self-center">
-                                                    <h2 className="text-lg font-bold">
-                                                        {item.title}
-                                                    </h2>
-                                                    <h3 className="text-sm text-gray-500">
-                                                        {item.artist}
-                                                    </h3>
-                                                </div>
-                                                <div className="col-span-1 flex flex-col items-center gap-4">
-                                                    <Selector label="Format" options={formats} />
-                                                    <button className="rounded-md bg-fuchsia-900 p-1 text-white hover:bg-opacity-80">
-                                                        Ajouter
-                                                    </button>
-                                                </div>
+                                <div className="m-1 flex flex-col gap-4">
+                                    {vinylsResult.map(item => (
+                                        <div
+                                            key={item.id}
+                                            className="grid grid-cols-4 gap-4 rounded-xl border-2 p-2"
+                                        >
+                                            <div className="col-span-1">
+                                                <Image
+                                                    src={prefixImage(item.image)}
+                                                    alt={item.title}
+                                                    width={100}
+                                                    height={100}
+                                                    className="h-full w-full rounded-xl"
+                                                />
                                             </div>
-                                        ))}
-                                        <div className="flex flex-row justify-center gap-4">
-                                            {hasMorePage && (
-                                                <button
-                                                    className="rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80"
-                                                    onClick={() => {
-                                                        if (indexStep === 0) {
-                                                            searchVinyls(currentPage + 1).then(
-                                                                r => {
-                                                                    setVinylsResult([
-                                                                        ...vinylsResult,
-                                                                        ...r.data
-                                                                    ])
-                                                                    if (
-                                                                        r.last_page >
-                                                                        currentPage + 1
-                                                                    ) {
-                                                                        setHasMorePage(true)
-                                                                    } else {
-                                                                        setHasMorePage(false)
-                                                                    }
-                                                                    setCurrentPage(currentPage + 1)
-                                                                }
-                                                            )
-                                                        } else {
-                                                            searchDiscogs(currentPage + 1).then(
-                                                                r => {
-                                                                    setVinylsResult([...r.data])
-                                                                    if (
-                                                                        r.last_page >
-                                                                        currentPage + 1
-                                                                    ) {
-                                                                        setHasMorePage(true)
-                                                                    } else {
-                                                                        setHasMorePage(false)
-                                                                    }
-                                                                    setCurrentPage(currentPage + 1)
-                                                                }
-                                                            )
-                                                        }
-                                                    }}
-                                                >
-                                                    Voir plus
-                                                </button>
-                                            )}
+                                            <div className="col-span-2 flex flex-col self-center">
+                                                <h2 className="text-lg font-bold">{item.title}</h2>
+                                                <h3 className="text-sm text-gray-500">
+                                                    {item.artist}
+                                                </h3>
+                                            </div>
+                                            <Formik
+                                                initialValues={{
+                                                    vinyl_id: item.id
+                                                        ? `vc_${item.id}`
+                                                        : `discogs_${item.discog_id}`,
+                                                    format: `${formats[0].id}`
+                                                }}
+                                                onSubmit={(values, { setSubmitting }) => {
+                                                    handleAddVinyl(values).then(() => {
+                                                        showToast({
+                                                            type: 'success',
+                                                            message: 'Vinyl ajouté'
+                                                        })
+                                                    })
+                                                }}
+                                            >
+                                                {({ handleSubmit, handleChange, values }) => (
+                                                    <form
+                                                        onSubmit={handleSubmit}
+                                                        className="col-span-1 flex flex-col items-center gap-4"
+                                                    >
+                                                        <input
+                                                            type="hidden"
+                                                            name="vinyl_id"
+                                                            value={values.vinyl_id}
+                                                        />
+                                                        <select
+                                                            name="format"
+                                                            value={values.format}
+                                                            onChange={handleChange}
+                                                            className="rounded-md border-2 p-1"
+                                                        >
+                                                            {formats.map(format => (
+                                                                <option
+                                                                    key={format.id}
+                                                                    value={format.id}
+                                                                >
+                                                                    {format.name}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                        <button
+                                                            type="submit"
+                                                            className="rounded-md bg-fuchsia-900 p-1 text-white hover:bg-opacity-80"
+                                                        >
+                                                            Ajouter
+                                                        </button>
+                                                    </form>
+                                                )}
+                                            </Formik>
+                                        </div>
+                                    ))}
+                                    <div className="flex flex-row justify-center gap-4">
+                                        {hasMorePage && (
                                             <button
                                                 className="rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80"
                                                 onClick={() => {
                                                     if (indexStep === 0) {
-                                                        searchDiscogs(1).then(r => {
-                                                            setVinylsResult([...r.data])
-                                                            if (r.last_page > 1) {
+                                                        searchVinyls(currentPage + 1).then(r => {
+                                                            setVinylsResult([
+                                                                ...vinylsResult,
+                                                                ...r.data
+                                                            ])
+                                                            if (r.last_page > currentPage + 1) {
                                                                 setHasMorePage(true)
                                                             } else {
                                                                 setHasMorePage(false)
                                                             }
-                                                            setCurrentPage(1)
-                                                            setIndexStep(1)
-                                                            setNextStep('Création manuelle')
+                                                            setCurrentPage(currentPage + 1)
+                                                        })
+                                                    } else {
+                                                        searchDiscogs(currentPage + 1).then(r => {
+                                                            setVinylsResult([...r.data])
+                                                            if (r.last_page > currentPage + 1) {
+                                                                setHasMorePage(true)
+                                                            } else {
+                                                                setHasMorePage(false)
+                                                            }
+                                                            setCurrentPage(currentPage + 1)
                                                         })
                                                     }
                                                 }}
                                             >
-                                                {nextStep}
+                                                Voir plus
                                             </button>
-                                        </div>
+                                        )}
+                                        <button
+                                            className="rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80"
+                                            onClick={() => {
+                                                if (indexStep === 0) {
+                                                    setTitleStep(
+                                                        'Recherche sur Discogs en cours...'
+                                                    )
+                                                    searchDiscogs(1).then(r => {
+                                                        setVinylsResult([...r.data])
+                                                        setTitleStep('Résultat de Discogs')
+                                                        if (r.last_page > 1) {
+                                                            setHasMorePage(true)
+                                                        } else {
+                                                            setHasMorePage(false)
+                                                        }
+                                                        setCurrentPage(1)
+                                                        setIndexStep(1)
+                                                        setNextStep('Création manuelle')
+                                                    })
+                                                }
+                                            }}
+                                        >
+                                            {nextStep}
+                                        </button>
                                     </div>
-                                </>
+                                </div>
                             )}
                         </AccordionItem>
                     </Accordion>

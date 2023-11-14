@@ -24,27 +24,28 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
     const [isLoadingDelete, setIsLoadingDelete] = useState(false)
 
     return (
-        <Link
-            href={`/vinyls/${item.vinyl_id}`}
-            className="group m-1 flex rounded border-2 border-gray-300"
-        >
-            <div className="relative h-full w-[100px] min-w-[100px]">
+        <div className="group m-1 flex rounded border-2 border-gray-300">
+            <Link
+                href={`/vinyls/${item.vinyl_id}`}
+                className="relative h-full w-[100px] min-w-[100px]"
+            >
                 <Image
-                    src={prefixImage(item.vinyl.image)}
-                    alt={item.vinyl.title}
-                    fill
+                    src={prefixImage(item.vinyl?.image)}
+                    alt={item.vinyl?.title}
+                    width={100}
+                    height={100}
                     className="cursor-pointer"
                     style={{ objectFit: 'cover' }}
                 />
-            </div>
+            </Link>
 
-            <div className="mx-3 flex-1 truncate py-0.5">
+            <Link href={`/vinyls/${item.vinyl_id}`} className="mx-3 flex-1 truncate py-0.5">
                 <h2 className="text-fuchsia-80 truncate text-lg font-bold group-hover:underline">
                     {item.vinyl.title}
                 </h2>
                 <h3 className="mb-2 truncate text-sm text-fuchsia-800">{item.vinyl.artist}</h3>
                 <p className="text-xs font-light">{item.vinyl.released}</p>
-            </div>
+            </Link>
             {isOwner && (
                 <div className="flex justify-center px-0.5 pt-0.5">
                     <button
@@ -56,7 +57,7 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
                         onClick={e => {
                             e.preventDefault()
                             setIsLoadingDelete(true)
-                            deleteVinyl(item.id).then(() => {
+                            deleteVinyl(item.id, collectionId).then(() => {
                                 setIsLoadingDelete(false)
                                 showToast({ type: 'success', message: 'Vinyle supprimé' })
                             })
@@ -70,6 +71,6 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
                     </button>
                 </div>
             )}
-        </Link>
+        </div>
     )
 }

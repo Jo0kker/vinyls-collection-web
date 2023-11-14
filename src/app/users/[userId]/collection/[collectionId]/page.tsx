@@ -40,15 +40,17 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
             tags: ['collection']
         },
         body: JSON.stringify({
-            filters: [
-                {
-                    field: 'user.id',
-                    operator: '=',
-                    value: userId
-                }
-            ],
-            includes: [{ relation: 'collectionVinyls' }, { relation: 'user' }],
-            limit: 6
+            search: {
+                filters: [
+                    {
+                        field: 'user.id',
+                        operator: '=',
+                        value: userId
+                    }
+                ],
+                includes: [{ relation: 'collectionVinyls' }, { relation: 'user' }],
+                limit: 6
+            }
         })
     })
 
@@ -59,14 +61,16 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
             tags: ['collection']
         },
         body: JSON.stringify({
-            filters: [
-                {
-                    field: 'id',
-                    operator: '=',
-                    value: collectionId
-                }
-            ],
-            limit: 6
+            search: {
+                filters: [
+                    {
+                        field: 'id',
+                        operator: '=',
+                        value: collectionId
+                    }
+                ],
+                limit: 6
+            }
         })
     })
 
@@ -89,16 +93,21 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
 
         list = await fetchAPI<CollectionVinyl[]>('/searches/search', {
             method: 'POST',
+            next: {
+                tags: ['searchVinyls']
+            },
             body: JSON.stringify({
-                filters: [
-                    {
-                        field: 'user.id',
-                        operator: '=',
-                        value: userId
-                    }
-                ],
-                includes: [{ relation: 'vinyl' }, { relation: 'format' }],
-                limit: 10
+                search: {
+                    filters: [
+                        {
+                            field: 'user.id',
+                            operator: '=',
+                            value: userId
+                        }
+                    ],
+                    includes: [{ relation: 'vinyl' }, { relation: 'format' }],
+                    limit: 10
+                }
             })
         })
         isEditable = false
@@ -107,16 +116,21 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
 
         list = await fetchAPI<CollectionVinyl[]>('/trades/search', {
             method: 'POST',
+            next: {
+                tags: ['tradeVinyls']
+            },
             body: JSON.stringify({
-                filters: [
-                    {
-                        field: 'user.id',
-                        operator: '=',
-                        value: userId
-                    }
-                ],
-                includes: [{ relation: 'vinyl' }, { relation: 'format' }],
-                limit: 10
+                search: {
+                    filters: [
+                        {
+                            field: 'user.id',
+                            operator: '=',
+                            value: userId
+                        }
+                    ],
+                    includes: [{ relation: 'vinyl' }, { relation: 'format' }],
+                    limit: 10
+                }
             })
         })
         isEditable = false
@@ -127,18 +141,20 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                 tags: ['collectionVinyl']
             },
             body: JSON.stringify({
-                filters: [
-                    {
-                        field: 'collection.id',
-                        operator: '=',
-                        value: collectionId
-                    }
-                ],
-                includes: [
-                    { relation: 'vinyl' },
-                    { relation: 'format' },
-                    { relation: 'collection' }
-                ]
+                search: {
+                    filters: [
+                        {
+                            field: 'collection.id',
+                            operator: '=',
+                            value: collectionId
+                        }
+                    ],
+                    includes: [
+                        { relation: 'vinyl' },
+                        { relation: 'format' },
+                        { relation: 'collection' }
+                    ]
+                }
             })
         })
         isEditable = isOwner
