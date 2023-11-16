@@ -32,19 +32,14 @@ export async function fetchAPI<T = any>(
                 : {})
         }
     }).then(async response => {
-        if (response.ok || !(response.status in [400, 401, 403, 404, 500, 503, 504])) {
+        if (response.ok || !([400, 401, 403, 404, 422, 500, 503, 504].includes(response.status))) {
             const data = await response.json()
             return data
         } else {
             const errorData = await response.json()
 
             throw new Error(
-                'Une erreur est survenue: ' +
-                    response.status +
-                    ': ' +
-                    errorData.message +
-                    ' ' +
-                    response.url
+                errorData.message
             )
         }
     })

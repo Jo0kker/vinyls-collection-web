@@ -1,21 +1,21 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 
-import { faPlus } from '@fortawesome/pro-duotone-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Modal, Tooltip } from 'flowbite-react'
-import { Formik } from 'formik'
+import {faPlus} from '@fortawesome/pro-duotone-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {Modal, Tooltip} from 'flowbite-react'
+import {Formik} from 'formik'
 import Image from 'next/image'
-import { useSession } from 'next-auth/react'
+import {useSession} from 'next-auth/react'
 
 import revalidateCacheClient from '@/components/actions/revalidateCacheClient'
-import { Accordion, AccordionItem } from '@/components/atom/accordion'
-import { InputText } from '@/components/atom/InputText'
-import { Vinyl } from '@/types'
-import { fetchAPI } from '@/utils/fetchAPI'
-import { prefixImage } from '@/utils/prefixImage'
-import { showToast } from '@/utils/toast'
+import {Accordion, AccordionItem} from '@/components/atom/accordion'
+import {InputText} from '@/components/atom/InputText'
+import {Vinyl} from '@/types'
+import {fetchAPI} from '@/utils/fetchAPI'
+import {prefixImage} from '@/utils/prefixImage'
+import {showToast} from '@/utils/toast'
 
 export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
     const session = useSession()
@@ -78,27 +78,34 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
     }
 
     const searchVinyls = async (page = 1) => {
+        const filters = []
+        if (searchName) {
+            filters.push({
+                field: 'title',
+                operator: 'like',
+                value: `%${searchName}%`
+            })
+        }
+        if (searchArtist) {
+            filters.push({
+                field: 'artist',
+                operator: 'like',
+                value: `%${searchArtist}%`
+            })
+        }
+        if (searchYear) {
+            filters.push({
+                field: 'released',
+                operator: 'like',
+                value: `%${searchYear}%`
+            })
+        }
+
         return await fetchAPI('/vinyls/search', {
             method: 'POST',
             body: JSON.stringify({
                 search: {
-                    filters: [
-                        {
-                            field: 'title',
-                            operator: 'like',
-                            value: `%${searchName}%`
-                        },
-                        {
-                            field: 'artist',
-                            operator: 'like',
-                            value: `%${searchArtist}%`
-                        },
-                        {
-                            field: 'released',
-                            operator: 'like',
-                            value: `%${searchYear}%`
-                        }
-                    ],
+                    filters: filters,
                     limit: 10,
                     page: page
                 }
@@ -124,6 +131,39 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         })
     }
 
+    const getVinylFormat = (item: any) => {
+        if (indexStep === 1) {
+            // find item.formats[0] in formats
+            const format = formats.find(f => f.name === item.formats[0])
+            if (format) {
+                return `${format.id}`
+            } else {
+                return `${formats[0].id}`
+            }
+        } else {
+            return `${formats[0].id}`
+        }
+    }
+
+    const getAllVinylFormats = (item: any): {
+        id?: number
+        name?: string
+    }[] => {
+        if (indexStep === 1) {
+            // return all formats in item.formats
+            return item.formats.map((f: string | undefined) => {
+                const format = formats.find(f2 => f2.name === f)
+                if (format) {
+                    return format
+                } else {
+                    return formats[0]
+                }
+            })
+        } else {
+            return formats
+        }
+    }
+
     const handleAddVinyl = async (data: { vinyl_id: string; format: string }) => {
         // if data.vinyl_id contains 'vc_' then it's a vinyls-collection vinyl
         // else it's a discogs vinyl
@@ -135,7 +175,7 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         if (sourceVinyl === 'vc') {
             switch (collectionId) {
                 case -1:
-                    await fetchAPI('/searches/mutate', {
+                    fetchAPI('/searches/mutate', {
                         method: 'POST',
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -151,12 +191,22 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                 }
                             ]
                         })
+                    }).then(async () => {
+                        await revalidateCacheClientSearch({ tag: 'searchVinyls' })
+                        showToast({
+                            type: 'success',
+                            message: 'Vinyl ajouté à la liste de souhaits'
+                        })
+                    }).catch(e => {
+                        showToast({
+                            type: 'error',
+                            message: e.message
+                        })
                     })
-                    await revalidateCacheClientSearch({ tag: 'searchVinyls' })
                     break
                 case -2:
                     // add to trade
-                    await fetchAPI('/trades/mutate', {
+                    fetchAPI('/trades/mutate', {
                         method: 'POST',
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -173,9 +223,24 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                             ]
                         })
                     })
+                      .then(async () => {
+                        await revalidateCacheClientSearch({ tag: 'tradeVinyls' })
+                          showToast({
+                              type: 'success',
+                              message: 'Vinyl ajouté à la liste de recherches'
+                          })
+                      })
+                      .catch(e => {
+                          showToast({
+                              type: 'error',
+                              message: e.message
+                          })
+                      })
+                    ;
+
                     break
                 default:
-                    await fetchAPI('/collectionVinyl/mutate', {
+                    fetchAPI('/collectionVinyl/mutate', {
                         method: 'POST',
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -191,6 +256,17 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                     }
                                 }
                             ]
+                        })
+                    }).then(async () => {
+                        await revalidateCacheClientSearch({ tag: 'collectionVinyl' })
+                        showToast({
+                            type: 'success',
+                            message: 'Vinyl ajouté à la collection'
+                        })
+                    }).catch(e => {
+                        showToast({
+                            type: 'error',
+                            message: e.message
                         })
                     })
             }
@@ -301,14 +377,12 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                     vinyl_id: item.id
                                                         ? `vc_${item.id}`
                                                         : `discogs_${item.discog_id}`,
-                                                    format: `${formats[0].id}`
+                                                    format: getVinylFormat(item)
                                                 }}
                                                 onSubmit={(values, { setSubmitting }) => {
                                                     handleAddVinyl(values).then(() => {
-                                                        showToast({
-                                                            type: 'success',
-                                                            message: 'Vinyl ajouté'
-                                                        })
+                                                        setIsOpen(false)
+                                                        resetAll()
                                                     })
                                                 }}
                                             >
@@ -328,7 +402,7 @@ export const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                             onChange={handleChange}
                                                             className="rounded-md border-2 p-1"
                                                         >
-                                                            {formats.map(format => (
+                                                            {getAllVinylFormats(item).map(format => (
                                                                 <option
                                                                     key={format.id}
                                                                     value={format.id}
