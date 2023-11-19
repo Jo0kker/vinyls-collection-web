@@ -20,11 +20,11 @@ export interface Vinyl {
     genre?: string
     released?: string
     image?: string
-    formats?: JSON
     provenance?: string
     discog_id?: number
     discog_url?: string
     discog_videos?: string
+    discog_img?: JSON
     created_at: Date
     updated_at?: Date
 }

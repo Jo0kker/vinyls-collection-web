@@ -16,8 +16,7 @@ export default async function HomePage() {
                 includes: [
                     { relation: 'vinyl' },
                     { relation: 'collection' },
-                    { relation: 'collection.user' },
-                    { relation: 'format' }
+                    { relation: 'collection.user' }
                 ],
                 limit: 6
             }

@@ -30,7 +30,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                         value: userId
                     }
                 ],
-                includes: [{ relation: 'vinyl' }, { relation: 'format' }],
+                includes: [{ relation: 'vinyl' }],
                 limit: 6
             }
         })

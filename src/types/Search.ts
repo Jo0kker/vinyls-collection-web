@@ -7,7 +7,7 @@ export interface Search {
     vinyl: Vinyl
     description?: string
     user_id: number
-    format_vinyl_id?: number
+    format?: string
     created_at: string
     updated_at: string
     user?: User
