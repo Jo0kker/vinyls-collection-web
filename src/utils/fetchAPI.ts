@@ -1,6 +1,7 @@
 import { getSession } from './authOptions'
 
 export type FetchResponse<T> = {
+    id: any
     data: T
     current_page: number
     from: number
@@ -38,7 +39,7 @@ export async function fetchAPI<T = any>(
         } else {
             const errorData = await response.json()
 
-            throw new Error(errorData.message)
+            throw new Error(JSON.stringify(errorData))
         }
     })
 }
