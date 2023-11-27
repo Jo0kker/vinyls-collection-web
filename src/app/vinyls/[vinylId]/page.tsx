@@ -11,7 +11,19 @@ type VinylPageProps = {
 }
 
 export default async function VinylPage({ params }: VinylPageProps) {
-    const { data: vinyl } = await fetchAPI<Vinyl>(`/vinyls/${params.vinylId}`)
+    const { data: vinyl } = await fetchAPI<Vinyl>('/vinyls/search',
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                filters: [
+                    {
+                        field: 'id',
+                        operator: '=',
+                        value: params.vinylId
+                    }
+                ]
+            })
+        })
 
     return (
         <div className="mt-4 flex flex-col gap-4 rounded bg-white px-4 py-4 pt-4 sm:pt-0">
@@ -130,10 +142,4 @@ export default async function VinylPage({ params }: VinylPageProps) {
             </div>
         </div>
     )
-}
-
-export async function generateStaticParams() {
-    const vinyls = await fetchAPI<{ id: number }[]>('/vinyls?limit=50')
-
-    return vinyls.data?.map(item => ({ vinylId: `${item.id}` }))
 }
