@@ -30,7 +30,7 @@ steps:
             from_secret: API_URL
 
   - name: install
-    image: node:18.15.0
+    image: node:20.9.0
     commands:
       - yarn install
 #      - yarn build

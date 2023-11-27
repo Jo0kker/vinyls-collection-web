@@ -6,14 +6,16 @@ export const fetchUserData = async (userId: number) => {
         const response = await fetchAPI('/users/search', {
             method: 'POST',
             body: JSON.stringify({
-                filters: [
-                    {
-                        field: 'id',
-                        operator: '=',
-                        value: userId
-                    }
-                ],
-                limit: 1
+                search: {
+                    filters: [
+                        {
+                            field: 'id',
+                            operator: '=',
+                            value: userId
+                        }
+                    ],
+                    limit: 1
+                }
             })
         })
         return response.data[0] as User

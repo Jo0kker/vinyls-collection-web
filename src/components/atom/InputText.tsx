@@ -1,8 +1,11 @@
 import React from 'react'
 
+import { cn } from '@/utils/classNames'
+
 type InputTextProps = {
-    value: string
-    setValue: (value: string) => void
+    value: string | File
+    setValue?: (value: string) => void
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
     name: string
     label: string
     type?: string
@@ -17,6 +20,7 @@ type InputTextProps = {
 export const InputText = ({
     value,
     setValue,
+    onChange,
     name,
     label,
     type,
@@ -27,16 +31,22 @@ export const InputText = ({
     tipClassname,
     tipMessage
 }: InputTextProps) => {
+    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue && setValue(e.target.value)
+        onChange && onChange(e)
+    }
+
     return (
-        <div className={'relative z-0 ' + className}>
+        <div className={cn('relative z-0', className)}>
             <input
                 type={type ?? 'text'}
                 id={name}
-                onChange={e => setValue(e.target.value)}
-                className={
-                    inputClassName +
-                    ' peer block w-full appearance-none border-0  border-b-2 border-white bg-transparent px-0 py-1.5 text-sm focus:border-fuchsia-600 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-fuchsia-500'
-                }
+                name={name}
+                onChange={onChangeHandler}
+                className={cn(
+                    'peer block w-full appearance-none border-0  border-b-2 bg-transparent px-0 py-1.5 text-sm focus:border-fuchsia-700 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-fuchsia-500',
+                    inputClassName ?? 'border-white'
+                )}
                 placeholder={' '}
                 value={value}
                 style={inputStyle}

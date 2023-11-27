@@ -22,19 +22,21 @@ export default function CollectorPage() {
     const [isLoading, setIsLoading] = useState(true)
 
     const getCollectors = useCallback(async () => {
-        const body: { [key: string]: unknown } = {
-            sort: [
-                {
-                    field: 'created_at',
-                    direction: 'desc'
-                }
-            ],
-            page: nextPage,
-            limit: 6
+        const body: { [key: string]: any } = {
+            search: {
+                sort: [
+                    {
+                        field: 'created_at',
+                        direction: 'desc'
+                    }
+                ],
+                page: nextPage,
+                limit: 6
+            }
         }
 
         if (lastSearchValue.current !== '') {
-            body['filters'] = [
+            body['search']['filters'] = [
                 {
                     field: 'name',
                     operator: 'like',
@@ -70,48 +72,46 @@ export default function CollectorPage() {
     }, [])
 
     return (
-        <>
-            <div className="mt-4 flex flex-col rounded bg-white px-4 py-4 sm:pt-0">
-                <div className="mb-4 mt-6 flex flex-row justify-center text-2xl font-bold">
-                    <span className="mr-3 text-emerald-500">&#47;&#47;</span>
-                    <h1 className="text-fuchsia-800">Liste des collectionneurs</h1>
-                    <span className="ml-3 text-orange-400">&#47;&#47;</span>
-                </div>
-                <div className="my-2">
-                    <InputText
-                        value={search}
-                        setValue={value => {
-                            setSearch(value)
-                            searchDebouce(value)
-                        }}
-                        name="search"
-                        inputStyle={{ borderColor: '#000' }}
-                        label="Rechercher un collectionneur"
-                    />
-                </div>
-                {collectors && collectors.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                        {collectors.map(user => (
-                            <UserCard user={user} key={user.id} />
-                        ))}
-                    </div>
-                )}
-                {isLoading && (
-                    <div className="flex h-full items-center justify-center">
-                        <Loading className="w-10 opacity-40" />
-                    </div>
-                )}
-                {infoPagination.current_page < infoPagination.last_page && (
-                    <div className="mt-4 flex justify-center">
-                        <button
-                            onClick={() => getCollectors()}
-                            className="rounded bg-fuchsia-800 px-4 py-2 font-bold text-white"
-                        >
-                            Voir plus
-                        </button>
-                    </div>
-                )}
+        <div className="mt-4 flex flex-col rounded bg-white px-4 py-4 sm:pt-0">
+            <div className="mb-4 mt-6 flex flex-row justify-center text-2xl font-bold">
+                <span className="mr-3 text-emerald-500">&#47;&#47;</span>
+                <h1 className="text-fuchsia-800">Liste des collectionneurs</h1>
+                <span className="ml-3 text-orange-400">&#47;&#47;</span>
             </div>
-        </>
+            <div className="my-2">
+                <InputText
+                    value={search}
+                    setValue={value => {
+                        setSearch(value)
+                        searchDebouce(value)
+                    }}
+                    name="search"
+                    inputStyle={{ borderColor: '#000' }}
+                    label="Rechercher un collectionneur"
+                />
+            </div>
+            {collectors && collectors.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                    {collectors.map(user => (
+                        <UserCard user={user} key={user.id} />
+                    ))}
+                </div>
+            )}
+            {isLoading && (
+                <div className="flex h-full items-center justify-center">
+                    <Loading className="w-10 opacity-40" />
+                </div>
+            )}
+            {infoPagination.current_page < infoPagination.last_page && (
+                <div className="mt-4 flex justify-center">
+                    <button
+                        onClick={() => getCollectors()}
+                        className="rounded bg-fuchsia-800 px-4 py-2 font-bold text-white"
+                    >
+                        Voir plus
+                    </button>
+                </div>
+            )}
+        </div>
     )
 }

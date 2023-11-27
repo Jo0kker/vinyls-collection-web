@@ -22,15 +22,17 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
         method: 'POST',
         withSession: true,
         body: JSON.stringify({
-            filters: [
-                {
-                    field: 'user.id',
-                    operator: '=',
-                    value: userId
-                }
-            ],
-            includes: [{ relation: 'vinyl' }, { relation: 'format' }],
-            limit: 6
+            search: {
+                filters: [
+                    {
+                        field: 'user.id',
+                        operator: '=',
+                        value: userId
+                    }
+                ],
+                includes: [{ relation: 'vinyl' }],
+                limit: 6
+            }
         })
     })
 

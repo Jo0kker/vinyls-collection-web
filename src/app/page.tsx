@@ -12,13 +12,14 @@ export default async function HomePage() {
     const vinyls = await fetchAPI<CollectionVinyl[]>('/collectionVinyl/search', {
         method: 'POST',
         body: JSON.stringify({
-            includes: [
-                { relation: 'vinyl' },
-                { relation: 'collection' },
-                { relation: 'collection.user' },
-                { relation: 'format' }
-            ],
-            limit: 6
+            search: {
+                includes: [
+                    { relation: 'vinyl' },
+                    { relation: 'collection' },
+                    { relation: 'collection.user' }
+                ],
+                limit: 6
+            }
         })
     })
 

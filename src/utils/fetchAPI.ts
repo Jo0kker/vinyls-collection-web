@@ -1,6 +1,7 @@
 import { getSession } from './authOptions'
 
 export type FetchResponse<T> = {
+    id: any
     data: T
     current_page: number
     from: number
@@ -17,12 +18,19 @@ export async function fetchAPI<T = any>(
 ): Promise<FetchResponse<T>> {
     const session = options?.withSession ? await getSession() : null
 
+    // if options.body not formData add headers 'application/json'
+    if (options?.body && !(options.body instanceof FormData)) {
+        options.headers = {
+            ...options.headers,
+            'Content-Type': 'application/json'
+        }
+    }
+
     return fetch(`${process.env.NEXT_PUBLIC_API_URL}/api` + url, {
         ...options,
         headers: {
             ...options?.headers,
             Accept: 'application/json',
-            'Content-Type': 'application/json',
             'Accept-Encoding': 'identity',
             'Access-Control-Allow-Origin': '*',
             ...(session
@@ -32,20 +40,13 @@ export async function fetchAPI<T = any>(
                 : {})
         }
     }).then(async response => {
-        if (response.ok || !(response.status in [400, 401, 403, 404, 500, 503, 504])) {
+        if (response.ok || ![400, 401, 403, 404, 422, 500, 503, 504].includes(response.status)) {
             const data = await response.json()
             return data
         } else {
             const errorData = await response.json()
 
-            throw new Error(
-                'Une erreur est survenue: ' +
-                    response.status +
-                    ': ' +
-                    errorData.message +
-                    ' ' +
-                    response.url
-            )
+            throw new Error(JSON.stringify(errorData))
         }
     })
 }

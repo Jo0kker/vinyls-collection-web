@@ -38,7 +38,7 @@ const LINKS = (isAuth?: boolean, userId?: number): Link[] => [
         ? [
               {
                   name: 'Votre espace collectionneur',
-                  href: `/users/${userId}/collection`,
+                  href: `/users/${userId}/collection/-1`,
                   icon: <FontAwesomeIcon icon={faAlbumCollection} color="purple" className="mr-2" />
               }
           ]

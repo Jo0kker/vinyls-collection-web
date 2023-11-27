@@ -2,16 +2,44 @@
 const nextConfig = {
     reactStrictMode: false,
     swcMinify: true,
-    experimental: {
-        serverActions: true
-    },
     images: {
-        domains: [
-            'picsum.photos',
-            'via.placeholder.com',
-            'i.discogs.com',
-            'localhost',
-            'vinyls-collection.fra1.cdn.digitaloceanspaces.com'
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'picsum.photos',
+                port: '',
+                pathname: '/**'
+            },
+            {
+                protocol: 'https',
+                hostname: 'i.scdn.co',
+                port: '',
+                pathname: '**'
+            },
+            {
+                protocol: 'http',
+                hostname: 'localhost',
+                port: '8000',
+                pathname: '/storage/**'
+            },
+            {
+                protocol: 'https',
+                hostname: '*.digitaloceanspaces.com',
+                port: '',
+                pathname: '/**'
+            },
+            {
+                protocol: 'https',
+                hostname: 'via.placeholder.com',
+                port: '',
+                pathname: '/**'
+            },
+            {
+                protocol: 'https',
+                hostname: 'i.discogs.com',
+                port: '',
+                pathname: '/**'
+            }
         ]
     },
     eslint: {

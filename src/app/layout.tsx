@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
 
-import { Metadata } from 'next'
+import { Metadata, Viewport } from 'next'
 import { Roboto } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 
@@ -28,7 +28,7 @@ export default async function Layout({ children }: PropsWithChildren) {
             <body
                 className={cn(
                     roboto.className,
-                    'text-body flex min-h-screen w-screen flex-col bg-gradient-to-tr from-fuchsia-900 via-fuchsia-900 to-fuchsia-800 text-gray-900 '
+                    'text-body flex min-h-screen w-full flex-col bg-gradient-to-tr from-fuchsia-900 via-fuchsia-900 to-fuchsia-800 text-gray-900 '
                 )}
             >
                 <Providers session={session}>
@@ -53,9 +53,6 @@ export const metadata: Metadata = {
     // creator: 'Ezio.dev',
     // authors: [{ name: 'Ezio.dev', url: 'https://ezio.dev' }],
     keywords: ['vinyls', 'collection', 'musique'],
-    themeColor: '#1e1b4b',
-    colorScheme: 'dark',
-    viewport: 'width=device-width, initial-scale=1',
     manifest: '/manifest.json',
     openGraph: {
         title: 'Vinyls Collection',
@@ -103,4 +100,11 @@ export const metadata: Metadata = {
         canonical: 'https://vinyls-collection.com'
     },
     metadataBase: new URL('https://vinyls-collection.com')
+}
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    themeColor: '#1e1b4b',
+    colorScheme: 'dark light'
 }

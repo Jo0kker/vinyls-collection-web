@@ -1,3 +1,4 @@
+import ButtonAddVinyl from '@/app/users/[userId]/collection/[collectionId]/components/ButtonAddVinyl'
 import { ButtonDeleteCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonDeleteCollection'
 import { ButtonEditCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonEditCollection'
 import { ButtonAddCollection } from '@/app/users/[userId]/collection/components/ButtonAddCollection'
@@ -39,15 +40,17 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
             tags: ['collection']
         },
         body: JSON.stringify({
-            filters: [
-                {
-                    field: 'user.id',
-                    operator: '=',
-                    value: userId
-                }
-            ],
-            includes: [{ relation: 'collectionVinyls' }, { relation: 'user' }],
-            limit: 6
+            search: {
+                filters: [
+                    {
+                        field: 'user.id',
+                        operator: '=',
+                        value: userId
+                    }
+                ],
+                includes: [{ relation: 'collectionVinyls' }, { relation: 'user' }],
+                limit: 6
+            }
         })
     })
 
@@ -58,14 +61,16 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
             tags: ['collection']
         },
         body: JSON.stringify({
-            filters: [
-                {
-                    field: 'id',
-                    operator: '=',
-                    value: collectionId
-                }
-            ],
-            limit: 6
+            search: {
+                filters: [
+                    {
+                        field: 'id',
+                        operator: '=',
+                        value: collectionId
+                    }
+                ],
+                limit: 6
+            }
         })
     })
 
@@ -88,16 +93,21 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
 
         list = await fetchAPI<CollectionVinyl[]>('/searches/search', {
             method: 'POST',
+            next: {
+                tags: ['searchVinyls']
+            },
             body: JSON.stringify({
-                filters: [
-                    {
-                        field: 'user.id',
-                        operator: '=',
-                        value: userId
-                    }
-                ],
-                includes: [{ relation: 'vinyl' }, { relation: 'format' }],
-                limit: 10
+                search: {
+                    filters: [
+                        {
+                            field: 'user.id',
+                            operator: '=',
+                            value: userId
+                        }
+                    ],
+                    includes: [{ relation: 'vinyl' }],
+                    limit: 10
+                }
             })
         })
         isEditable = false
@@ -106,16 +116,21 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
 
         list = await fetchAPI<CollectionVinyl[]>('/trades/search', {
             method: 'POST',
+            next: {
+                tags: ['tradeVinyls']
+            },
             body: JSON.stringify({
-                filters: [
-                    {
-                        field: 'user.id',
-                        operator: '=',
-                        value: userId
-                    }
-                ],
-                includes: [{ relation: 'vinyl' }, { relation: 'format' }],
-                limit: 10
+                search: {
+                    filters: [
+                        {
+                            field: 'user.id',
+                            operator: '=',
+                            value: userId
+                        }
+                    ],
+                    includes: [{ relation: 'vinyl' }],
+                    limit: 10
+                }
             })
         })
         isEditable = false
@@ -126,18 +141,16 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                 tags: ['collectionVinyl']
             },
             body: JSON.stringify({
-                filters: [
-                    {
-                        field: 'collection.id',
-                        operator: '=',
-                        value: collectionId
-                    }
-                ],
-                includes: [
-                    { relation: 'vinyl' },
-                    { relation: 'format' },
-                    { relation: 'collection' }
-                ]
+                search: {
+                    filters: [
+                        {
+                            field: 'collection.id',
+                            operator: '=',
+                            value: collectionId
+                        }
+                    ],
+                    includes: [{ relation: 'vinyl' }, { relation: 'collection' }]
+                }
             })
         })
         isEditable = isOwner
@@ -156,7 +169,10 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                 <span className="ml-3 text-orange-400">&#47;&#47;</span>
             </div>
 
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col md:flex-row md:gap-2">
+                <div className="mb-4 flex flex-row justify-center md:hidden">
+                    {isOwner && <ButtonAddCollection />}
+                </div>
                 <SelectorCollectionMobile userId={userId} defaultValue={collectionId}>
                     <option value="-1">Recherches</option>
                     <option value="-2">Échanges</option>
@@ -183,27 +199,32 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                         />
                     ))}
                 </nav>
-                <div className="flex w-64 w-full flex-auto flex-col gap-3">
+                <div className="flex w-full flex-auto flex-col gap-3">
                     <div className="flex flex-1 flex-col px-4 md:px-0">
+                        <div className="flex justify-between">
+                            <h2 className="mb-2 hidden self-end truncate text-2xl font-bold md:block">
+                                {isEditable ? collection.data[0].name : collectionName}
+                            </h2>
+                            {isOwner && (
+                                <div className="mb-1 ml-auto mt-2 flex flex-row">
+                                    <ButtonAddVinyl collectionId={collectionId} />
+                                    {isEditable && (
+                                        <>
+                                            <ButtonEditCollection collection={collection.data[0]} />
+                                            <ButtonDeleteCollection
+                                                collectionId={collectionId}
+                                                userId={userId}
+                                            />
+                                        </>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                         <div
                             className={cn('my-2 grid grid-cols-1', {
                                 'md:grid-cols-2 lg:grid-cols-3': list.data.length > 0
                             })}
                         >
-                            <div className="flex justify-between">
-                                <h2 className="mb-2 hidden truncate text-2xl font-bold md:block">
-                                    {isEditable ? collection.data[0].name : collectionName}
-                                </h2>
-                                {isEditable && (
-                                    <div className="mb-1 ml-auto flex flex-row">
-                                        <ButtonEditCollection collection={collection.data[0]} />
-                                        <ButtonDeleteCollection
-                                            collectionId={collectionId}
-                                            userId={userId}
-                                        />
-                                    </div>
-                                )}
-                            </div>
                             {list.data.length === 0 && <EmptyList />}
 
                             {list.data.map(item => (
@@ -211,6 +232,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                                     key={item.id}
                                     item={item}
                                     collectionId={params.collectionId}
+                                    isOwner={isOwner}
                                 />
                             ))}
                         </div>

@@ -22,6 +22,7 @@ export interface Vinyl {
     discog_id?: number
     discog_url?: string
     discog_videos?: string
+    discog_img?: JSON
     created_at: Date
     updated_at?: Date
 }
