@@ -10,7 +10,7 @@ import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 
 import revalidateCacheClient from '@/components/actions/revalidateCacheClient'
-import { Accordion, AccordionItem } from '@/components/atom/accordion'
+import { Accordion, AccordionItem } from '@/components/atom/Accordion'
 import { InputText } from '@/components/atom/InputText'
 import { Vinyl } from '@/types'
 import { fetchAPI } from '@/utils/fetchAPI'
@@ -25,7 +25,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
     // step 0: search vinyls in vinyls-collection
     // step 1: search vinyls in discogs
     // step 2: create vinyls manually
-    const [indexStep, setIndexStep] = useState(2)
+    const [indexStep, setIndexStep] = useState(0)
     const [searchName, setSearchName] = useState('')
     const [searchArtist, setSearchArtist] = useState('')
     const [searchYear, setSearchYear] = useState('')
@@ -167,6 +167,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         }
     }
 
+    // handle add vinyl discogs or vinyls-collection create discogs vinyls if not exist
     const handleAddVinyl = (data: { vinyl_id: string; format: string }) => {
         // if data.vinyl_id contains 'vc_' then it's a vinyls-collection vinyl
         // else it's a discogs vinyl
@@ -177,7 +178,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
             addVinyl({
                 collectionId: collectionId,
                 vinylId: parseInt(vinylId),
-                format: parseInt(data.format)
+                format: data.format
             })
         } else {
             // create vinyls in vinyls-collection
@@ -195,7 +196,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                     addVinyl({
                         collectionId: collectionId,
                         vinylId: newVinylId,
-                        format: parseInt(data.format)
+                        format: data.format
                     })
                 })
                 .catch(e => {
@@ -216,6 +217,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         }
     }
 
+    // add vinyl to collection, (-1) wishlist, (-2) trade
     const addVinyl = ({
         collectionId,
         vinylId,
@@ -223,7 +225,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
     }: {
         collectionId: number
         vinylId: number
-        format: number
+        format: string
     }) => {
         switch (collectionId) {
             case -1:
@@ -333,6 +335,46 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         }
     }
 
+    const storeVinyl = (data: {
+        title: string
+        artist: string
+        year: string
+        genre: string
+        image: File | string
+        format: string
+    }) => {
+        // send data to api
+        const formData = new FormData()
+        formData.append('title', data.title)
+        formData.append('artist', data.artist)
+        formData.append('year', data.year)
+        formData.append('genre', data.genre)
+        formData.append('image', data.image)
+
+        fetchAPI('/vinyls', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`
+                // 'Content-Type': 'multipart/form-data'
+            },
+            body: formData
+        })
+            .then(res => {
+                const vinylId = res.id
+                addVinyl({
+                    collectionId: collectionId,
+                    vinylId: vinylId,
+                    format: data.format
+                })
+            })
+            .catch(e => {
+                showToast({
+                    type: 'error',
+                    message: e.message
+                })
+            })
+    }
+
     return (
         <>
             <Tooltip content="Ajouter un vinyls" placement="top" className="mr-1">
@@ -437,7 +479,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                             : `discogs_${item.discog_id}`,
                                                         format: getVinylFormat(item)
                                                     }}
-                                                    onSubmit={(values, { setSubmitting }) => {
+                                                    onSubmit={values => {
                                                         handleAddVinyl(values)
                                                     }}
                                                 >
@@ -558,23 +600,22 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                 title: '',
                                 artist: '',
                                 year: '',
+                                genre: '',
                                 image: '',
                                 format: ''
                             }}
-                            onSubmit={(
-                                values: {
-                                    title: string
-                                    artist: string
-                                    year: string
-                                    image: File | string
-                                    format: string
-                                },
-                                { setSubmitting }
-                            ) => {
-                                console.log(values)
+                            onSubmit={(values: {
+                                title: string
+                                artist: string
+                                year: string
+                                genre: string
+                                image: File | string
+                                format: string
+                            }) => {
+                                storeVinyl(values)
                             }}
                         >
-                            {({ handleSubmit, handleChange, values }) => (
+                            {({ handleSubmit, handleChange, values, setFieldValue }) => (
                                 <form
                                     onSubmit={handleSubmit}
                                     className="center flex flex-col gap-2 px-2 pt-3"
@@ -603,10 +644,25 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                         name="year"
                                         label="Année"
                                     />
+                                    <InputText
+                                        className="h-14"
+                                        value={values.genre}
+                                        inputClassName="border-gray-200"
+                                        onChange={handleChange}
+                                        name="genre"
+                                        label="Genre"
+                                    />
                                     <input
                                         type="file"
                                         name="image"
-                                        onChange={handleChange}
+                                        onChange={e => {
+                                            if (
+                                                e.currentTarget.files &&
+                                                e.currentTarget.files.length > 0
+                                            ) {
+                                                setFieldValue('image', e.currentTarget.files[0])
+                                            }
+                                        }}
                                         className="h-14"
                                     />
                                     <select

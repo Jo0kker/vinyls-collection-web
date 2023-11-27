@@ -18,12 +18,19 @@ export async function fetchAPI<T = any>(
 ): Promise<FetchResponse<T>> {
     const session = options?.withSession ? await getSession() : null
 
+    // if options.body not formData add headers 'application/json'
+    if (options?.body && !(options.body instanceof FormData)) {
+        options.headers = {
+            ...options.headers,
+            'Content-Type': 'application/json'
+        }
+    }
+
     return fetch(`${process.env.NEXT_PUBLIC_API_URL}/api` + url, {
         ...options,
         headers: {
             ...options?.headers,
             Accept: 'application/json',
-            'Content-Type': 'application/json',
             'Accept-Encoding': 'identity',
             'Access-Control-Allow-Origin': '*',
             ...(session

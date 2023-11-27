@@ -1,3 +1,4 @@
+import ButtonAddVinyl from '@/app/users/[userId]/collection/[collectionId]/components/ButtonAddVinyl'
 import { ButtonDeleteCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonDeleteCollection'
 import { ButtonEditCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonEditCollection'
 import { ButtonAddCollection } from '@/app/users/[userId]/collection/components/ButtonAddCollection'
@@ -11,7 +12,6 @@ import { fetchUserData } from '@/utils/fetchUserData'
 
 import { EmptyList } from '../components/EmptyList'
 import { VinylItem } from '../components/VinylItem'
-import ButtonAddVinyl from '@/app/users/[userId]/collection/[collectionId]/components/ButtonAddVinyl'
 
 type CollectionPageProps = {
     params: {
@@ -149,10 +149,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                             value: collectionId
                         }
                     ],
-                    includes: [
-                        { relation: 'vinyl' },
-                        { relation: 'collection' }
-                    ]
+                    includes: [{ relation: 'vinyl' }, { relation: 'collection' }]
                 }
             })
         })

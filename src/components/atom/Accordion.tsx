@@ -2,10 +2,11 @@ import React, {
     useState,
     useRef,
     useEffect,
-    FC,
     ReactElement,
     PropsWithChildren,
-    cloneElement
+    cloneElement,
+    Children,
+    isValidElement
 } from 'react'
 
 import { cn } from '@/utils/classNames'
@@ -65,8 +66,8 @@ interface AccordionProps {
 export const Accordion = ({ children, openIndex, onToggle }: PropsWithChildren<AccordionProps>) => {
     return (
         <div>
-            {React.Children.map(children, (child, index) => {
-                if (React.isValidElement(child)) {
+            {Children.map(children, (child, index) => {
+                if (isValidElement(child)) {
                     return cloneElement(child as ReactElement<any>, {
                         isOpen: openIndex === index,
                         onToggle: () => onToggle(index),
