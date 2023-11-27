@@ -3,7 +3,7 @@ import React from 'react'
 import { cn } from '@/utils/classNames'
 
 type InputTextProps = {
-    value: string | File
+    value: string
     setValue?: (value: string) => void
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
     name: string
