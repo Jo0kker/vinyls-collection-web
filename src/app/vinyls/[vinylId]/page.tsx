@@ -11,19 +11,18 @@ type VinylPageProps = {
 }
 
 export default async function VinylPage({ params }: VinylPageProps) {
-    const { data: vinyl } = await fetchAPI<Vinyl>('/vinyls/search',
-        {
-            method: 'POST',
-            body: JSON.stringify({
-                filters: [
-                    {
-                        field: 'id',
-                        operator: '=',
-                        value: params.vinylId
-                    }
-                ]
-            })
+    const { data: vinyl } = await fetchAPI<Vinyl>('/vinyls/search', {
+        method: 'POST',
+        body: JSON.stringify({
+            filters: [
+                {
+                    field: 'id',
+                    operator: '=',
+                    value: params.vinylId
+                }
+            ]
         })
+    })
 
     return (
         <div className="mt-4 flex flex-col gap-4 rounded bg-white px-4 py-4 pt-4 sm:pt-0">

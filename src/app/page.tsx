@@ -9,10 +9,16 @@ import { CollectionVinyl } from '@/types'
 import { fetchAPI } from '@/utils/fetchAPI'
 
 export default async function HomePage() {
-    const vinyls = await fetchAPI<CollectionVinyl[]>('/collectionVinyl/search', {
+    const collectionVinyls = await fetchAPI<CollectionVinyl[]>('/collectionVinyl/search', {
         method: 'POST',
         body: JSON.stringify({
             search: {
+                sorts: [
+                    {
+                        field: 'created_at',
+                        direction: 'DESC'
+                    }
+                ],
                 includes: [
                     { relation: 'vinyl' },
                     { relation: 'collection' },
@@ -55,7 +61,7 @@ export default async function HomePage() {
                 </div>
             </div>
 
-            {vinyls.data?.length && (
+            {collectionVinyls.data?.length && (
                 <div>
                     <h2 className="mb-2 mt-4 text-xl font-bold text-fuchsia-800">
                         <span className="text-emerald-500">
@@ -63,7 +69,7 @@ export default async function HomePage() {
                         </span>{' '}
                         Derniers vinyls ajoutés
                     </h2>
-                    <Carousel vinyls={vinyls.data} />
+                    <Carousel collectionVinyls={collectionVinyls.data} />
 
                     <Link href="/vinyls">
                         <Button className="my-4">En voir davantage</Button>

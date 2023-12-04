@@ -1,5 +1,5 @@
-import { faFacebook } from '@fortawesome/free-brands-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faFacebook } from '@fortawesome/free-brands-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -59,12 +59,12 @@ export default function Footer() {
                     </span>
 
                     <div className="flex justify-center lg:justify-end">
-                        <Link href="www">
-                            <FontAwesomeIcon
-                                icon={faFacebook}
-                                className="h-[1rem] w-[1rem] cursor-pointer hover:text-orange-700"
-                            />
-                        </Link>
+                        {/* <Link href="www"> */}
+                        {/*     <FontAwesomeIcon */}
+                        {/*         icon={faFacebook} */}
+                        {/*         className="h-[1rem] w-[1rem] cursor-pointer hover:text-orange-700" */}
+                        {/*     /> */}
+                        {/* </Link> */}
                     </div>
                 </div>
 

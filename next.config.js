@@ -42,11 +42,6 @@ const nextConfig = {
             }
         ]
     },
-    experimental: {
-        serverActions: {
-            allowedOrigins: ['*']
-        }
-    },
     eslint: {
         // On peut désactiver pour l'instant le temps de se familiariser avec les différentes règles
         ignoreDuringBuilds: true

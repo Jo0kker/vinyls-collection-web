@@ -27,26 +27,33 @@ const LINKS = (isAuth?: boolean, userId?: number): Link[] => [
     {
         name: 'Les vinyles',
         href: '/vinyls',
-        icon: <FontAwesomeIcon icon={faCompactDisc} color="purple" className="mr-2" />
+        icon: <FontAwesomeIcon icon={faCompactDisc} color="purple" className="mr-2" size="lg" />
     },
     {
         name: 'Les collectionneurs',
         href: '/collector',
-        icon: <FontAwesomeIcon icon={faUserMusic} color="purple" className="mr-2" />
+        icon: <FontAwesomeIcon icon={faUserMusic} color="purple" className="mr-2" size="lg" />
     },
     ...(isAuth
         ? [
               {
                   name: 'Votre espace collectionneur',
                   href: `/users/${userId}/collection/-1`,
-                  icon: <FontAwesomeIcon icon={faAlbumCollection} color="purple" className="mr-2" />
+                  icon: (
+                      <FontAwesomeIcon
+                          icon={faAlbumCollection}
+                          color="purple"
+                          className="mr-2"
+                          size="lg"
+                      />
+                  )
               }
           ]
         : []),
     {
         name: 'Forum',
         href: '/forum',
-        icon: <FontAwesomeIcon icon={faComment} color="purple" className="mr-2" />
+        icon: <FontAwesomeIcon icon={faComment} color="purple" className="mr-2" size="lg" />
     }
 ]
 

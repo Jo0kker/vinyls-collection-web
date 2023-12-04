@@ -16,7 +16,7 @@ export function RegisterForm() {
     const [password_confirmation, setPasswordConfirmation] = useState('')
 
     const register = async () => {
-        await fetchAPI('/auth/register', {
+        await fetchAPI('/register', {
             method: 'POST',
             body: JSON.stringify({
                 name: name,
@@ -30,7 +30,12 @@ export function RegisterForm() {
     }
 
     return (
-        <form onSubmit={register}>
+        <form
+            onSubmit={e => {
+                e.preventDefault()
+                register()
+            }}
+        >
             <div className="flex flex-col items-center justify-center">
                 <div className="mt-4 flex flex-col justify-center gap-2 p-4 ">
                     <div className="flex flex-col justify-center gap-4 rounded bg-black bg-opacity-20 p-4 align-middle lg:flex-row">
@@ -64,12 +69,13 @@ export function RegisterForm() {
                             name="password_confirmation"
                             setValue={setPasswordConfirmation}
                             value={password_confirmation}
+                            type="password"
                         />
                     </div>
                     <div className="flex flex-col items-center justify-center lg:justify-around">
                         <div>
                             <button
-                                className="font-roboto h-auto rounded bg-fuchsia-800 px-3 px-4 py-2 text-white"
+                                className="font-roboto h-auto rounded bg-fuchsia-800 px-4 py-2 text-white"
                                 type="submit"
                             >
                                 S'enregistrer

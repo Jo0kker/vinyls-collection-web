@@ -38,7 +38,7 @@ const MobileMenu = ({ session, links }: MenuItem) => {
     }
 
     return (
-        <div className="fixed bottom-0 left-1/2 z-50 w-full -translate-x-1/2 border-t border-gray-200 bg-white dark:border-gray-600 dark:bg-gray-700 md:hidden">
+        <div className="fixed bottom-0 left-1/2 z-50 w-full -translate-x-1/2 border-t border-gray-200 bg-white pb-2 dark:border-gray-600 dark:bg-gray-700 md:hidden">
             {/* top part of navBar */}
             {subMenu?.length !== 0 && (
                 <div className="w-full border-b-2 border-purple-700">
