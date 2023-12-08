@@ -23,13 +23,17 @@ export default function Header() {
             <div className="flex justify-center">
                 <div className="mb-14 flex justify-center drop-shadow-2xl">
                     <Link href="/">
-                        <h1 className="z-10 mt-8 flex flex-col items-center font-bold leading-relaxed text-white shadow-blue-600 drop-shadow-2xl">
-                            <SoundAnimation className="absolute -top-11 -z-10 w-56 opacity-50 sm:-top-[89px] sm:w-96" />
-                            <span className="bgr bg-gradient-to-l from-red-500 via-yellow-500 to-blue-800 bg-clip-text pb-5 text-5xl font-black leading-relaxed text-transparent sm:text-8xl">
-                                Vinyls
-                            </span>
-                            <span>Collection</span>
-                        </h1>
+                        <div className="relative mt-8 flex flex-col items-center font-bold text-white">
+                            <div className="absolute -top-[2rem] sm:-top-[6rem] sm:-left-[4rem] bottom-0 -left-[2rem] right-0 z-[-1] opacity-50">
+                                <SoundAnimation className="w-[12rem] sm:w-[25rem]" />
+                            </div>
+                            <h1 className="z-10 flex flex-col items-center leading-relaxed shadow-blue-600 drop-shadow-2xl">
+                                <span className="bgr bg-gradient-to-l from-red-500 via-yellow-500 to-blue-800 bg-clip-text text-5xl font-black leading-relaxed text-transparent sm:text-8xl">
+                                    Vinyls
+                                </span>
+                                <span>Collection</span>
+                            </h1>
+                        </div>
                     </Link>
                 </div>
             </div>

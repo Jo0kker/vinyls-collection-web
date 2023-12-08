@@ -664,6 +664,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                             }
                                         }}
                                         className="h-14"
+                                        accept="image/png, image/jpeg"
                                     />
                                     <select
                                         name="format"
