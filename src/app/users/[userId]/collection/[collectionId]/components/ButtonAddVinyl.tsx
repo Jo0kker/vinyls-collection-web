@@ -584,6 +584,9 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                             setIndexStep(1)
                                                             setNextStep('Création manuelle')
                                                         })
+                                                    } else if (indexStep === 1) {
+                                                        setIndexStep(2)
+                                                        setNextStep('Création manuelle')
                                                     }
                                                 }}
                                             >

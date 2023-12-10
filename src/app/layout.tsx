@@ -4,6 +4,7 @@ import { Metadata, Viewport } from 'next'
 import { Roboto } from 'next/font/google'
 import NextTopLoader from 'nextjs-toploader'
 
+import HelperModal from '@/components/home/HelperModal'
 import { getSession } from '@/utils/authOptions'
 import { cn } from '@/utils/classNames'
 
@@ -32,6 +33,7 @@ export default async function Layout({ children }: PropsWithChildren) {
                 )}
             >
                 <Providers session={session}>
+                    <HelperModal />
                     <Header />
                     <NextTopLoader />
                     <main className="mx-auto w-full max-w-screen-xl flex-1 space-y-4 p-4 md:px-0">

@@ -24,7 +24,7 @@ export default function Header() {
                 <div className="mb-14 flex justify-center drop-shadow-2xl">
                     <Link href="/">
                         <div className="relative mt-8 flex flex-col items-center font-bold text-white">
-                            <div className="absolute -top-[2rem] sm:-top-[6rem] sm:-left-[4rem] bottom-0 -left-[2rem] right-0 z-[-1] opacity-50">
+                            <div className="absolute -left-[2rem] -top-[2rem] bottom-0 right-0 z-[-1] opacity-50 sm:-left-[4rem] sm:-top-[6rem]">
                                 <SoundAnimation className="w-[12rem] sm:w-[25rem]" />
                             </div>
                             <h1 className="z-10 flex flex-col items-center leading-relaxed shadow-blue-600 drop-shadow-2xl">
