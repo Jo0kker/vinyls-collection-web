@@ -37,12 +37,14 @@ export function ButtonAddCollection() {
                             setValue={setCollectionName}
                             name="collectionName"
                             label="Nom de la collection"
+                            inputClassName="border-gray-300 dark:border-gray-700"
                         />
                         <InputText
                             value={collectionDescription}
                             setValue={setCollectionDescription}
                             name="collectionDescription"
                             label="Description de la collection"
+                            inputClassName="border-gray-300 dark:border-gray-700"
                         />
                         <Button
                             onClick={() => {

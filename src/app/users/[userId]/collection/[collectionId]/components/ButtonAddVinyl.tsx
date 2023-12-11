@@ -64,6 +64,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         setOpenIndex(0)
         setCurrentPage(1)
         setHasMorePage(false)
+        setIndexStep(0)
     }
 
     const searchDiscogs = async (page = 1) => {
@@ -450,6 +451,13 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                             >
                                 {vinylsResult && (
                                     <div className="m-1 flex flex-col gap-4">
+                                        {vinylsResult.length === 0 && (
+                                            <div className="flex flex-col items-center justify-center">
+                                                <h2 className="text-lg font-bold">
+                                                    Aucun résultat
+                                                </h2>
+                                            </div>
+                                        )}
                                         {vinylsResult.map(item => (
                                             <div
                                                 key={item.id || item.discog_id}

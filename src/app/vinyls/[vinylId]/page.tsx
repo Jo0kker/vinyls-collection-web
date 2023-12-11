@@ -1,8 +1,12 @@
+import { faCompactDisc, faVideo } from '@fortawesome/pro-duotone-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, Accordion, AccordionContent, AccordionPanel, AccordionTitle } from 'flowbite-react';
 import Image from 'next/image'
 
 import { Vinyl } from '@/types'
 import { fetchAPI } from '@/utils/fetchAPI'
 import { prefixImage } from '@/utils/prefixImage'
+import AccordionVideo from '@/app/vinyls/[vinylId]/components/AccordionVideo';
 
 type VinylPageProps = {
     params: {
@@ -11,18 +15,22 @@ type VinylPageProps = {
 }
 
 export default async function VinylPage({ params }: VinylPageProps) {
-    const { data: vinyl } = await fetchAPI<Vinyl>('/vinyls/search', {
+    const { data: vinyls } = await fetchAPI<Vinyl[]>('/vinyls/search', {
         method: 'POST',
         body: JSON.stringify({
-            filters: [
-                {
-                    field: 'id',
-                    operator: '=',
-                    value: params.vinylId
-                }
-            ]
+            search: {
+                filters: [
+                    {
+                        field: 'id',
+                        operator: '=',
+                        value: params.vinylId
+                    }
+                ]
+            }
         })
     })
+
+    const vinyl = vinyls[0]
 
     return (
         <div className="mt-4 flex flex-col gap-4 rounded bg-white px-4 py-4 pt-4 sm:pt-0">
@@ -32,7 +40,7 @@ export default async function VinylPage({ params }: VinylPageProps) {
                 <span className="ml-3 text-orange-400">&#47;&#47;</span>
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col items-center">
                 <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
                     <Image
                         src={prefixImage(vinyl.image)}
@@ -67,77 +75,55 @@ export default async function VinylPage({ params }: VinylPageProps) {
                     </table>
                 </div>
 
-                {/* {vinyl.discogs && (
+                {vinyl.discog_id && (
                     <>
-                        <div className='flex flex-col items-center justify-center'}>
-                            <h2 className='mb-2 mt-4 text-xl font-bold text-fuchsia-800'}>
-                                <span className='text-emerald-500'}>
+                        {vinyl.track_list && (
+                          <div className='flex flex-col items-center justify-center w-full md:w-1/2'>
+                              <h2 className='mb-2 mt-4 text-xl font-bold text-fuchsia-800'>
+                                <span className='text-emerald-500'>
                                     <FontAwesomeIcon icon={faCompactDisc} />{' '}
                                 </span>{' '}
-                                Tracklist
-                            </h2>
-                            <table className='table-auto text-sm'}>
-                                <tbody>
-                                    {vinyl.discogs.tracklist.map((track, index: number) => (
-                                        <tr key={index}>
-                                            <td className='px-4 py-2'}>{track.position}</td>
-                                            <td className='px-4 py-2'}>{track.title}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        {vinyl.discogs.videos && (
-                            <div className='flex flex-col items-center justify-center'}>
-                                <h2 className='mb-2 mt-4 text-xl font-bold text-fuchsia-800'}>
-                                    <span className='text-emerald-500'}>
+                                  Tracklist
+                              </h2>
+                              <div className="overflow-x-auto w-full">
+                                  <Table hoverable>
+                                      <TableHead className="bg-gray-100 dark:bg-gray-900">
+                                          <TableHeadCell className="whitespace-nowrap">Position</TableHeadCell>
+                                          <TableHeadCell>Titre</TableHeadCell>
+                                          <TableHeadCell>Durée</TableHeadCell>
+                                      </TableHead>
+                                      <TableBody className="w-full divide-y">
+                                          {JSON.parse(vinyl.track_list).map((track: any, index: number) => (
+                                              <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800" key={index}>
+                                                  <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                                      {track.position}
+                                                  </TableCell>
+                                                  <TableCell>{track.title}</TableCell>
+                                                  <TableCell>{track.duration}</TableCell>
+                                              </TableRow>
+                                          ))}
+                                      </TableBody>
+                                  </Table>
+                              </div>
+                          </div>
+                        )}
+                        {vinyl.discog_videos && (
+                            <div className='flex flex-col items-center justify-center w-full'>
+                                <h2 className='mb-2 mt-4 text-xl font-bold text-fuchsia-800'>
+                                    <span className='text-emerald-500'>
                                         <FontAwesomeIcon icon={faVideo} />{' '}
                                     </span>{' '}
                                     Videos
                                 </h2>
-                                <div className='flex flex-col gap-1'}>
-                                    <Accordion>
-                                        {vinyl.discogs.videos.map((video, index: number) => {
-                                            if (index < 3) {
-                                                return (
-                                                    <Accordion.Panel key={index}>
-                                                        <Accordion.Title>
-                                                            {video.title}
-                                                        </Accordion.Title>
-                                                        <Accordion.Content>
-                                                            <YoutubeEmbed url={video.uri} />
-                                                        </Accordion.Content>
-                                                    </Accordion.Panel>
-                                                )
-                                            } else {
-                                                if (showMoreVideo) {
-                                                    return (
-                                                        <Accordion.Panel key={index}>
-                                                            <Accordion.Title>
-                                                                {video.title}
-                                                            </Accordion.Title>
-                                                            <Accordion.Content>
-                                                                <YoutubeEmbed url={video.uri} />
-                                                            </Accordion.Content>
-                                                        </Accordion.Panel>
-                                                    )
-                                                } else {
-                                                    return <></>
-                                                }
-                                            }
-                                        })}
-                                    </Accordion>
-                                </div>
-                                <Button
-                                    onClick={() => setShowMoreVideo(!showMoreVideo)}
-                                    className='my-4'}
-                                >
-                                    {showMoreVideo ? 'Voir moins' : 'Voir plus'}
-                                </Button>
+                                <>
+                                    <div className="flex flex-col w-full">
+                                        <AccordionVideo videos={JSON.parse(vinyl.discog_videos)} />
+                                    </div>
+                                </>
                             </div>
                         )}
                     </>
-                )} */}
+                )}
             </div>
         </div>
     )
