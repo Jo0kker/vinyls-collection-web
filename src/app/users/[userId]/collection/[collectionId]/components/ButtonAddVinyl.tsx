@@ -460,7 +460,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                         )}
                                         {vinylsResult.length > 0 && vinylsResult.map(item => (
                                             <div
-                                                key={item.id || item.discog_id}
+                                                key={item.id}
                                                 className="grid grid-cols-4 gap-4 rounded-xl border-2 p-2"
                                             >
                                                 <div className="col-span-1">
