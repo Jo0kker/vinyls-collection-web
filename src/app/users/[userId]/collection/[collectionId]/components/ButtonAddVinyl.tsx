@@ -449,7 +449,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                 onToggle={() => {}}
                                 className="mt-2"
                             >
-                                {vinylsResult && vinylsResult.length > 0 && (
+                                {vinylsResult && (
                                     <div className="m-1 flex flex-col gap-4">
                                         {vinylsResult.length === 0 && (
                                             <div className="flex flex-col items-center justify-center">
@@ -458,7 +458,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                 </h2>
                                             </div>
                                         )}
-                                        {vinylsResult.map(item => (
+                                        {vinylsResult.length > 0 && vinylsResult.map(item => (
                                             <div
                                                 key={item.id || item.discog_id}
                                                 className="grid grid-cols-4 gap-4 rounded-xl border-2 p-2"
