@@ -449,7 +449,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                 onToggle={() => {}}
                                 className="mt-2"
                             >
-                                {vinylsResult && (
+                                {vinylsResult && vinylsResult.length > 0 && (
                                     <div className="m-1 flex flex-col gap-4">
                                         {vinylsResult.length === 0 && (
                                             <div className="flex flex-col items-center justify-center">
@@ -555,7 +555,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                         } else {
                                                             searchDiscogs(currentPage + 1).then(
                                                                 r => {
-                                                                    setVinylsResult([...r.data])
+                                                                    setVinylsResult(r.data)
                                                                     if (
                                                                         r.last_page >
                                                                         currentPage + 1
@@ -581,7 +581,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                             'Recherche sur Discogs en cours...'
                                                         )
                                                         searchDiscogs(1).then(r => {
-                                                            setVinylsResult([...r.data])
+                                                            setVinylsResult(r.data)
                                                             setTitleStep('Résultat de Discogs')
                                                             if (r.last_page > 1) {
                                                                 setHasMorePage(true)
