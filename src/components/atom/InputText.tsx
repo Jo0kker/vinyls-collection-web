@@ -15,6 +15,8 @@ type InputTextProps = {
     labelClassName?: string
     tipClassname?: string
     tipMessage?: string
+    required?: boolean
+    formikOnChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const InputText = ({
@@ -29,7 +31,9 @@ export const InputText = ({
     inputStyle,
     labelClassName,
     tipClassname,
-    tipMessage
+    tipMessage,
+    required = false,
+    formikOnChange
 }: InputTextProps) => {
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue && setValue(e.target.value)
@@ -42,12 +46,13 @@ export const InputText = ({
                 type={type ?? 'text'}
                 id={name}
                 name={name}
-                onChange={onChangeHandler}
+                onChange={formikOnChange ?? onChangeHandler}
                 className={cn(
                     'peer block w-full appearance-none border-0  border-b-2 bg-transparent px-0 py-1.5 text-sm focus:border-fuchsia-700 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-fuchsia-500',
                     inputClassName ?? 'border-white'
                 )}
                 placeholder={' '}
+                required={required}
                 value={value}
                 style={inputStyle}
                 aria-describedby={name + '_help'}

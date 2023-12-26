@@ -7,9 +7,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Modal } from 'flowbite-react'
 
 import { cn } from '@/utils/classNames'
+import {getCookie, getCookies, setCookie} from "cookies-next";
 
 export default function HelperModal() {
-    const [openModal, setOpenModal] = useState(true)
+    let initialShowHelper = true
+    const helperModalCookie = getCookie('helperModal')
+
+    if (helperModalCookie === 'false') {
+        initialShowHelper = false
+    }
+    const [openModal, setOpenModal] = useState(initialShowHelper)
     const [showHelper, setShowHelper] = useState(true)
 
     const showModal = () => {
@@ -19,6 +26,7 @@ export default function HelperModal() {
     const hideHelperModal = (e: any) => {
         e.stopPropagation()
         setShowHelper(false)
+        setCookie('helperModal', 'false')
     }
 
     const iconCheck = () => {
@@ -28,9 +36,8 @@ export default function HelperModal() {
     return (
         <>
             <div
-                className={cn('fixed bottom-24 right-8 z-20 m-4 md:bottom-8 md:right-10', {
-                    hidden: !showHelper
-                })}
+                className={cn('fixed bottom-24 right-8 z-20 m-4 md:bottom-8 md:right-10')}
+                hidden={!showHelper}
             >
                 <button
                     onClick={showModal}
@@ -45,7 +52,10 @@ export default function HelperModal() {
                     <FontAwesomeIcon icon={faXmark} color="black" />
                 </button>
             </div>
-            <Modal dismissible show={openModal} onClose={() => setOpenModal(false)}>
+            <Modal dismissible show={openModal} onClose={() => {
+                setOpenModal(false)
+                setCookie('helperModal', 'false')
+            }}>
                 <Modal.Header>Bienvenue sur Vinyls-collection!</Modal.Header>
                 <Modal.Body>
                     <div className="flex flex-col items-center">

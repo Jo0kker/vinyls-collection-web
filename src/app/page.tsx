@@ -11,6 +11,9 @@ import { fetchAPI } from '@/utils/fetchAPI'
 export default async function HomePage() {
     const collectionVinyls = await fetchAPI<CollectionVinyl[]>('/collectionVinyl/search', {
         method: 'POST',
+        next: {
+            revalidate: 1200
+        },
         body: JSON.stringify({
             search: {
                 sorts: [

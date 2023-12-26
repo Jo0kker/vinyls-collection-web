@@ -70,6 +70,9 @@ export const authOptions: AuthOptions = {
                 const authData = (await authResponse.json()) as AuthResponse
 
                 const user = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/users/me', {
+                    next: {
+                        revalidate: 3600
+                    },
                     headers: {
                         Authorization: `Bearer ${authData.access_token}`
                     }

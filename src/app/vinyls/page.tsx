@@ -71,7 +71,7 @@ export default async function VinylsPage() {
                                 className="m-4 flex w-48 flex-col items-center p-2 hover:bg-gray-300"
                             >
                                 <Image
-                                    src={prefixImage(trade.image_path)}
+                                    src={prefixImage(trade.vinyl.image)}
                                     alt={trade.vinyl.title}
                                     width={100}
                                     height={100}
@@ -136,6 +136,9 @@ async function getData() {
     return await Promise.all([
         fetchAPI<CollectionVinyl[]>('/collectionVinyl/search', {
             method: 'POST',
+            next: {
+                revalidate: 1200
+            },
             body: JSON.stringify({
                 search: {
                     includes: [
@@ -149,6 +152,9 @@ async function getData() {
         }),
         fetchAPI<Trade[]>('/trades/search', {
             method: 'POST',
+            next: {
+                revalidate: 1200
+            },
             body: JSON.stringify({
                 search: {
                     includes: [{ relation: 'vinyl' }, { relation: 'user' }],
@@ -158,6 +164,9 @@ async function getData() {
         }),
         fetchAPI<Search[]>('/searches/search', {
             method: 'POST',
+            next: {
+                revalidate: 1200
+            },
             body: JSON.stringify({
                 search: {
                     includes: [{ relation: 'vinyl' }, { relation: 'user' }],

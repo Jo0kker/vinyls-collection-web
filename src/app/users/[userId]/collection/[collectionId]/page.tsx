@@ -9,22 +9,29 @@ import { getSession } from '@/utils/authOptions'
 import { cn } from '@/utils/classNames'
 import { fetchAPI, FetchResponse } from '@/utils/fetchAPI'
 import { fetchUserData } from '@/utils/fetchUserData'
-
+import { faArrowRight, faArrowsLeftRight} from "@fortawesome/pro-duotone-svg-icons";
 import { EmptyList } from '../components/EmptyList'
 import { VinylItem } from '../components/VinylItem'
+import getCollectionData from "@/app/users/[userId]/collection/[collectionId]/actions/getCollectionData";
+import Link from "next/link";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 type CollectionPageProps = {
     params: {
         collectionId: string
         userId: string
+    },
+    searchParams: {
+        page?: string
     }
 }
 
-export default async function CollectionPage({ params }: CollectionPageProps) {
+export default async function CollectionPage({ params, searchParams }: CollectionPageProps) {
     const collectionId = parseInt(params.collectionId)
     const session = await getSession()
     const userId = parseInt(params.userId)
-    let list: FetchResponse<CollectionVinyl[]>
+    const page = searchParams.page ? parseInt(searchParams.page) : 1
+
     let isEditable = false
     let isOwner = false
     let collectionName
@@ -87,72 +94,14 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
         }
     }
     const ownerData = await getOwnerData()
-
+    const list = await getCollectionData(userId, collectionId, page)
     if (collectionId === -1) {
         collectionName = 'Liste de souhaits'
-
-        list = await fetchAPI<CollectionVinyl[]>('/searches/search', {
-            method: 'POST',
-            next: {
-                tags: ['searchVinyls']
-            },
-            body: JSON.stringify({
-                search: {
-                    filters: [
-                        {
-                            field: 'user.id',
-                            operator: '=',
-                            value: userId
-                        }
-                    ],
-                    includes: [{ relation: 'vinyl' }],
-                    limit: 10
-                }
-            })
-        })
         isEditable = false
     } else if (collectionId === -2) {
         collectionName = 'Liste de recherches'
-
-        list = await fetchAPI<CollectionVinyl[]>('/trades/search', {
-            method: 'POST',
-            next: {
-                tags: ['tradeVinyls']
-            },
-            body: JSON.stringify({
-                search: {
-                    filters: [
-                        {
-                            field: 'user.id',
-                            operator: '=',
-                            value: userId
-                        }
-                    ],
-                    includes: [{ relation: 'vinyl' }],
-                    limit: 10
-                }
-            })
-        })
         isEditable = false
     } else {
-        list = await fetchAPI<CollectionVinyl[]>('/collectionVinyl/search', {
-            method: 'POST',
-            next: {
-                tags: ['collectionVinyl']
-            },
-            body: JSON.stringify({
-                search: {
-                    filters: [
-                        {
-                            field: 'collection.id',
-                            operator: '=',
-                            value: collectionId
-                        }
-                    ],
-                    includes: [{ relation: 'vinyl' }, { relation: 'collection' }]
-                }
-            })
-        })
         isEditable = isOwner
     }
 
@@ -222,7 +171,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                         </div>
                         <div
                             className={cn('my-2 grid grid-cols-1', {
-                                'md:grid-cols-2 lg:grid-cols-3': list.data.length > 0
+                                'md:grid-cols-2 lg:grid-cols-3': list.data?.length > 0
                             })}
                         >
                             {list.data.length === 0 && <EmptyList />}
@@ -235,6 +184,27 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
                                     isOwner={isOwner}
                                 />
                             ))}
+                        </div>
+                        <div className="flex flex-row justify-center">
+                            {list.current_page > 1 && (
+                              <Link
+                                className="mr-2 border rounded-xl p-2 hover:bg-fuchsia-500 hover:bg-opacity-30"
+                                href={`/users/${userId}/collection/${collectionId}?page=${page - 1}`}>
+                                   <FontAwesomeIcon icon={faArrowRight} rotation={180} size="2xl" />
+                              </Link>
+                            )}
+                            <div className="flex flex-row justify-center items-center">
+                              <span className="mr-2">{list.current_page}</span>
+                              <span className="mr-2">/</span>
+                              <span className="mr-2">{list.last_page}</span>
+                            </div>
+                            {list.current_page < list.last_page && (
+                              <Link
+                                className="ml-2 border rounded-xl p-2 hover:bg-fuchsia-500 hover:bg-opacity-30"
+                                href={`/users/${userId}/collection/${collectionId}?page=${page + 1}`}>
+                                <FontAwesomeIcon icon={faArrowRight} size="2xl"/>
+                              </Link>
+                            )}
                         </div>
                     </div>
                 </div>
