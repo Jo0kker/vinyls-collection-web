@@ -169,8 +169,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
     }
 
     const getVinylFormat = (item: any) => {
-        if (indexStep === 1) {
-            // if formats is empty return formats[0]
+        if (item.id) {
             if (!item.formats) return formats[0].name
             return item.formats[0]
         } else {
