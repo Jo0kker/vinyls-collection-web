@@ -1,12 +1,12 @@
-import { faCompactDisc, faVideo } from '@fortawesome/pro-duotone-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, Accordion, AccordionContent, AccordionPanel, AccordionTitle } from 'flowbite-react';
+import { faCompactDisc, faVideo } from '@fortawesome/pro-duotone-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react'
 import Image from 'next/image'
 
+import AccordionVideo from '@/app/vinyls/[vinylId]/components/AccordionVideo'
 import { Vinyl } from '@/types'
 import { fetchAPI } from '@/utils/fetchAPI'
 import { prefixImage } from '@/utils/prefixImage'
-import AccordionVideo from '@/app/vinyls/[vinylId]/components/AccordionVideo';
 
 type VinylPageProps = {
     params: {
@@ -78,45 +78,52 @@ export default async function VinylPage({ params }: VinylPageProps) {
                 {vinyl.discog_id && (
                     <>
                         {vinyl.track_list && (
-                          <div className='flex flex-col items-center justify-center w-full md:w-1/2'>
-                              <h2 className='mb-2 mt-4 text-xl font-bold text-fuchsia-800'>
-                                <span className='text-emerald-500'>
-                                    <FontAwesomeIcon icon={faCompactDisc} />{' '}
-                                </span>{' '}
-                                  Tracklist
-                              </h2>
-                              <div className="overflow-x-auto w-full">
-                                  <Table hoverable>
-                                      <TableHead className="bg-gray-100 dark:bg-gray-900">
-                                          <TableHeadCell className="whitespace-nowrap">Position</TableHeadCell>
-                                          <TableHeadCell>Titre</TableHeadCell>
-                                          <TableHeadCell>Durée</TableHeadCell>
-                                      </TableHead>
-                                      <TableBody className="w-full divide-y">
-                                          {JSON.parse(vinyl.track_list).map((track: any, index: number) => (
-                                              <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800" key={index}>
-                                                  <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                                      {track.position}
-                                                  </TableCell>
-                                                  <TableCell>{track.title}</TableCell>
-                                                  <TableCell>{track.duration}</TableCell>
-                                              </TableRow>
-                                          ))}
-                                      </TableBody>
-                                  </Table>
-                              </div>
-                          </div>
+                            <div className="flex w-full flex-col items-center justify-center md:w-1/2">
+                                <h2 className="mb-2 mt-4 text-xl font-bold text-fuchsia-800">
+                                    <span className="text-emerald-500">
+                                        <FontAwesomeIcon icon={faCompactDisc} />{' '}
+                                    </span>{' '}
+                                    Tracklist
+                                </h2>
+                                <div className="w-full overflow-x-auto">
+                                    <Table hoverable>
+                                        <TableHead className="bg-gray-100 dark:bg-gray-900">
+                                            <TableHeadCell className="whitespace-nowrap">
+                                                Position
+                                            </TableHeadCell>
+                                            <TableHeadCell>Titre</TableHeadCell>
+                                            <TableHeadCell>Durée</TableHeadCell>
+                                        </TableHead>
+                                        <TableBody className="w-full divide-y">
+                                            {JSON.parse(vinyl.track_list).map(
+                                                (track: any, index: number) => (
+                                                    <TableRow
+                                                        className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                                        key={index}
+                                                    >
+                                                        <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                                            {track.position}
+                                                        </TableCell>
+                                                        <TableCell>{track.title}</TableCell>
+                                                        <TableCell>{track.duration}</TableCell>
+                                                    </TableRow>
+                                                )
+                                            )}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            </div>
                         )}
                         {vinyl.discog_videos && (
-                            <div className='flex flex-col items-center justify-center w-full'>
-                                <h2 className='mb-2 mt-4 text-xl font-bold text-fuchsia-800'>
-                                    <span className='text-emerald-500'>
+                            <div className="flex w-full flex-col items-center justify-center">
+                                <h2 className="mb-2 mt-4 text-xl font-bold text-fuchsia-800">
+                                    <span className="text-emerald-500">
                                         <FontAwesomeIcon icon={faVideo} />{' '}
                                     </span>{' '}
                                     Videos
                                 </h2>
                                 <>
-                                    <div className="flex flex-col w-full">
+                                    <div className="flex w-full flex-col">
                                         <AccordionVideo videos={JSON.parse(vinyl.discog_videos)} />
                                     </div>
                                 </>

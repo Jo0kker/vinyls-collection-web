@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 
 import { MenuItem } from '@/app/navBar'
+import { verifyEmail } from '@/components/navBar/Desktop'
 import MainItem from '@/components/navBar/mobileNavBar/MainItem'
-import {verifyEmail} from "@/components/navBar/Desktop";
 const MobileMenu = ({ session, links }: MenuItem) => {
     const [subMenu, setSubMenu] =
         useState<{ name: string; href?: string; onClick?: () => void }[]>()
@@ -44,20 +44,20 @@ const MobileMenu = ({ session, links }: MenuItem) => {
             {subMenu?.length !== 0 && (
                 <div className="w-full border-b-2 border-purple-700">
                     {session?.user?.email_verified_at && (
-                      <button
-                        onClick={() => verifyEmail(session)}
-                        className="rounded-lg px-5 py-1.5 text-xs font-medium text-gray-900 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700"
-                      >
-                          Verifier email
-                      </button>
+                        <button
+                            onClick={() => verifyEmail(session)}
+                            className="rounded-lg px-5 py-1.5 text-xs font-medium text-gray-900 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700"
+                        >
+                            Verifier email
+                        </button>
                     )}
-                    {subMenu?.map(({href, name, onClick}, index) => (
-                      <>
-                          {href ? (
-                            <Link
-                              key={index}
-                              href={href ? href : '#'}
-                              className="rounded-lg px-5 py-1.5 text-xs font-medium text-gray-900 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700"
+                    {subMenu?.map(({ href, name, onClick }, index) => (
+                        <>
+                            {href ? (
+                                <Link
+                                    key={index}
+                                    href={href ? href : '#'}
+                                    className="rounded-lg px-5 py-1.5 text-xs font-medium text-gray-900 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700"
                                 >
                                     {name}
                                 </Link>

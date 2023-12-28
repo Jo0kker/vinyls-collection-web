@@ -9,9 +9,8 @@ import { signOut } from 'next-auth/react'
 import { MenuItem } from '@/app/navBar'
 import { VinylLoading } from '@/assets/lottie/VinylLoading'
 import { cn } from '@/utils/classNames'
-import {fetchAPI} from "@/utils/fetchAPI";
-import {showToast} from "@/utils/toast";
-import revalidateCacheClient from "@/components/actions/revalidateCacheClient";
+import { fetchAPI } from '@/utils/fetchAPI'
+import { showToast } from '@/utils/toast'
 const DesktopMenu = ({ session, links }: MenuItem) => {
     const [menuOpen, setMenuOpen] = useState(false)
 
@@ -74,28 +73,29 @@ const DesktopMenu = ({ session, links }: MenuItem) => {
     )
 }
 
-export function verifyEmail(session: Session|undefined|null) {
+export function verifyEmail(session: Session | undefined | null) {
     fetchAPI('/email/resend', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${session?.user.access_token}`,
-        },
-    }).then(() => {
-        showToast({
-            type: 'success',
-            message: 'Email de vérification renvoyé',
-        })
-    }).catch((r) => {
-        showToast({
-            type: 'error',
-            message: JSON.parse(r.message).msg,
-        })
+            Authorization: `Bearer ${session?.user.access_token}`
+        }
     })
+        .then(() => {
+            showToast({
+                type: 'success',
+                message: 'Email de vérification renvoyé'
+            })
+        })
+        .catch(r => {
+            showToast({
+                type: 'error',
+                message: JSON.parse(r.message).msg
+            })
+        })
 }
 
 function AccountMenu({ session }: { session: Session }) {
-    console.log(session.user.email_verified_at)
     return (
         <Menu as="div" className="relative inline-block text-left">
             <Menu.Button className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-3xl border border-red-700 bg-black bg-transparent bg-opacity-10 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-opacity-20">
@@ -133,19 +133,19 @@ function AccountMenu({ session }: { session: Session }) {
                             )}
                         </Menu.Item>
                         {!session?.user.email_verified_at && (
-                          <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  onClick={() => verifyEmail(session)}
-                                  className={cn(
-                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                    'block px-4 py-2 text-sm'
-                                  )}
-                                >
-                                    Renvoyer l'email de vérification
-                                </button>
-                              )}
-                          </Menu.Item>
+                            <Menu.Item>
+                                {({ active }) => (
+                                    <button
+                                        onClick={() => verifyEmail(session)}
+                                        className={cn(
+                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                            'block px-4 py-2 text-sm'
+                                        )}
+                                    >
+                                        Renvoyer l'email de vérification
+                                    </button>
+                                )}
+                            </Menu.Item>
                         )}
                         <Menu.Item>
                             {({ active }) => (

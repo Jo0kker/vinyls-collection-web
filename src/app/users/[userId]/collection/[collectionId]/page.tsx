@@ -1,26 +1,28 @@
+import { faArrowRight } from '@fortawesome/pro-duotone-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Link from 'next/link'
+
+import getCollectionData from '@/app/users/[userId]/collection/[collectionId]/actions/getCollectionData'
 import ButtonAddVinyl from '@/app/users/[userId]/collection/[collectionId]/components/ButtonAddVinyl'
 import { ButtonDeleteCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonDeleteCollection'
 import { ButtonEditCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonEditCollection'
 import { ButtonAddCollection } from '@/app/users/[userId]/collection/components/ButtonAddCollection'
 import { CollectionLink } from '@/app/users/[userId]/collection/components/CollectionLink'
 import { SelectorCollectionMobile } from '@/app/users/[userId]/collection/components/SelectorCollectionMobile'
-import { Collection, CollectionVinyl, User } from '@/types'
+import { Collection, User } from '@/types'
 import { getSession } from '@/utils/authOptions'
 import { cn } from '@/utils/classNames'
-import { fetchAPI, FetchResponse } from '@/utils/fetchAPI'
+import { fetchAPI } from '@/utils/fetchAPI'
 import { fetchUserData } from '@/utils/fetchUserData'
-import { faArrowRight, faArrowsLeftRight} from "@fortawesome/pro-duotone-svg-icons";
+
 import { EmptyList } from '../components/EmptyList'
 import { VinylItem } from '../components/VinylItem'
-import getCollectionData from "@/app/users/[userId]/collection/[collectionId]/actions/getCollectionData";
-import Link from "next/link";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 type CollectionPageProps = {
     params: {
         collectionId: string
         userId: string
-    },
+    }
     searchParams: {
         page?: string
     }
@@ -187,23 +189,33 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                         </div>
                         <div className="flex flex-row justify-center">
                             {list.current_page > 1 && (
-                              <Link
-                                className="mr-2 border rounded-xl p-2 hover:bg-fuchsia-500 hover:bg-opacity-30"
-                                href={`/users/${userId}/collection/${collectionId}?page=${page - 1}`}>
-                                   <FontAwesomeIcon icon={faArrowRight} rotation={180} size="2xl" />
-                              </Link>
+                                <Link
+                                    className="mr-2 rounded-xl border p-2 hover:bg-fuchsia-500 hover:bg-opacity-30"
+                                    href={`/users/${userId}/collection/${collectionId}?page=${
+                                        page - 1
+                                    }`}
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faArrowRight}
+                                        rotation={180}
+                                        size="2xl"
+                                    />
+                                </Link>
                             )}
-                            <div className="flex flex-row justify-center items-center">
-                              <span className="mr-2">{list.current_page}</span>
-                              <span className="mr-2">/</span>
-                              <span className="mr-2">{list.last_page}</span>
+                            <div className="flex flex-row items-center justify-center">
+                                <span className="mr-2">{list.current_page}</span>
+                                <span className="mr-2">/</span>
+                                <span className="mr-2">{list.last_page}</span>
                             </div>
                             {list.current_page < list.last_page && (
-                              <Link
-                                className="ml-2 border rounded-xl p-2 hover:bg-fuchsia-500 hover:bg-opacity-30"
-                                href={`/users/${userId}/collection/${collectionId}?page=${page + 1}`}>
-                                <FontAwesomeIcon icon={faArrowRight} size="2xl"/>
-                              </Link>
+                                <Link
+                                    className="ml-2 rounded-xl border p-2 hover:bg-fuchsia-500 hover:bg-opacity-30"
+                                    href={`/users/${userId}/collection/${collectionId}?page=${
+                                        page + 1
+                                    }`}
+                                >
+                                    <FontAwesomeIcon icon={faArrowRight} size="2xl" />
+                                </Link>
                             )}
                         </div>
                     </div>

@@ -4,10 +4,10 @@ import { useState } from 'react'
 
 import { faCircleCheck, faInfo, faXmark } from '@fortawesome/pro-duotone-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { getCookie, setCookie } from 'cookies-next'
 import { Modal } from 'flowbite-react'
 
 import { cn } from '@/utils/classNames'
-import {getCookie, getCookies, setCookie} from "cookies-next";
 
 export default function HelperModal() {
     let initialShowHelper = true
@@ -52,10 +52,14 @@ export default function HelperModal() {
                     <FontAwesomeIcon icon={faXmark} color="black" />
                 </button>
             </div>
-            <Modal dismissible show={openModal} onClose={() => {
-                setOpenModal(false)
-                setCookie('helperModal', 'false')
-            }}>
+            <Modal
+                dismissible
+                show={openModal}
+                onClose={() => {
+                    setOpenModal(false)
+                    setCookie('helperModal', 'false')
+                }}
+            >
                 <Modal.Header>Bienvenue sur Vinyls-collection!</Modal.Header>
                 <Modal.Body>
                     <div className="flex flex-col items-center">

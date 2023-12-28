@@ -13,7 +13,6 @@ import { CollectionVinyl, Search } from '@/types'
 import { cn } from '@/utils/classNames'
 import { prefixImage } from '@/utils/prefixImage'
 import { showToast } from '@/utils/toast'
-import YoutubeAudioPlayer from "@/components/atom/YoutubeAudioPlayer";
 
 type VinylItemProps = {
     item: Search | CollectionVinyl
@@ -35,9 +34,9 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
                     alt={item.vinyl?.title}
                     width={100}
                     height={100}
-                    sizes={'100px'}
+                    sizes="100px"
                     className="cursor-pointer"
-                    objectFit={'cover'}
+                    objectFit="cover"
                     style={{ objectFit: 'cover', height: '100%' }}
                 />
             </Link>

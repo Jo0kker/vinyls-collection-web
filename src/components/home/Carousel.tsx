@@ -42,10 +42,10 @@ export default function Carousel({ collectionVinyls }: CarouselProps) {
                                         isFocus
                                             ? ''
                                             : isBefore
-                                            ? '-translate-x-full md:translate-x-0'
-                                            : isAfter
-                                            ? 'translate-x-full md:translate-x-0'
-                                            : 'hidden md:block'
+                                              ? '-translate-x-full md:translate-x-0'
+                                              : isAfter
+                                                ? 'translate-x-full md:translate-x-0'
+                                                : 'hidden md:block'
                                     )}
                                 >
                                     <Image
