@@ -58,7 +58,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                     }
                 ],
                 includes: [{ relation: 'collectionVinyls' }, { relation: 'user' }],
-                limit: 6
+                limit: 50
             }
         })
     })

@@ -2,26 +2,34 @@
 
 import { useState } from 'react'
 
-import { faTrash } from '@fortawesome/pro-light-svg-icons'
+import { faPen, faTrash } from '@fortawesome/pro-light-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Spinner } from 'flowbite-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
 import deleteVinyl from '@/app/users/[userId]/collection/[collectionId]/actions/deleteVinyl'
-import { CollectionVinyl, Search } from '@/types'
+import useModalStore from '@/store/modalStore'
+import { CollectionVinyl, Search, Trade } from '@/types'
 import { cn } from '@/utils/classNames'
 import { prefixImage } from '@/utils/prefixImage'
 import { showToast } from '@/utils/toast'
 
 type VinylItemProps = {
-    item: Search | CollectionVinyl
+    item: Search | CollectionVinyl | Trade
     collectionId?: string
     isOwner?: boolean
 }
 
 export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
     const [isLoadingDelete, setIsLoadingDelete] = useState(false)
+    const openModal = useModalStore((state) => state.openModal);
+
+    const editVinyl = (event : React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault()
+
+        openModal(item)
+    }
 
     return (
         <div className="group m-1 flex rounded border-2 border-gray-300">
@@ -49,7 +57,7 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
                 <p className="text-xs font-light">{item.vinyl.released}</p>
             </Link>
             {isOwner && (
-                <div className="flex justify-center px-0.5 pt-0.5">
+                <div className="flex flex-col justify-center px-0.5 pt-0.5">
                     <button
                         className={cn('h-8 w-8 rounded-md hover:bg-red-200', {
                             'cursor-not-allowed': !collectionId,
@@ -70,6 +78,16 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
                         ) : (
                             <FontAwesomeIcon icon={faTrash} className="text-red-800" size="sm" />
                         )}
+                    </button>
+                    <button
+                        className={cn('h-8 w-8 rounded-md hover:bg-red-200', {
+                            'cursor-not-allowed': !collectionId,
+                            'bg-red-200': isLoadingDelete
+                        })}
+                        disabled={!collectionId}
+                        onClick={editVinyl}
+                    >
+                        <FontAwesomeIcon icon={faPen} className="text-fuchsia-600" size="sm" />
                     </button>
                 </div>
             )}

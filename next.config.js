@@ -36,8 +36,14 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'i.discogs.com',
+                hostname: '*.discogs.com',
                 port: '',
+                pathname: '/**'
+            },
+            {
+                protocol: 'http',
+                hostname: 'minio',
+                port: '9000',
                 pathname: '/**'
             }
         ]

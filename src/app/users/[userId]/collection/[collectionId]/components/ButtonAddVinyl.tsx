@@ -487,8 +487,8 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                             <Image
                                                 src="https://vinyls-collection.fra1.cdn.digitaloceanspaces.com/helperCodeDiscog.png"
                                                 alt="helper code discogs"
-                                                width={200}
-                                                height={200}
+                                                width={1200}
+                                                height={1200}
                                                 className="h-full w-full rounded-xl"
                                             />
                                         }

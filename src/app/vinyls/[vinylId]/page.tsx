@@ -52,7 +52,7 @@ export default async function VinylPage({ params }: VinylPageProps) {
                     <table className="table-auto text-sm">
                         <tbody>
                             <tr>
-                                <td className="px-4 py-2">Label</td>
+                                <td className="px-4 py-2">Titre</td>
                                 <td className="px-4 py-2">{vinyl.title}</td>
                             </tr>
                             <tr>

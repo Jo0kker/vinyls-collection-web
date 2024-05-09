@@ -64,7 +64,7 @@ const getCollectionData = async (
                         }
                     ],
                     includes: [{ relation: 'vinyl' }, { relation: 'collection' }],
-                    limit: 12,
+                    limit: 24,
                     page: page ?? 1
                 }
             })
