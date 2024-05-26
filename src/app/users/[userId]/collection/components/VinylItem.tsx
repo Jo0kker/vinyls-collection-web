@@ -17,7 +17,7 @@ import { showToast } from '@/utils/toast'
 
 type VinylItemProps = {
     item: Search | CollectionVinyl | Trade
-    collectionId?: string
+    collectionId: string
     isOwner?: boolean
 }
 
@@ -27,8 +27,13 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
 
     const editVinyl = (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-
-        openModal(item)
+        /**
+         * For the collection
+         * -1: Wishlist (Recherches)
+         * -2: Trades (Échanges)
+         * other: Collection
+         */
+        openModal(item, collectionId)
     }
 
     return (

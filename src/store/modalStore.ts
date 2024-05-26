@@ -1,17 +1,20 @@
 import { create } from 'zustand'
+
 import { CollectionVinyl, Search, Trade } from '@/types'
 
 type ModalState = {
     isModalOpen: boolean;
     modalData: Search | CollectionVinyl | Trade | null;
-    openModal: (data: any) => void;
+    collectionType: string;
+    openModal: (data: any, collectionType: string) => void;
     closeModal: () => void;
 };
 
 const useModalStore = create<ModalState>((set) => ({
     isModalOpen: false,
     modalData: null,
-    openModal: (data) => set({ isModalOpen: true, modalData: data }),
+    collectionType: '',
+    openModal: (data, collectionType) => set({ isModalOpen: true, modalData: data, collectionType: collectionType }),
     closeModal: () => set({ isModalOpen: false, modalData: null })
 }));
 

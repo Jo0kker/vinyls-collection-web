@@ -15,6 +15,8 @@ import Providers from './Providers'
 
 import './global.css'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import 'filepond/dist/filepond.min.css'
+
 
 const roboto = Roboto({
     subsets: ['latin'],

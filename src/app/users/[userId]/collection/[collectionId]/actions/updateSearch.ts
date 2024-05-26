@@ -2,11 +2,11 @@
 
 import { revalidateTag } from 'next/cache'
 
-import { Collection } from '@/types'
+import { Search, Trade } from '@/types'
 import { fetchAPI } from '@/utils/fetchAPI'
 
-const UpdateCollection = async (collectionId: number, attributes: object) => {
-    await fetchAPI<Collection[]>('/collections/mutate', {
+const UpdateSearch = async (collectionId: number, attributes: object) => {
+    await fetchAPI<Search|Trade>('/searches/mutate', {
         method: 'POST',
         withSession: true,
         body: JSON.stringify({
@@ -20,7 +20,7 @@ const UpdateCollection = async (collectionId: number, attributes: object) => {
         })
     })
 
-    revalidateTag('collection')
+    revalidateTag('searchVinyls')
 }
 
-export default UpdateCollection
+export default UpdateSearch

@@ -28,6 +28,19 @@ type CollectionPageProps = {
     }
 }
 
+/**
+ * Collection page
+ *
+ * For the collection
+ * -1: Wishlist (Recherches)
+ * -2: Trades (Échanges)
+ * other: Collection
+ *
+ * @param params
+ * @param searchParams
+ * @constructor
+ */
+
 export default async function CollectionPage({ params, searchParams }: CollectionPageProps) {
     const collectionId = parseInt(params.collectionId)
     const session = await getSession()
@@ -101,7 +114,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
         collectionName = 'Liste de souhaits'
         isEditable = false
     } else if (collectionId === -2) {
-        collectionName = 'Liste de recherches'
+        collectionName = 'Liste d\'échanges'
         isEditable = false
     } else {
         isEditable = isOwner
