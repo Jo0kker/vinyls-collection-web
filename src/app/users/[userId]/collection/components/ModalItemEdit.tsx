@@ -14,7 +14,9 @@ import useModalStore from '@/store/modalStore';
 
 const ModalItemEdit = () => {
     const { isModalOpen, modalData, collectionType, closeModal } = useModalStore();
+    console.log(modalData)
     const [description, setDescription] = useState<string>(modalData?.description || '')
+    const [imageIds, setImageIds] = useState<number[]>([])
     const session = useSession()
     
     
@@ -40,16 +42,22 @@ const ModalItemEdit = () => {
         // Save the data
         switch (collectionType) {
             case '-1':
+                // it's a search, just update the description
                 await updateSearch(modalData.id, {
                     description,
                 })
                 break
             case '-2':
+                // it's a trade, update the description and the images
+
+                // format to send image relations : { media: [ { operation: 'create', attributes: { file_id: 1 } }, { operation: 'create', attributes: { file_id: 2 } } ] }
+                const relations = imageIds.map(id => ({ operation: 'create', attributes: { file_id: id } }))
                 await updateTrade(modalData.id, {
-                    description,
-                })
+                    description
+                }, relations)
                 break
             default:
+                // it's a collection, update the description and the images
                 console.log('updateCollection')
                 // await updateCollection(modalData.id, {})
                 break
@@ -57,23 +65,32 @@ const ModalItemEdit = () => {
         }
 
 
+        // closeModal()
+    }
+
+    const processClose = () => {
+        setImageIds([])
         closeModal()
     }
 
     return (
         <>
             {modalData && (
-                <Modal show={isModalOpen} onClose={closeModal}>
+                <Modal show={isModalOpen} onClose={processClose}>
                     <Modal.Header>{modalData.vinyl.title}</Modal.Header>
                     <Modal.Body>
                         <h3 className="mb-3">
                             Vous pouvez spécifier des informations propres à votre exemplaire
                         </h3>
+                        <button onClick={() => {
+                            console.log(imageIds)
+                        }}>show id list</button>
                         <InputText
                             value={description}
                             setValue={setDescription}
                             name="description"
                             label="Description"
+                            inputClassName="border-gray-200"
                             className="mb-3"
                         />
                         {collectionType !== '-1' && (
@@ -94,6 +111,7 @@ const ModalItemEdit = () => {
                                         })
                                             .then(response => response.json())
                                             .then(data => {
+                                                setImageIds([...imageIds, data])
                                                 load(data);
                                             })
                                             .catch(err => error(err.message));
@@ -109,6 +127,9 @@ const ModalItemEdit = () => {
                                         })
                                             .then(response => {
                                                 if (response.ok) {
+                                                    const NumberUniqueFileId = parseInt(uniqueFileId)
+                                                    const newImageIds = imageIds.filter(id => id !== NumberUniqueFileId)
+                                                    setImageIds(newImageIds)
                                                     load();
                                                 } else {
                                                     error('Failed to delete the file.');
@@ -177,7 +198,7 @@ const ModalItemEdit = () => {
                     </Modal.Body>
                     <Modal.Footer>
                         <div className="flex justify-between w-full">
-                            <Button onClick={closeModal} className="mr-2">
+                            <Button onClick={processClose} className="mr-2">
                                 Annuler
                             </Button>
                             <Button onClick={save} className="mb-1 rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80">

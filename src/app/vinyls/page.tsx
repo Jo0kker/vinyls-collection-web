@@ -153,7 +153,8 @@ async function getData() {
         fetchAPI<Trade[]>('/trades/search', {
             method: 'POST',
             next: {
-                revalidate: 1200
+                revalidate: 1200,
+                tags: ['tradeVinyls']
             },
             body: JSON.stringify({
                 search: {
