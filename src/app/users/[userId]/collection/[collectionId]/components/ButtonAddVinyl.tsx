@@ -39,7 +39,10 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [hasMorePage, setHasMorePage] = useState(false)
     const [nextStep, setNextStep] = useState('Recherche sur discogs')
-    const revalidateCacheClientSearch = revalidateCacheClient.bind('searchVinyls')
+    const revalidateCacheClientSearch = ({ tag = 'searchVinyls' }) => revalidateCacheClient({ tag })
+
+
+
     const [isLoadingAdd, setIsLoadingAdd] = useState(false)
 
     const handleToggle = (index: number) => {

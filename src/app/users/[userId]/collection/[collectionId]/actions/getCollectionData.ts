@@ -42,7 +42,7 @@ const getCollectionData = async (
                             value: userId
                         }
                     ],
-                    includes: [{ relation: 'vinyl' }],
+                    includes: [{ relation: 'vinyl' }, { relation: 'media' }],
                     limit: 12,
                     page: page ?? 1
                 }
@@ -63,7 +63,11 @@ const getCollectionData = async (
                             value: collectionId
                         }
                     ],
-                    includes: [{ relation: 'vinyl' }, { relation: 'collection' }],
+                    includes: [
+                        { relation: 'vinyl' },
+                        { relation: 'collection' },
+                        { relation: 'media' }
+                    ],
                     limit: 24,
                     page: page ?? 1
                 }

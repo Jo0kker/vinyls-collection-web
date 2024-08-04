@@ -15,4 +15,5 @@ export interface CollectionVinyl {
     updated_at: Date
     vinyl: Vinyl
     collection?: Collection
+    media?: any
 }
