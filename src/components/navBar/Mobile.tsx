@@ -41,36 +41,35 @@ const MobileMenu = ({ session, links }: MenuItem) => {
     return (
         <div className="fixed bottom-0 left-1/2 z-50 w-full -translate-x-1/2 border-t border-gray-200 bg-white pb-2 dark:border-gray-600 dark:bg-gray-700 md:hidden">
             {/* top part of navBar */}
-            {subMenu?.length !== 0 && (
+            {subMenu && subMenu?.length !== 0 && (
                 <div className="w-full border-b-2 border-purple-700">
-                    {session?.user?.email_verified_at && (
-                        <button
-                            onClick={() => verifyEmail(session)}
-                            className="rounded-lg px-5 py-1.5 text-xs font-medium text-gray-900 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700"
-                        >
-                            Verifier email
-                        </button>
+                    {!session?.user?.email_verified_at && (
+                      <div
+                          className="rounded-lg px-5 py-1.5 text-xs font-medium text-gray-900 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700">
+                              <button onClick={() => verifyEmail(session)}>
+                                  Verifier email
+                              </button>
+                      </div>
                     )}
                     {subMenu?.map(({ href, name, onClick }, index) => (
-                        <>
+                      <div
+                        key={name}
+                          className="rounded-lg px-5 py-1.5 text-xs font-medium text-gray-900 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700"
+                        >
                             {href ? (
                                 <Link
-                                    key={index}
                                     href={href ? href : '#'}
-                                    className="rounded-lg px-5 py-1.5 text-xs font-medium text-gray-900 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700"
                                 >
                                     {name}
                                 </Link>
                             ) : (
                                 <button
-                                    key={index}
                                     onClick={() => onClick?.()}
-                                    className="rounded-lg px-5 py-1.5 text-xs font-medium text-gray-900 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700"
                                 >
                                     {name}
                                 </button>
                             )}
-                        </>
+                        </div>
                     ))}
                 </div>
             )}

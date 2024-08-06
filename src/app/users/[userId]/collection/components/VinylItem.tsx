@@ -2,14 +2,15 @@
 
 import { useState } from 'react'
 
-import { faPen, faTrash } from '@fortawesome/pro-light-svg-icons'
+import { faPen, faTrash, faEye } from '@fortawesome/pro-light-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Spinner } from 'flowbite-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
 import deleteVinyl from '@/app/users/[userId]/collection/[collectionId]/actions/deleteVinyl'
-import useModalStore from '@/store/modalStore'
+import useModalItemEditStore from '@/store/modalItemEditStore'
+import useModalItemViewStore from '@/store/modalItemViewStore'
 import { CollectionVinyl, Search, Trade } from '@/types'
 import { cn } from '@/utils/classNames'
 import { prefixImage } from '@/utils/prefixImage'
@@ -23,7 +24,8 @@ type VinylItemProps = {
 
 export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
     const [isLoadingDelete, setIsLoadingDelete] = useState(false)
-    const openModal = useModalStore((state) => state.openModal);
+    const openModal = useModalItemEditStore((state) => state.openModal);
+    const openViewModal = useModalItemViewStore((state) => state.openModal);
 
     const editVinyl = (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
@@ -34,6 +36,11 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
          * other: Collection
          */
         openModal(item, collectionId)
+    }
+
+    const viewVinyl = (event : React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault()
+        openViewModal(item, collectionId)
     }
 
     return (
@@ -61,7 +68,7 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
                 <h3 className="mb-2 truncate text-sm text-fuchsia-800">{item.vinyl.artist}</h3>
                 <p className="text-xs font-light">{item.vinyl.released}</p>
             </Link>
-            {isOwner && (
+            {isOwner ? (
                 <div className="flex flex-col justify-center px-0.5 pt-0.5">
                     <button
                         className={cn('h-8 w-8 rounded-md hover:bg-red-200', {
@@ -95,6 +102,19 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
                         <FontAwesomeIcon icon={faPen} className="text-fuchsia-600" size="sm" />
                     </button>
                 </div>
+            ) : (
+              <div className="flex flex-col justify-center px-0.5 pt-0.5">
+                <button
+                  className={cn('h-8 w-8 rounded-md hover:bg-red-200', {
+                    'cursor-not-allowed': !collectionId,
+                    'bg-red-200': isLoadingDelete
+                  })}
+                  disabled={!collectionId}
+                  onClick={viewVinyl}
+                >
+                  <FontAwesomeIcon icon={faEye} className="text-fuchsia-600" size="sm"/>
+                </button>
+              </div>
             )}
         </div>
     )

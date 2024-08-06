@@ -23,7 +23,7 @@ import updateTrade from '@/app/users/[userId]/collection/[collectionId]/actions/
 import revalidateCacheClient from '@/components/actions/revalidateCacheClient'
 import { Button } from '@/components/atom/Button'
 import { InputText } from '@/components/atom/InputText'
-import useModalStore from '@/store/modalStore';
+import useModalItemEditStore from '@/store/modalItemEditStore';
 // Enregistrer le plugin
 registerPlugin(
     FilePondPluginImagePreview,
@@ -33,7 +33,7 @@ registerPlugin(
 );
 
 const ModalItemEdit = () => {
-    const { isModalOpen, modalData, collectionType, closeModal } = useModalStore();
+    const { isModalOpen, modalData, collectionType, closeModal } = useModalItemEditStore();
     const [description, setDescription] = useState<string>(modalData?.description || '')
     const [imageIds, setImageIds] = useState<number[]>([])
     const [files, setFiles] = useState<any[]>([])
@@ -43,7 +43,7 @@ const ModalItemEdit = () => {
     useEffect(() => {
         setDescription(modalData?.description || '')
         if (modalData && 'media' in modalData && modalData?.media) {
-            const initialFiles = modalData.media.map((media: any) => ({
+            const initialFiles = modalData.media.map((media) => ({
                 source: media.file_name,
                 options: {
                     type: 'local',

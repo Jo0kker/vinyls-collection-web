@@ -10,7 +10,7 @@ type ModalState = {
     closeModal: () => void;
 };
 
-const useModalStore = create<ModalState>((set) => ({
+const useModalItemEditStore = create<ModalState>((set) => ({
     isModalOpen: false,
     modalData: null,
     collectionType: '',
@@ -18,4 +18,4 @@ const useModalStore = create<ModalState>((set) => ({
     closeModal: () => set({ isModalOpen: false, modalData: null })
 }));
 
-export default useModalStore;
+export default useModalItemEditStore;

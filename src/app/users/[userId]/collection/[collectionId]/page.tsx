@@ -8,6 +8,7 @@ import { ButtonDeleteCollection } from '@/app/users/[userId]/collection/[collect
 import { ButtonEditCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonEditCollection'
 import { ButtonAddCollection } from '@/app/users/[userId]/collection/components/ButtonAddCollection'
 import { CollectionLink } from '@/app/users/[userId]/collection/components/CollectionLink'
+import ModalItemEdit from '@/app/users/[userId]/collection/components/ModalItemEdit';
 import { SelectorCollectionMobile } from '@/app/users/[userId]/collection/components/SelectorCollectionMobile'
 import { Collection, User } from '@/types'
 import { getSession } from '@/utils/authOptions'
@@ -17,6 +18,7 @@ import { fetchUserData } from '@/utils/fetchUserData'
 
 import { EmptyList } from '../components/EmptyList'
 import { VinylItem } from '../components/VinylItem'
+import ModalItemView from '@/app/users/[userId]/collection/components/ModalItemView';
 
 type CollectionPageProps = {
     params: {
@@ -232,6 +234,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                             )}
                         </div>
                     </div>
+                    {isOwner ? <ModalItemEdit /> : <ModalItemView />}
                 </div>
             </div>
         </div>
