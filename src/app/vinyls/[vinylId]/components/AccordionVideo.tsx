@@ -2,6 +2,7 @@
 
 import { Accordion } from 'flowbite-react'
 import YouTube from 'react-youtube'
+import { useEffect, useState } from 'react'
 
 export default function AccordionVideo({ videos }: { videos: any }) {
     const getVideoId = (url: string) => {
@@ -13,16 +14,32 @@ export default function AccordionVideo({ videos }: { videos: any }) {
         return videoId
     }
 
-    const opts = {
-        height: window.innerWidth * 0.5625,
-        width: window.innerWidth * 0.5
-    }
+    const [opts, setOpts] = useState({
+        height: 390,
+        width: 640,
+        playerVars: {
+            autoplay: 0,
+        },
+    })
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            // Mise à jour des options de YouTube avec la taille de la fenêtre
+            setOpts({
+                height: window.innerWidth / 1.77,
+                width: window.innerWidth,
+                playerVars: {
+                    autoplay: 0,
+                },
+            })
+        }
+    }, [])
+
 
     return (
         <div className="flex flex-col">
-            <Accordion className="">
+            <Accordion>
                 {videos.map((video: any, index: number) => {
-                    if (index > 3) return <></>
                     return (
                         <Accordion.Panel key={index}>
                             <Accordion.Title className="truncate ">{video.title}</Accordion.Title>
