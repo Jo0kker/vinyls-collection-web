@@ -21,7 +21,7 @@ const MainItem = ({ name, href, icon, subContent, subMenu, setSubMenu }: Item) =
             {!subContent ? (
                 <Link
                     href={href}
-                    className="group inline-flex flex-col items-center justify-center p-4 hover:bg-gray-50 dark:hover:bg-gray-800"
+                    className="group inline-flex flex-col items-center justify-center p-2 md:p-4 hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                     {icon}
                     <span className="sr-only">{name}</span>
@@ -32,7 +32,7 @@ const MainItem = ({ name, href, icon, subContent, subMenu, setSubMenu }: Item) =
                         data-tooltip-target="tooltip-home"
                         type="button"
                         onClick={onClick}
-                        className="group inline-flex flex-col items-center justify-center p-4 hover:bg-gray-50 dark:hover:bg-gray-800"
+                        className="group inline-flex flex-col items-center justify-center p-2 md:p-4 hover:bg-gray-50 dark:hover:bg-gray-800"
                     >
                         {icon}
                         <span className="sr-only">{name}</span>

@@ -28,7 +28,7 @@ export default function Header() {
                                 <SoundAnimation className="w-[12rem] sm:w-[25rem]" />
                             </div>
                             <h1 className="z-10 flex flex-col items-center leading-relaxed shadow-blue-600 drop-shadow-2xl">
-                                <span className="bgr bg-gradient-to-l from-red-500 via-yellow-500 to-blue-800 bg-clip-text text-5xl font-black leading-relaxed text-transparent sm:text-8xl">
+                                <span className="bgr bg-gradient-to-l from-red-500 via-yellow-500 to-blue-800 bg-clip-text text-5xl font-black text-transparent sm:text-8xl sm:leading-tight leading-relaxed">
                                     Vinyls
                                 </span>
                                 <span>Collection</span>

@@ -27,6 +27,7 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
     const openModal = useModalItemEditStore((state) => state.openModal);
     const openViewModal = useModalItemViewStore((state) => state.openModal);
 
+    console.log('Start VinylItem')
     const editVinyl = (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         /**
