@@ -1,4 +1,4 @@
-import { faCompactDisc, faVideo, faArrowUpRightFromSquare } from '@fortawesome/pro-duotone-svg-icons'
+import { faCompactDisc, faVideo, faArrowUpRightFromSquare, faEarMuffs } from '@fortawesome/pro-duotone-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     Accordion, AccordionContent, AccordionPanel, AccordionTitle,
@@ -15,6 +15,7 @@ import Image from 'next/image'
 
 import AccordionVideo from '@/app/vinyls/[vinylId]/components/AccordionVideo'
 import AddToCollection from '@/app/vinyls/[vinylId]/components/AddToCollection'
+import ButtonUpdateDiscog from '@/app/vinyls/[vinylId]/components/ButtonUpdateDiscog'
 import { Vinyl } from '@/types'
 import { getSession } from '@/utils/authOptions'
 import { fetchAPI } from '@/utils/fetchAPI'
@@ -31,6 +32,9 @@ export default async function VinylPage({ params }: VinylPageProps) {
 
     const { data: vinyls } = await fetchAPI<Vinyl[]>('/vinyls/search', {
         method: 'POST',
+        next: {
+            tags: [`vinyls:${params.vinylId}`]
+        },
         body: JSON.stringify({
             search: {
                 filters: [
@@ -104,11 +108,14 @@ export default async function VinylPage({ params }: VinylPageProps) {
                                     </a>
                                 </Tooltip>
                             )}
-                            {/*{session && (*/}
-                            {/*    <Tooltip content="Ajouter à ça collection">*/}
-                            {/*        <AddToCollection />*/}
-                            {/*    </Tooltip>*/}
-                            {/*)}*/}
+                            {session && vinyl.discog_id && session.user.ability && session.user.ability.includes('update vinyls') && (
+                                <ButtonUpdateDiscog />
+                            )}
+                            {session && (
+                                <Tooltip content="Ajouter à ça collection">
+                                    <AddToCollection vinyl={vinyl} />
+                                </Tooltip>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -170,14 +177,14 @@ export default async function VinylPage({ params }: VinylPageProps) {
                                 </AccordionContent>
                             </AccordionPanel>
                         )}
-                        {vinyl.discog_videos ? (
+                        {vinyl.discog_videos && JSON.parse(vinyl.discog_videos).length > 0 ? (
                             <AccordionPanel className="w-full">
                                 <AccordionTitle className="w-full text-fuchsia-800">
                                     <span className="text-emerald-500">
-                                        <FontAwesomeIcon className="text-emerald-500" icon={faVideo} />{' '}
+                                        <FontAwesomeIcon className="text-emerald-500" icon={faEarMuffs} />{' '}
                                     </span>
                                     {' '}
-                                    Videos
+                                    Media
                                 </AccordionTitle>
                                 <AccordionContent>
                                     <div className="flex flex-col">
@@ -189,7 +196,7 @@ export default async function VinylPage({ params }: VinylPageProps) {
                             <AccordionPanel>
                                 <AccordionTitle className="w-full text-fuchsia-800">
                                     <span className="text-emerald-500">
-                                        <FontAwesomeIcon className="text-emerald-500" icon={faVideo} />{' '}
+                                        <FontAwesomeIcon className="text-emerald-500" icon={faEarMuffs} />{' '}
                                     </span>
                                     {' '}
                                     Pas de vidéos

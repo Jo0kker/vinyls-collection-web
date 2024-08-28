@@ -1,4 +1,5 @@
 import { getSession } from './authOptions'
+import { headers } from 'next/headers'
 
 export type FetchResponse<T> = {
     id: any
