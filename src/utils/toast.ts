@@ -3,7 +3,7 @@ import toast from 'react-hot-toast'
 
 type showToastProps = {
     type: 'success' | 'error'
-    message: string
+    message: string | JSX.Element
     icon?: string
 }
 
