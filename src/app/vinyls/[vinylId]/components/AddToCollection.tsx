@@ -9,6 +9,7 @@ import AsyncSelect from 'react-select/async'
 
 import { Collection, Vinyl } from '@/types'
 import { fetchAPI } from '@/utils/fetchAPI'
+import { showToast } from '@/utils/toast';
 
 const AddToCollection = ({ vinyl }: {vinyl: Vinyl}) => {
     const session = useSession();
@@ -99,6 +100,15 @@ const AddToCollection = ({ vinyl }: {vinyl: Vinyl}) => {
             },
         }).then(() => {
             setIsOpen(false);
+            showToast({
+                type: 'success',
+                message: 'Vinyle ajouté à la collection',
+            });
+        }).catch((error) => {
+            showToast({
+                type: 'error',
+                message: JSON.parse(error.message).message,
+            });
         });
     }
 
