@@ -12,10 +12,13 @@ export default async function HomePage() {
     const collectionVinyls = await fetchAPI<CollectionVinyl[]>('/collectionVinyl/search', {
         method: 'POST',
         next: {
-            revalidate: 1200
+            revalidate: 1
         },
         body: JSON.stringify({
             search: {
+                scopes: [
+                    { name: 'uniqueVinyls' }
+                ],
                 sorts: [
                     {
                         field: 'created_at',

@@ -141,6 +141,7 @@ async function getData() {
             },
             body: JSON.stringify({
                 search: {
+                    scopes: [{ name: 'uniqueVinyls' }],
                     includes: [
                         { relation: 'vinyl' },
                         { relation: 'collection' },
@@ -158,6 +159,7 @@ async function getData() {
             },
             body: JSON.stringify({
                 search: {
+                    scopes: [{ name: 'uniqueVinyls' }],
                     includes: [{ relation: 'vinyl' }, { relation: 'user' }],
                     sort: [{ field: 'updated_at', direction: 'desc' }]
                 }
@@ -170,6 +172,7 @@ async function getData() {
             },
             body: JSON.stringify({
                 search: {
+                    scopes: [{ name: 'uniqueVinyls' }],
                     includes: [{ relation: 'vinyl' }, { relation: 'user' }],
                     sort: [{ field: 'updated_at', direction: 'desc' }]
                 }
