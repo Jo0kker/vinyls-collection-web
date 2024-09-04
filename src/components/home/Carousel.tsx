@@ -78,7 +78,7 @@ export default function Carousel({ collectionVinyls }: CarouselProps) {
                         type="button"
                         className={cn(
                             'h-3 w-3 rounded-full',
-                            i === index ? 'bg-white' : 'bg-white/50'
+                            i === index ? 'bg-fuchsia-400' : 'bg-fuchsia-400/50'
                         )}
                         aria-current={index === i ? 'true' : 'false'}
                         aria-label={`Vinyl ${i}`}
@@ -94,7 +94,7 @@ export default function Carousel({ collectionVinyls }: CarouselProps) {
                     setIndex(prev => (prev === 0 ? collectionVinyls.length - 1 : (prev -= 1)))
                 }
             >
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/30 group-hover:bg-white/50 group-focus:outline-none group-focus:ring-4 group-focus:ring-white dark:bg-gray-800/30 dark:group-hover:bg-gray-800/60 dark:group-focus:ring-gray-800/70">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-fuchsia-800/30 group-hover:bg-white/50 group-focus:outline-none group-focus:ring-4 group-focus:ring-white dark:bg-gray-800/30 dark:group-hover:bg-gray-800/60 dark:group-focus:ring-gray-800/70">
                     <FontAwesomeIcon icon={faChevronLeft} className="text-white" />
                 </span>
             </button>
@@ -105,7 +105,7 @@ export default function Carousel({ collectionVinyls }: CarouselProps) {
                     setIndex(prev => (prev === collectionVinyls.length - 1 ? 0 : (prev += 1)))
                 }
             >
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/30 group-hover:bg-white/50 group-focus:outline-none group-focus:ring-4 group-focus:ring-white dark:bg-gray-800/30 dark:group-hover:bg-gray-800/60 dark:group-focus:ring-gray-800/70">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-fuchsia-800/30 group-hover:bg-white/50 group-focus:outline-none group-focus:ring-4 group-focus:ring-white dark:bg-gray-800/30 dark:group-hover:bg-gray-800/60 dark:group-focus:ring-gray-800/70">
                     <FontAwesomeIcon icon={faChevronRight} className="text-white" />
                 </span>
             </button>

@@ -4,6 +4,7 @@ import { cn } from '@/utils/classNames'
 
 type ButtonProps = ComponentProps<'button'> & {
     type?: ComponentProps<'button'>['type'] | 'reset'
+    buttonClassName?: string
 }
 
 export const Button = (props: PropsWithChildren<Partial<ButtonProps>>) => {
@@ -22,7 +23,7 @@ export const Button = (props: PropsWithChildren<Partial<ButtonProps>>) => {
     } else {
         return (
             <div className={cn('flex content-center justify-center', props.className)}>
-                <button {...props} className={cn('rounded-3xl border border-black px-4 py-2')}>
+                <button {...props} className={cn('rounded-3xl border border-black px-4 py-2 ', props.buttonClassName)}>
                     {props.children}
                 </button>
             </div>

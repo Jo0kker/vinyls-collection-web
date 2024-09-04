@@ -19,7 +19,9 @@ export const ButtonEditCollection = ({ collection }: ButtonEditCollectionProps) 
     const [newCollectionName, setNewCollectionName] = useState(collection.name)
 
     const handleUpdateCollection = () => {
-        updateCollection(collection.id, newCollectionName).then(() => setIsOpen(false))
+        updateCollection(collection.id, {
+            name: newCollectionName
+        }).then(() => setIsOpen(false))
     }
 
     return (

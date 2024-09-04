@@ -1,3 +1,5 @@
+import { Media } from '@/types/Media';
+
 import type { User } from './User'
 import type { Vinyl } from './Vinyl'
 
@@ -12,4 +14,5 @@ export interface Trade {
     created_at: string
     updated_at: string
     user?: User
+    media?: Media[]
 }

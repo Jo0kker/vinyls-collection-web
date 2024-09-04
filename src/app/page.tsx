@@ -12,10 +12,13 @@ export default async function HomePage() {
     const collectionVinyls = await fetchAPI<CollectionVinyl[]>('/collectionVinyl/search', {
         method: 'POST',
         next: {
-            revalidate: 1200
+            revalidate: 1
         },
         body: JSON.stringify({
             search: {
+                scopes: [
+                    { name: 'uniqueVinyls' }
+                ],
                 sorts: [
                     {
                         field: 'created_at',
@@ -64,7 +67,7 @@ export default async function HomePage() {
                 </div>
             </div>
 
-            {collectionVinyls.data?.length && (
+            {collectionVinyls.data?.length > 0 && (
                 <div>
                     <h2 className="mb-2 mt-4 text-xl font-bold text-fuchsia-800">
                         <span className="text-emerald-500">

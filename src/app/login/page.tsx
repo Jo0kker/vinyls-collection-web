@@ -16,7 +16,7 @@ export default function LoginPage() {
                 <LoginForm />
             </div>
             <div className="mx-auto mt-3 flex flex-col">
-                <Link className="text-center hover:text-orange-700" href="/reset-password">
+                <Link className="text-center hover:text-orange-700" href="/forgot-password">
                     Mot de passe oubliée ?
                 </Link>
             </div>

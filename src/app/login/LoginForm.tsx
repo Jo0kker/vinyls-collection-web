@@ -1,7 +1,8 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
-
+import { useState } from 'react'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 import { Spinner } from 'flowbite-react'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
@@ -12,61 +13,79 @@ import { showToast } from '@/utils/toast'
 
 export function LoginForm() {
     const router = useRouter()
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
-    async function handleLogin(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault()
-        setLoading(true)
 
-        try {
-            const result = await signIn('credentials', {
-                username: email,
-                password,
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+        },
+        validationSchema: Yup.object({
+            email: Yup.string().email('Adresse e-mail invalide').required('L\'adresse e-mail est requise'),
+            password: Yup.string().required('Le mot de passe est requis'),
+        }),
+        onSubmit: async (values) => {
+            setLoading(true)
+
+            setLoading(true)
+            signIn('credentials', {
+                username: values.email,
+                password: values.password,
                 redirect: false
             })
-
-            if (!result?.ok) {
-                if (result?.status === 401) {
-                    showToast({ type: 'error', message: 'Identifiants incorrects' })
+            .then((result) => {
+                if (!result?.ok) {
+                    if (result?.status === 401) {
+                        showToast({ type: 'error', message: 'Identifiants incorrects' })
+                    } else {
+                        showToast({ type: 'error', message: 'Une erreur est survenue' })
+                    }
                 } else {
-                    showToast({ type: 'error', message: 'Une erreur est survenue' })
+                    showToast({ type: 'success', message: 'Vous êtes connectés' })
+                    router.replace('/')
                 }
-            } else {
-                showToast({ type: 'success', message: 'Vous êtes connectés' })
-                router.replace('/')
-            }
-        } catch (error) {
-            showToast({ type: 'error', message: 'Une erreur est survenue' })
-        } finally {
-            setLoading(false)
-        }
-    }
+            })
+            .catch(() => {
+                showToast({ type: 'error', message: 'Une erreur est survenue' })
+            })
+            .finally(() => {
+                setLoading(false)
+            })
+        },
+    })
 
     return (
         <form
-            onSubmit={handleLogin}
+            onSubmit={formik.handleSubmit}
             className="mx-4 flex w-full flex-col items-center justify-center gap-4 rounded bg-black bg-opacity-20 p-2 lg:w-2/3"
         >
             <div className="flex w-full flex-col pt-2 md:w-1/2 md:flex-row md:items-center md:justify-center md:gap-4 lg:w-full">
                 <InputText
-                    value={email}
-                    setValue={setEmail}
-                    name="mail"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    name="email"
                     label="E-mail"
                     type="email"
                     className="my-3"
                 />
+                {formik.touched.email && formik.errors.email ? (
+                    <div className="text-red-500">{formik.errors.email}</div>
+                ) : null}
 
                 <InputText
-                    value={password}
-                    setValue={setPassword}
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                     name="password"
                     label="Mot de passe"
                     type="password"
                 />
+                {formik.touched.password && formik.errors.password ? (
+                    <div className="text-red-500">{formik.errors.password}</div>
+                ) : null}
             </div>
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading || !formik.isValid}>
                 {loading ? <Spinner /> : 'Connexion'}
             </Button>
         </form>

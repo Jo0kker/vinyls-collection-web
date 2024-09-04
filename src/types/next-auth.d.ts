@@ -24,6 +24,7 @@ declare module 'next-auth' {
         deleted_at?: Date
         collections_count?: number
         collectionVinyls_count?: number
+        ability?: string[]
     }
 
     interface Session {

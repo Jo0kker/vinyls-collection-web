@@ -8,6 +8,8 @@ import { ButtonDeleteCollection } from '@/app/users/[userId]/collection/[collect
 import { ButtonEditCollection } from '@/app/users/[userId]/collection/[collectionId]/components/ButtonEditCollection'
 import { ButtonAddCollection } from '@/app/users/[userId]/collection/components/ButtonAddCollection'
 import { CollectionLink } from '@/app/users/[userId]/collection/components/CollectionLink'
+import ModalItemEdit from '@/app/users/[userId]/collection/components/ModalItemEdit';
+import ModalItemView from '@/app/users/[userId]/collection/components/ModalItemView';
 import { SelectorCollectionMobile } from '@/app/users/[userId]/collection/components/SelectorCollectionMobile'
 import { Collection, User } from '@/types'
 import { getSession } from '@/utils/authOptions'
@@ -27,6 +29,19 @@ type CollectionPageProps = {
         page?: string
     }
 }
+
+/**
+ * Collection page
+ *
+ * For the collection
+ * -1: Wishlist (Recherches)
+ * -2: Trades (Échanges)
+ * other: Collection
+ *
+ * @param params
+ * @param searchParams
+ * @constructor
+ */
 
 export default async function CollectionPage({ params, searchParams }: CollectionPageProps) {
     const collectionId = parseInt(params.collectionId)
@@ -58,7 +73,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                     }
                 ],
                 includes: [{ relation: 'collectionVinyls' }, { relation: 'user' }],
-                limit: 6
+                limit: 50
             }
         })
     })
@@ -101,7 +116,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
         collectionName = 'Liste de souhaits'
         isEditable = false
     } else if (collectionId === -2) {
-        collectionName = 'Liste de recherches'
+        collectionName = 'Liste d\'échanges'
         isEditable = false
     } else {
         isEditable = isOwner
@@ -219,6 +234,7 @@ export default async function CollectionPage({ params, searchParams }: Collectio
                             )}
                         </div>
                     </div>
+                    {isOwner ? <ModalItemEdit /> : <ModalItemView />}
                 </div>
             </div>
         </div>

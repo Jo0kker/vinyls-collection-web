@@ -39,7 +39,10 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [hasMorePage, setHasMorePage] = useState(false)
     const [nextStep, setNextStep] = useState('Recherche sur discogs')
-    const revalidateCacheClientSearch = revalidateCacheClient.bind('searchVinyls')
+    const revalidateCacheClientSearch = ({ tag = 'searchVinyls' }) => revalidateCacheClient({ tag })
+
+
+
     const [isLoadingAdd, setIsLoadingAdd] = useState(false)
 
     const handleToggle = (index: number) => {
@@ -487,8 +490,8 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                             <Image
                                                 src="https://vinyls-collection.fra1.cdn.digitaloceanspaces.com/helperCodeDiscog.png"
                                                 alt="helper code discogs"
-                                                width={200}
-                                                height={200}
+                                                width={1200}
+                                                height={1200}
                                                 className="h-full w-full rounded-xl"
                                             />
                                         }

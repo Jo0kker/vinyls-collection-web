@@ -1,52 +1,13 @@
 import { redirect } from 'next/navigation'
 
-import { Search } from '@/types'
-import { cn } from '@/utils/classNames'
-import { fetchAPI } from '@/utils/fetchAPI'
-
-import { EmptyList } from './components/EmptyList'
-import { VinylItem } from './components/VinylItem'
-
 type CollectionPageProps = {
     params: {
         userId: string
     }
 }
 
-export default async function CollectionPage({ params }: CollectionPageProps) {
+export default function CollectionPage({ params }: CollectionPageProps) {
     const userId: number = parseInt(params.userId)
 
     redirect(`/users/${userId}/collection/-1`)
-
-    const searchesList = await fetchAPI<Search[]>('/searches/search', {
-        method: 'POST',
-        withSession: true,
-        body: JSON.stringify({
-            search: {
-                filters: [
-                    {
-                        field: 'user.id',
-                        operator: '=',
-                        value: userId
-                    }
-                ],
-                includes: [{ relation: 'vinyl' }],
-                limit: 6
-            }
-        })
-    })
-
-    return (
-        <div
-            className={cn('my-2 grid grid-cols-1', {
-                'md:grid-cols-2 lg:grid-cols-3': searchesList.data.length > 0
-            })}
-        >
-            {searchesList.data.length === 0 && <EmptyList />}
-
-            {searchesList.data.map(item => (
-                <VinylItem key={item.id} item={item} />
-            ))}
-        </div>
-    )
 }

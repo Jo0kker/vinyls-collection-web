@@ -1,3 +1,5 @@
+import { Media } from '@/types/Media';
+
 import type { Collection } from './Collection'
 import type { Vinyl } from './Vinyl'
 
@@ -15,4 +17,5 @@ export interface CollectionVinyl {
     updated_at: Date
     vinyl: Vinyl
     collection?: Collection
+    media?: Media[]
 }
