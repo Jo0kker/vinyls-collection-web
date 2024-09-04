@@ -6,6 +6,7 @@ type InputTextProps = {
     value: string
     setValue?: (value: string) => void
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
     name: string
     label: string
     type?: string
@@ -17,12 +18,14 @@ type InputTextProps = {
     tipMessage?: string
     required?: boolean
     formikOnChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    formikOnBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
 }
 
 export const InputText = ({
     value,
     setValue,
     onChange,
+    onBlur,
     name,
     label,
     type,
@@ -33,11 +36,16 @@ export const InputText = ({
     tipClassname,
     tipMessage,
     required = false,
-    formikOnChange
+    formikOnChange,
+    formikOnBlur
 }: InputTextProps) => {
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue && setValue(e.target.value)
         onChange && onChange(e)
+    }
+
+    const onBlurHandler = (e: React.FocusEvent<HTMLInputElement>) => {
+        onBlur && onBlur(e)
     }
 
     return (
@@ -47,6 +55,7 @@ export const InputText = ({
                 id={name}
                 name={name}
                 onChange={formikOnChange ?? onChangeHandler}
+                onBlur={formikOnBlur ?? onBlurHandler}
                 className={cn(
                     'peer block w-full appearance-none border-0  border-b-2 bg-transparent px-0 py-1.5 text-sm focus:border-fuchsia-700 focus:outline-none focus:ring-0 dark:border-gray-600 dark:text-white dark:focus:border-fuchsia-500',
                     inputClassName ?? 'border-white'
