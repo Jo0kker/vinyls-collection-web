@@ -15,7 +15,7 @@ export default function ResetPasswordPage({ searchParams }: { searchParams: { to
 
             <div className="flex flex-col items-center justify-center lg:mx-32">
                 {token ? (
-                    <ResetPasswordForm token={token} email={email} />
+                    <ResetPasswordForm token={token as string} email={email as string} />
                 ) : (
                     <p className="text-red-500">Token de réinitialisation manquant. Veuillez vérifier le lien dans votre e-mail.</p>
                 )}
