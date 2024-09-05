@@ -97,6 +97,8 @@ export const authOptions: AuthOptions = {
                     )
                 })
 
+                console.log(userData)
+
                 return {
                     ...userData,
                     ...authData
