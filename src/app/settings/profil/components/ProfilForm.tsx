@@ -12,49 +12,60 @@ import { updateProfil } from '../actions/updateProfil'; // Importer l'action
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import { User } from '@/types/User';
-
+import { signIn, useSession } from 'next-auth/react';
+import { showToast } from '@/utils/toast';
 registerPlugin(FilePondPluginImagePreview);
 
 export interface ProfileFormData {
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
   avatar: string | null;
   phone: string;
-  birthDate: string;
-  audioEquipment: string;
+  birth_date: string;
+  audio_equipment: string;
   influence: string;
   description: string;
 }
 
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required('Le prénom est requis'),
-  lastName: Yup.string().required('Le nom est requis'),
+  first_name: Yup.string().required('Le prénom est requis'),
+  last_name: Yup.string().required('Le nom est requis'),
   email: Yup.string().email('Adresse email invalide').required('L\'email est requis'),
   phone: Yup.string().required('Le numéro de téléphone est requis'),
-  birthDate: Yup.date().required('La date de naissance est requise'),
-  audioEquipment: Yup.string().required('L\'équipement audio est requis'),
+  birth_date: Yup.date().required('La date de naissance est requise'),
+  audio_equipment: Yup.string().required('L\'équipement audio est requis'),
   influence: Yup.string(),
   description: Yup.string(),
 });
 
 const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
+  const { update } = useSession()
   const [initialValues, setInitialValues] = useState<ProfileFormData>({
-    firstName: user.first_name,
-    lastName: user.last_name,
+    first_name: user.first_name,
+    last_name: user.last_name,
     email: user.email,
     avatar: user.avatar,
     phone: user.phone,
-    birthDate: user.birth_date,
-    audioEquipment: user.audio_equipment,
+    birth_date: user.birth_date,
+    audio_equipment: user.audio_equipment,
     influence: user.influence,
     description: user.description,
   });
 
   const handleSubmit = async (values: ProfileFormData, { setSubmitting }: any) => {
+    console.log('values', values)
     try {
       await updateProfil(values); // Appeler l'action
       console.log('Profil mis à jour avec succès');
+      showToast({ type: 'success', message: 'Profil mis à jour avec succès' })
+      await update({
+        user: {
+          ...user,
+          ...values
+        }
+      });
+
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Erreur lors de la mise à jour du profil:', error);
@@ -74,14 +85,14 @@ const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
         <Form>
           <div>
             <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">Prénom</label>
-            <Field type="text" id="firstName" name="firstName" className="block w-full mt-1" />
-            <ErrorMessage name="firstName" component="p" className="mt-1 text-sm text-red-600" />
+            <Field type="text" id="first_name" name="first_name" className="block w-full mt-1" />
+            <ErrorMessage name="first_name" component="p" className="mt-1 text-sm text-red-600" />
           </div>
 
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Nom</label>
-            <Field type="text" id="lastName" name="lastName" className="block w-full mt-1" />
-            <ErrorMessage name="lastName" component="p" className="mt-1 text-sm text-red-600" />
+            <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">Nom</label>
+            <Field type="text" id="last_name" name="last_name" className="block w-full mt-1" />
+            <ErrorMessage name="last_name" component="p" className="mt-1 text-sm text-red-600" />
           </div>
 
           <div>
@@ -97,15 +108,15 @@ const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
           </div>
 
           <div>
-            <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">Date de naissance</label>
-            <Field type="date" id="birthDate" name="birthDate" className="block w-full mt-1" />
-            <ErrorMessage name="birthDate" component="p" className="mt-1 text-sm text-red-600" />
+            <label htmlFor="birth_date" className="block text-sm font-medium text-gray-700">Date de naissance</label>
+            <Field type="date" id="birth_date" name="birth_date" className="block w-full mt-1" />
+            <ErrorMessage name="birth_date" component="p" className="mt-1 text-sm text-red-600" />
           </div>
 
           <div>
-            <label htmlFor="audioEquipment" className="block text-sm font-medium text-gray-700">Équipement audio</label>
-            <Field type="text" id="audioEquipment" name="audioEquipment" className="block w-full mt-1" />
-            <ErrorMessage name="audioEquipment" component="p" className="mt-1 text-sm text-red-600" />
+            <label htmlFor="audio_equipment" className="block text-sm font-medium text-gray-700">Équipement audio</label>
+            <Field type="text" id="audio_equipment" name="audio_equipment" className="block w-full mt-1" />
+            <ErrorMessage name="audio_equipment" component="p" className="mt-1 text-sm text-red-600" />
           </div>
 
           <div>
