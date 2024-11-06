@@ -65,13 +65,9 @@ export const authOptions: AuthOptions = {
                     })
                 })
 
-                console.log(authResponse)
-
                 if (!authResponse.ok) return null
 
                 const authData = (await authResponse.json()) as AuthResponse
-
-                console.log(authData)
 
                 const user = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/users/me', {
                     next: {
@@ -111,7 +107,6 @@ export const authOptions: AuthOptions = {
         },
         jwt({ token, user, trigger, session }) {
             if (trigger === "update" && session) {
-                console.log('session', session)
                 token = {
                     ...token,
                     ...session.user

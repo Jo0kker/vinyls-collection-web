@@ -18,7 +18,13 @@ import { fetchAPI } from '@/utils/fetchAPI'
 import { prefixImage } from '@/utils/prefixImage'
 import { showToast } from '@/utils/toast'
 
-const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
+const ButtonAddVinyl = ({ 
+    collectionId,
+    onSuccess 
+}: { 
+    collectionId: number
+    onSuccess?: () => void 
+}) => {
     const session = useSession()
     const [isOpen, setIsOpen] = useState(false)
     const [titleStep, setTitleStep] = useState('Ajouter un vinyls')
@@ -123,6 +129,15 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         }
         if (discogCode) {
             // code is like "[m27113]" and id is 27113 and m for master or r for release
+            // check if code not is like [m27113] or [r27113] return error
+            if (!discogCode.includes('[') || !discogCode.includes(']')) {
+                setIndexStep(0)
+                setOpenIndex(0)
+                setNextStep('Recherche sur discogs')
+                setTitleStep('Ajouter un vinyls')
+                throw new Error('Le code Discogs doit être comme ceci : [m27113] ou [r27113]')
+            }
+            
             const discogId = discogCode
                 .replace('[', '')
                 .replace(']', '')
@@ -168,6 +183,11 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
             } else {
                 setHasMorePage(false)
             }
+        }).catch(e => {
+            showToast({
+                type: 'error',
+                message: e.message
+            })
         })
     }
 
@@ -281,6 +301,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                         })
                         setIsOpen(false)
                         resetAll()
+                        onSuccess?.()
                     })
                     .catch(e => {
                         setIsLoadingAdd(false)
@@ -317,6 +338,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                         })
                         setIsOpen(false)
                         resetAll()
+                        onSuccess?.()
                     })
                     .catch(e => {
                         setIsLoadingAdd(false)
@@ -354,6 +376,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                         })
                         setIsOpen(false)
                         resetAll()
+                        onSuccess?.()
                     })
                     .catch(e => {
                         setIsLoadingAdd(false)
@@ -413,7 +436,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
         <>
             <Tooltip content="Ajouter un vinyls" placement="top" className="mr-1">
                 <button
-                    className="mr-1 inline-flex items-center rounded-md border px-2 py-2 hover:bg-emerald-600 hover:bg-opacity-30 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
+                    className="inline-flex items-center px-2 py-2 mr-1 border rounded-md hover:bg-emerald-600 hover:bg-opacity-30 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2"
                     onClick={() => setIsOpen(true)}
                 >
                     <FontAwesomeIcon icon={faPlus} />
@@ -424,9 +447,9 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                 show={isOpen}
                 position="center"
                 onClose={() => {
-                    setIsOpen(false)
-                    setTitleStep('Ajouter un vinyls')
-                    resetAll()
+                    setIsOpen(false);
+                    setTitleStep('Ajouter un vinyls');
+                    resetAll();
                 }}
             >
                 <Modal.Header>{titleStep}</Modal.Header>
@@ -440,9 +463,9 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                             >
                                 <form
                                     onSubmit={handleSearch}
-                                    className="center flex flex-col gap-2 px-2 pt-3"
+                                    className="flex flex-col gap-2 px-2 pt-3 center"
                                 >
-                                    <span className="w-full text-center italic opacity-40">
+                                    <span className="w-full italic text-center opacity-40">
                                         Aucun champ n'est obligatoire.
                                     </span>
                                     <InputText
@@ -483,7 +506,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                         inputClassName="border-gray-200"
                                         setValue={setDiscogCode}
                                         name="discogCode"
-                                        label="Discogs Code"
+                                        label="Discogs Code (ex: [r258198])"
                                     />
                                     <Tooltip
                                         content={
@@ -492,7 +515,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                 alt="helper code discogs"
                                                 width={1200}
                                                 height={1200}
-                                                className="h-full w-full rounded-xl"
+                                                className="w-full h-full rounded-xl"
                                             />
                                         }
                                         placement="bottom"
@@ -503,7 +526,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                     </Tooltip>
                                     <div className="flex justify-center">
                                         <button
-                                            className="mb-1 rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80"
+                                            className="px-1 py-2 mb-1 text-white rounded-md bg-fuchsia-900 hover:bg-opacity-80"
                                             onClick={handleSearch}
                                         >
                                             Rechercher
@@ -518,7 +541,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                 className="mt-2"
                             >
                                 {vinylsResult && (
-                                    <div className="m-1 flex flex-col gap-4">
+                                    <div className="flex flex-col gap-4 m-1">
                                         {vinylsResult.length === 0 && (
                                             <div className="flex flex-col items-center justify-center">
                                                 <h2 className="text-lg font-bold">
@@ -530,7 +553,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                             vinylsResult.map(item => (
                                                 <div
                                                     key={item.id ? item.id : item.discog_id}
-                                                    className="grid grid-cols-4 gap-4 rounded-xl border-2 p-2"
+                                                    className="grid grid-cols-4 gap-4 p-2 border-2 rounded-xl"
                                                 >
                                                     <div className="col-span-1">
                                                         <Image
@@ -538,10 +561,10 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                             alt={item.title}
                                                             width={100}
                                                             height={100}
-                                                            className="h-full w-full rounded-xl"
+                                                            className="w-full h-full rounded-xl"
                                                         />
                                                     </div>
-                                                    <div className="col-span-2 flex flex-col self-center">
+                                                    <div className="flex flex-col self-center col-span-2">
                                                         <div className="flex flex-row ">
                                                             {item.discog_id && (
                                                                 <Tooltip
@@ -600,7 +623,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                         }) => (
                                                             <form
                                                                 onSubmit={handleSubmit}
-                                                                className="col-span-1 flex flex-col items-center gap-4"
+                                                                className="flex flex-col items-center col-span-1 gap-4"
                                                             >
                                                                 <input
                                                                     type="hidden"
@@ -616,7 +639,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                                     name="format"
                                                                     value={values.format}
                                                                     onChange={handleChange}
-                                                                    className="w-full rounded-md border-2 p-1"
+                                                                    className="w-full p-1 border-2 rounded-md"
                                                                 >
                                                                     {getAllVinylFormats(item).map(
                                                                         format => (
@@ -631,7 +654,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                                 </select>
                                                                 <button
                                                                     type="submit"
-                                                                    className="rounded-md bg-fuchsia-900 p-1 text-white hover:bg-opacity-80"
+                                                                    className="p-1 text-white rounded-md bg-fuchsia-900 hover:bg-opacity-80"
                                                                     disabled={isLoadingAdd}
                                                                 >
                                                                     {isLoadingAdd ? (
@@ -658,7 +681,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                         <div className="flex flex-row justify-center gap-4">
                                             {hasMorePage && (
                                                 <button
-                                                    className="rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80"
+                                                    className="px-1 py-2 text-white rounded-md bg-fuchsia-900 hover:bg-opacity-80"
                                                     onClick={() => {
                                                         if (indexStep === 0) {
                                                             searchVinyls(currentPage + 1).then(
@@ -700,7 +723,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                                 </button>
                                             )}
                                             <button
-                                                className="rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80"
+                                                className="px-1 py-2 text-white rounded-md bg-fuchsia-900 hover:bg-opacity-80"
                                                 onClick={() => {
                                                     if (indexStep === 0) {
                                                         setTitleStep(
@@ -774,8 +797,12 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                             {({ handleSubmit, handleChange, values, setFieldValue }) => (
                                 <form
                                     onSubmit={handleSubmit}
-                                    className="center flex flex-col gap-2 px-2 pt-3"
+                                    className="flex flex-col gap-2 px-2 pt-3 center"
                                 >
+                                    <div className="mb-4 text-sm italic text-gray-500">
+                                        Cette méthode de création manuelle est dépréciée. Pour une meilleure qualité des données, nous vous recommandons fortement d'utiliser la recherche via Discogs.
+                                    </div>
+                                    
                                     <InputText
                                         className="h-14"
                                         value={values.title}
@@ -840,9 +867,9 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                         name="format"
                                         value={values.format}
                                         onChange={handleChange}
-                                        className="w-full rounded-md border-2 p-1"
+                                        className="w-full p-1 border-2 rounded-md"
                                     >
-                                        {formats.map(format => (
+                                                                                {formats.map(format => (
                                             <option key={format.id} value={format.name}>
                                                 {format.name}
                                             </option>
@@ -850,7 +877,7 @@ const ButtonAddVinyl = ({ collectionId }: { collectionId: number }) => {
                                     </select>
                                     <div className="flex justify-center">
                                         <button
-                                            className="mb-1 rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80"
+                                            className="px-1 py-2 mb-1 text-white rounded-md bg-fuchsia-900 hover:bg-opacity-80"
                                             type="submit"
                                         >
                                             Enregistrer

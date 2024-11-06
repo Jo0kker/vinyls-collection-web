@@ -38,7 +38,7 @@ const LINKS = (isAuth?: boolean, userId?: number): Link[] => [
         ? [
               {
                   name: 'Votre espace collectionneur',
-                  href: `/users/${userId}/collection/-1`,
+                  href: `/users/${userId}/collection`,
                   icon: (
                       <FontAwesomeIcon
                           icon={faAlbumCollection}
@@ -61,7 +61,7 @@ const NavBar: FunctionComponent = () => {
     const session = useSession()
 
     return (
-        <div className="mx-auto max-w-screen-xl p-6">
+        <div className="max-w-screen-xl p-6 mx-auto">
             <Desktop session={session.data} links={LINKS} />
             <Mobile session={session.data} links={LINKS} />
         </div>

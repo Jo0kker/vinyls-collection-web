@@ -8,7 +8,7 @@ import { Spinner } from 'flowbite-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import deleteVinyl from '@/app/users/[userId]/collection/[collectionId]/actions/deleteVinyl'
+import deleteVinyl from '@/app/users/[userId]/collection/actions/deleteVinyl'
 import useModalItemEditStore from '@/store/modalItemEditStore'
 import useModalItemViewStore from '@/store/modalItemViewStore'
 import { CollectionVinyl, Search, Trade } from '@/types'
@@ -18,16 +18,17 @@ import { showToast } from '@/utils/toast'
 
 type VinylItemProps = {
     item: Search | CollectionVinyl | Trade
-    collectionId: string
+    collectionId: any
     isOwner?: boolean
+    onDelete?: () => void
+    onRefresh?: () => void
 }
 
-export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
+export function VinylItem({ item, collectionId, isOwner, onDelete, onRefresh }: VinylItemProps) {
     const [isLoadingDelete, setIsLoadingDelete] = useState(false)
     const openModal = useModalItemEditStore((state) => state.openModal);
     const openViewModal = useModalItemViewStore((state) => state.openModal);
 
-    console.log('Start VinylItem')
     const editVinyl = (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         /**
@@ -36,7 +37,10 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
          * -2: Trades (Échanges)
          * other: Collection
          */
-        openModal(item, collectionId)
+        openModal(item, collectionId, () => {
+            // Déclencher le rechargement des données
+            if (onRefresh) onRefresh()
+        })
     }
 
     const viewVinyl = (event : React.MouseEvent<HTMLButtonElement>) => {
@@ -45,7 +49,7 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
     }
 
     return (
-        <div className="group m-1 flex rounded border-2 border-gray-300">
+        <div className="flex m-1 border-2 border-gray-300 rounded group">
             <Link
                 href={`/vinyls/${item.vinyl_id}`}
                 className="relative h-full w-[100px] min-w-[100px]"
@@ -63,10 +67,10 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
             </Link>
 
             <Link href={`/vinyls/${item.vinyl_id}`} className="mx-3 flex-1 truncate py-0.5">
-                <h2 className="text-fuchsia-80 truncate text-lg font-bold group-hover:underline">
+                <h2 className="text-lg font-bold truncate text-fuchsia-80 group-hover:underline">
                     {item.vinyl.title}
                 </h2>
-                <h3 className="mb-2 truncate text-sm text-fuchsia-800">{item.vinyl.artist}</h3>
+                <h3 className="mb-2 text-sm truncate text-fuchsia-800">{item.vinyl.artist}</h3>
                 <p className="text-xs font-light">{item.vinyl.released}</p>
             </Link>
             {isOwner ? (
@@ -83,6 +87,7 @@ export function VinylItem({ item, collectionId, isOwner }: VinylItemProps) {
                             deleteVinyl(item.id, collectionId).then(() => {
                                 setIsLoadingDelete(false)
                                 showToast({ type: 'success', message: 'Vinyle supprimé' })
+                                onDelete?.()
                             })
                         }}
                     >

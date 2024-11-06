@@ -13,6 +13,7 @@ export const metadata = {
 
 export default async function SettingsProfilPage() {
   const session = await getSession()
+
   return (
     <div className="flex flex-col px-4 pt-4 mt-4 bg-white rounded sm:pt-0">
       <div className="flex flex-row justify-center mt-6 mb-4 text-2xl font-bold">

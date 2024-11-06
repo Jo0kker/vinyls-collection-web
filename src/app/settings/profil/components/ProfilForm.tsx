@@ -12,8 +12,9 @@ import { updateProfil } from '../actions/updateProfil'; // Importer l'action
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import { User } from '@/types/User';
-import { signIn, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { showToast } from '@/utils/toast';
+import { FilePondInitialFile, FilePondFile } from 'filepond';
 registerPlugin(FilePondPluginImagePreview);
 
 export interface ProfileFormData {
@@ -41,6 +42,8 @@ const validationSchema = Yup.object().shape({
 
 const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
   const { update } = useSession()
+  const [tempAvatar, setTempAvatar] = useState<FilePondFile | null>(null);
+  const [initialAvatar, setInitialAvatar] = useState<FilePondInitialFile | string | null>(user.avatar);
   const [initialValues, setInitialValues] = useState<ProfileFormData>({
     first_name: user.first_name,
     last_name: user.last_name,
@@ -52,20 +55,39 @@ const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
     influence: user.influence,
     description: user.description,
   });
+  console.log('user', user)
+  console.log('initialValues', initialValues)
 
+  
   const handleSubmit = async (values: ProfileFormData, { setSubmitting }: any) => {
     console.log('values', values)
     try {
-      await updateProfil(values); // Appeler l'action
-      console.log('Profil mis à jour avec succès');
-      showToast({ type: 'success', message: 'Profil mis à jour avec succès' })
-      await update({
-        user: {
+      updateProfil(values).then((response) => {
+        console.log('response', response)
+        showToast({ type: 'success', message: 'Profil mis à jour avec succès' })
+
+        values.avatar = response.avatar
+        console.log('values', values)
+        console.log('update user', {
           ...user,
           ...values
-        }
-      });
+        })
+        
 
+        if (response.avatar) {
+          setInitialValues((prev) => ({
+            ...prev,
+            avatar: response.avatar,
+          }));
+        }
+        
+        update({
+          user: {
+            ...user,
+            ...values
+          }
+        });
+      })
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Erreur lors de la mise à jour du profil:', error);
@@ -130,18 +152,40 @@ const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
             <Field as="textarea" id="description" name="description" className="block w-full mt-1" />
             <ErrorMessage name="description" component="p" className="mt-1 text-sm text-red-600" />
           </div>
-
+          
           <div>
             <label htmlFor="avatar" className="block text-sm font-medium text-gray-700">Avatar</label>
             <FilePond
-              files={initialValues.avatar ? [initialValues.avatar] : []} // Utiliser l'URL directement
+              files={initialAvatar ? [initialAvatar] : []}
               onupdatefiles={(fileItems) => {
-                setFieldValue('avatar', fileItems.map(fileItem => fileItem.file)[0] || null);
+                const file = fileItems[0] || null;
+              
+                if (file) {
+                  setTempAvatar(file);
+              
+                  const adaptedFile: FilePondInitialFile = {
+                    source: file.file as unknown as string,
+                    options: {
+                      type: 'local',
+                      file: {
+                        name: file.file.name,
+                        size: file.file.size,
+                        type: file.file.type,
+                      },
+                    },
+                  };
+              
+                  setInitialAvatar(adaptedFile);
+                  setFieldValue('avatar', file.file);
+                } else {
+                  setTempAvatar(null);
+                  setInitialAvatar(null);
+                  setFieldValue('avatar', null);
+                }
               }}
               allowMultiple={false}
               acceptedFileTypes={['image/png', 'image/jpeg']}
               labelIdle='Déposez votre image ou <span class="filepond--label-action">parcourez</span>'
-              imagePreviewHeight={200} // Hauteur de la prévisualisation
             />
             <ErrorMessage name="avatar" component="p" className="mt-1 text-sm text-red-600" />
           </div>

@@ -14,8 +14,8 @@ export const UserCard = ({ user }: UserCardProps) => {
     return (
         <Link
             key={user.id}
-            href={`/users/${user.id}/collection/-1`}
-            className="m-1 flex flex-row rounded border-8 border-gray-300 hover:bg-gray-400"
+            href={`/users/${user.id}/collection`}
+            className="flex flex-row m-1 border-8 border-gray-300 rounded hover:bg-gray-400"
         >
             <Image
                 src={
@@ -28,7 +28,7 @@ export const UserCard = ({ user }: UserCardProps) => {
                 height={100}
                 className="cursor-pointer"
             />
-            <div className="mx-3 flex flex-col justify-center">
+            <div className="flex flex-col justify-center mx-3">
                 <h2>{user.name}</h2>
                 <p className="text-sm">{user.collectionVinyls_count} vinyls</p>
                 <p className="text-sm">

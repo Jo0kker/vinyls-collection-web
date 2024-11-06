@@ -16,8 +16,6 @@ export const updateProfil = async (userData: ProfileFormData) => {
   formData.append('influence', userData.influence);
   formData.append('description', userData.description);
 
-  console.log('avatar', userData.avatar)
-
   if (userData.avatar) {
     formData.append('avatar', userData.avatar);
   }
@@ -29,6 +27,7 @@ export const updateProfil = async (userData: ProfileFormData) => {
       body: formData,
       withSession: true,
     });
+    console.log('response', response)
 
     return response;
   } catch (error) {

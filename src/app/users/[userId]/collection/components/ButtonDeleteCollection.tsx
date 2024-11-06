@@ -6,7 +6,7 @@ import { faTrash, faCircleExclamation, faCheck, faXmark } from '@fortawesome/pro
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Modal, Tooltip } from 'flowbite-react'
 
-import deleteCollection from '@/app/users/[userId]/collection/[collectionId]/actions/deleteCollection'
+import deleteCollection from '@/app/users/[userId]/collection/actions/deleteCollection'
 import { showToast } from '@/utils/toast'
 
 type ButtonDeleteCollectionProps = {

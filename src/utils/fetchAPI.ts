@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 import { getSession } from './authOptions'
 
 export type FetchResponse<T> = {
+    avatar: string | null
     id: any
     data: T
     current_page: number

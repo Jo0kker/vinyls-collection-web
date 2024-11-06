@@ -8,7 +8,7 @@ import { Modal } from 'flowbite-react'
 import { ErrorMessage, Formik } from 'formik'
 import * as Yup from 'yup'
 
-import addCollection from '@/app/users/[userId]/collection/[collectionId]/actions/addCollection'
+import addCollection from '@/app/users/[userId]/collection/actions/addCollection'
 import { Button } from '@/components/atom/Button'
 import { InputText } from '@/components/atom/InputText'
 import { showToast } from '@/utils/toast'

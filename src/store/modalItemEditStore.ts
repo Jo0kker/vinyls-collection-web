@@ -6,7 +6,8 @@ type ModalState = {
     isModalOpen: boolean;
     modalData: Search | CollectionVinyl | Trade | null;
     collectionType: string;
-    openModal: (data: any, collectionType: string) => void;
+    onRefresh?: () => void
+    openModal: (item: CollectionVinyl | Search | Trade, collectionId: number, refreshCallback?: () => void) => void
     closeModal: () => void;
 };
 
@@ -14,8 +15,19 @@ const useModalItemEditStore = create<ModalState>((set) => ({
     isModalOpen: false,
     modalData: null,
     collectionType: '',
-    openModal: (data, collectionType) => set({ isModalOpen: true, modalData: data, collectionType: collectionType }),
-    closeModal: () => set({ isModalOpen: false, modalData: null })
+    onRefresh: undefined,
+    openModal: (item, collectionId, refreshCallback) => set({
+        isModalOpen: true,
+        modalData: item,
+        collectionType: collectionId.toString(),
+        onRefresh: refreshCallback
+    }),
+    closeModal: () => set({
+        isModalOpen: false,
+        modalData: null,
+        collectionType: '',
+        onRefresh: undefined
+    })
 }));
 
 export default useModalItemEditStore;

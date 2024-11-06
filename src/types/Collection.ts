@@ -9,4 +9,5 @@ export interface Collection {
     created_at: Date
     updated_at: Date
     user?: User
+    vinyls_count: number
 }

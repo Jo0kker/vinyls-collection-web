@@ -68,6 +68,7 @@
         "zustand": "^4.1.4"
     },
     "devDependencies": {
+        "@tailwindcss/forms": "^0.5.9",
         "@tanstack/eslint-plugin-query": "^5.0.5",
         "@types/jwt-decode": "^3.1.0",
         "@typescript-eslint/eslint-plugin": "^6.9.0",
