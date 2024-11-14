@@ -25,7 +25,11 @@ const MobileMenu = ({ session, links }: MenuItem) => {
         subMenu: [
             {
                 name: 'Profil',
-                href: '/profil'
+                href: '/settings/profil'
+            },
+            {
+                name: 'Sécurité',
+                href: '/settings/security'
             },
             {
                 name: 'Settings',
@@ -39,7 +43,7 @@ const MobileMenu = ({ session, links }: MenuItem) => {
     }
 
     return (
-        <div className="fixed bottom-0 left-1/2 z-50 w-full -translate-x-1/2 border-t border-gray-200 bg-white pb-2 dark:border-gray-600 dark:bg-gray-700 md:hidden">
+        <div className="fixed bottom-0 z-50 w-full pb-2 -translate-x-1/2 bg-white border-t border-gray-200 left-1/2 dark:border-gray-600 dark:bg-gray-700 md:hidden">
             {/* top part of navBar */}
             {subMenu && subMenu?.length !== 0 && (
                 <div className="w-full border-b-2 border-purple-700">
@@ -73,7 +77,7 @@ const MobileMenu = ({ session, links }: MenuItem) => {
                     ))}
                 </div>
             )}
-            <div className="mx-auto flex h-full max-w-md justify-between">
+            <div className="flex justify-between h-full max-w-md mx-auto">
                 <MainItem name={homeItem.name} href={homeItem.href} icon={homeItem.icon} />
                 {links(!!session, session?.user?.id).map(link => (
                     <MainItem key={link.href} href={link.href} name={link.name} icon={link.icon} />

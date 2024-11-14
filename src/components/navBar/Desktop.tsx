@@ -15,8 +15,8 @@ const DesktopMenu = ({ session, links }: MenuItem) => {
     const [menuOpen, setMenuOpen] = useState(false)
 
     return (
-        <nav className="font-roboto relative z-40 hidden w-full bg-transparent md:block">
-            <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between px-4 py-4 md:px-0">
+        <nav className="relative z-40 hidden w-full bg-transparent font-roboto md:block">
+            <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 py-4 mx-auto md:px-0">
                 <div className="md:flex-1">
                     <Link href="/">
                         <span className="sr-only">Vinyls Collection</span>
@@ -31,20 +31,20 @@ const DesktopMenu = ({ session, links }: MenuItem) => {
                         <Link href="/login" className="mr-4 md:mr-0">
                             <button
                                 type="button"
-                                className="inline-flex items-center justify-center whitespace-nowrap rounded-3xl border border-red-700 bg-black bg-transparent bg-opacity-10 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-opacity-20 hover:text-amber-600"
+                                className="inline-flex items-center justify-center px-4 py-2 text-base font-medium text-white bg-transparent bg-black border border-red-700 shadow-sm whitespace-nowrap rounded-3xl bg-opacity-10 hover:bg-opacity-20 hover:text-amber-600"
                             >
                                 Connexion / Inscription
                             </button>
                         </Link>
                     )}
                     <button
-                        className="text-bold inline-flex h-10 w-10 items-center justify-center rounded-md bg-transparent p-2 text-sm text-white outline-none hover:bg-gray-100 hover:outline-none focus:bg-transparent focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-200  md:hidden"
+                        className="inline-flex items-center justify-center w-10 h-10 p-2 text-sm text-white bg-transparent rounded-md outline-none text-bold hover:bg-gray-100 hover:outline-none focus:bg-transparent focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-200 md:hidden"
                         onClick={() => setMenuOpen(prev => !prev)}
                     >
                         {menuOpen ? (
-                            <XMarkIcon className="h-6 w-6" />
+                            <XMarkIcon className="w-6 h-6" />
                         ) : (
-                            <Bars3Icon className="h-6 w-6" />
+                            <Bars3Icon className="w-6 h-6" />
                         )}
                     </button>
                 </div>
@@ -54,14 +54,14 @@ const DesktopMenu = ({ session, links }: MenuItem) => {
                         { hidden: !menuOpen }
                     )}
                 >
-                    <ul className="mt-4 flex flex-col space-y-2 rounded-lg border border-gray-100 bg-gray-50 p-4 font-medium md:mt-0 md:flex-row md:space-x-8 md:space-y-0 md:border-0 md:bg-transparent md:p-0">
+                    <ul className="flex flex-col p-4 mt-4 space-y-2 font-medium border border-gray-100 rounded-lg bg-gray-50 md:mt-0 md:flex-row md:space-x-8 md:space-y-0 md:border-0 md:bg-transparent md:p-0">
                         {links(!!session, session?.user.id).map(link => (
                             <Link
                                 key={link.href}
                                 href={link.href}
                                 className="text-gray-900 hover:bg-slate-200 hover:text-amber-600 md:text-white md:hover:bg-transparent"
                             >
-                                <li className="cursor-pointer rounded-md p-3 font-body text-base font-medium  md:rounded-none md:p-0 ">
+                                <li className="p-3 text-base font-medium rounded-md cursor-pointer font-body md:rounded-none md:p-0 ">
                                     {link.name}
                                 </li>
                             </Link>
@@ -98,9 +98,9 @@ export function verifyEmail(session: Session | undefined | null) {
 function AccountMenu({ session }: { session: Session }) {
     return (
         <Menu as="div" className="relative inline-block text-left">
-            <Menu.Button className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-3xl border border-red-700 bg-black bg-transparent bg-opacity-10 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-opacity-20">
+            <Menu.Button className="inline-flex items-center justify-center px-4 py-2 ml-8 text-base font-medium text-white bg-transparent bg-black border border-red-700 shadow-sm whitespace-nowrap rounded-3xl bg-opacity-10 hover:bg-opacity-20">
                 Mon compte
-                <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+                <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
             </Menu.Button>
 
             <Transition
@@ -112,9 +112,9 @@ function AccountMenu({ session }: { session: Session }) {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
             >
-                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="px-4 py-3">
-                        <p className="truncate text-sm font-medium text-gray-900">
+                        <p className="text-sm font-medium text-gray-900 truncate">
                             {session.user.name}
                         </p>
                     </div>
@@ -123,12 +123,27 @@ function AccountMenu({ session }: { session: Session }) {
                             {({ active }) => (
                                 <Link
                                     href="/settings/profil"
+                                    key="profil"
                                     className={cn(
                                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                         'block px-4 py-2 text-sm'
                                     )}
                                 >
                                     Mon profil
+                                </Link>
+                            )}
+                        </Menu.Item>
+                        <Menu.Item>
+                            {({ active }) => (
+                                <Link
+                                    href="/settings/security"
+                                    key="security"
+                                    className={cn(
+                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                        'block px-4 py-2 text-sm'
+                                    )}
+                                >
+                                    Sécurité
                                 </Link>
                             )}
                         </Menu.Item>
