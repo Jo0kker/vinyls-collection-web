@@ -19,4 +19,8 @@ export interface User {
     deleted_at?: Date
     collections_count?: number
     collectionVinyls_count?: number
+    discogs_id?: number
+    discogs_token?: string
+    discogs_username?: string
+    discogs_data?: any
 }

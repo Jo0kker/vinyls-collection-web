@@ -28,6 +28,7 @@ import { useCollectionSearch } from './hooks/useCollectionSearch'
 import { Loading } from '@/assets/lottie/Loading'
 import { CollectionFilters } from '@/app/users/[userId]/collection/components/CollectionFilters'
 import { useCollectionSort } from './hooks/useCollectionSort'
+import ButtonSyncDiscogs from './components/ButtonSyncDiscogs'
 
 
 const SPECIAL_COLLECTIONS = {
@@ -151,6 +152,7 @@ export default function CollectionPage() {
             {/* Desktop Navigation */}
             <div className="flex flex-col md:flex-row md:gap-4">
                 <nav className="hidden w-56 gap-2 px-4 overflow-x-auto md:mx-0 md:flex md:flex-col md:p-4 md:border-r md:border-fuchsia-100">
+                    {isOwner && <ButtonSyncDiscogs />}
                     {isOwner && <ButtonAddCollection />}
                     
                     {/* Champ de recherche desktop */}
