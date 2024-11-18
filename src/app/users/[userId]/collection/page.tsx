@@ -131,7 +131,7 @@ export default function CollectionPage() {
             <div className="flex flex-col items-center gap-4 mb-6 md:hidden">
                 {isOwner && (
                     <div className="w-full max-w-[24rem]">
-                        <ButtonAddCollection />
+                        <ButtonAddCollection onSuccess={() => searchCollections(searchQuery, getSortParams())} />
                     </div>
                 )}
                 <MobileCollectionSelector
@@ -153,7 +153,7 @@ export default function CollectionPage() {
             <div className="flex flex-col md:flex-row md:gap-4">
                 <nav className="hidden w-56 gap-2 px-4 overflow-x-auto md:mx-0 md:flex md:flex-col md:p-4 md:border-r md:border-fuchsia-100">
                     {isOwner && <ButtonSyncDiscogs />}
-                    {isOwner && <ButtonAddCollection />}
+                    {isOwner && <ButtonAddCollection onSuccess={() => searchCollections(searchQuery, getSortParams())} />}
                     
                     {/* Champ de recherche desktop */}
                     <div className="relative mb-4">
