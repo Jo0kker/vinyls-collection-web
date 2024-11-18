@@ -13,7 +13,11 @@ import { Button } from '@/components/atom/Button'
 import { InputText } from '@/components/atom/InputText'
 import { showToast } from '@/utils/toast'
 
-export function ButtonAddCollection() {
+type ButtonAddCollectionProps = {
+    onSuccess?: () => void;
+}
+
+export function ButtonAddCollection({ onSuccess }: ButtonAddCollectionProps) {
     const [isOpenModal, setIsOpenModal] = useState(false)
 
     return (
@@ -36,19 +40,30 @@ export function ButtonAddCollection() {
                         validationSchema={Yup.object({
                             collectionName: Yup.string().required(
                                 'Le nom de la collection est requis'
-                            ),
-                            collectionDescription: Yup.string()
+                            )
                         })}
                         onSubmit={values => {
-                            addCollection(values.collectionName, values.collectionDescription).then(
-                                () => {
+                            addCollection(values.collectionName)
+                                .then(() => {
                                     showToast({
                                         type: 'success',
                                         message: 'Collection créée avec succès'
                                     })
                                     setIsOpenModal(false)
-                                }
-                            )
+                                    onSuccess?.()
+                                })
+                                .catch((error) => {
+                                    showToast({
+                                        type: 'error',
+                                        message: (() => {
+                                            const errorMessage = JSON.parse(error.message).message
+                                            if (errorMessage === 'The mutate.0.attributes.name has already been taken.') {
+                                                return 'Une collection avec ce nom existe déjà'
+                                            }
+                                            return errorMessage
+                                        })()
+                                    })
+                                })
                         }}
                     >
                         {formik => (
@@ -65,13 +80,6 @@ export function ButtonAddCollection() {
                                     inputClassName="border-gray-300 dark:border-gray-700"
                                 />
                                 <ErrorMessage name="collectionName" />
-                                <InputText
-                                    value={formik.values.collectionDescription}
-                                    formikOnChange={formik.handleChange}
-                                    name="collectionDescription"
-                                    label="Description de la collection"
-                                    inputClassName="border-gray-300 dark:border-gray-700"
-                                />
                                 <Button className="w-full" type="submit">
                                     Créer
                                 </Button>
