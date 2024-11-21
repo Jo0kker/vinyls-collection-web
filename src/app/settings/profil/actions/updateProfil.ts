@@ -1,33 +1,42 @@
 'use server';
 
 import { fetchAPI } from '@/utils/fetchAPI';
-
 import { ProfileFormData } from '../components/ProfilForm';
 import { revalidateTag } from 'next/cache';
 
 export const updateProfil = async (userData: ProfileFormData) => {
   const formData = new FormData();
-  formData.append('first_name', userData.first_name);
-  formData.append('last_name', userData.last_name);
-  formData.append('email', userData.email);
-  formData.append('phone', userData.phone);
-  formData.append('birth_date', userData.birth_date);
-  formData.append('audio_equipment', userData.audio_equipment);
-  formData.append('influence', userData.influence);
-  formData.append('description', userData.description);
 
+  // Liste des champs à vérifier
+  const fields: (keyof ProfileFormData)[] = [
+    'first_name',
+    'last_name',
+    'email',
+    'phone',
+    'birth_date',
+    'audio_equipment',
+    'influence',
+    'description'
+  ];
+
+  // N'ajouter que les champs non vides
+  fields.forEach(field => {
+    if (userData[field]) {
+      formData.append(field, userData[field]);
+    }
+  });
+
+  // Traitement spécial pour l'avatar car c'est un File
   if (userData.avatar) {
     formData.append('avatar', userData.avatar);
   }
 
   try {
-
     const response = await fetchAPI('/users/profile', {
       method: 'POST',
       body: formData,
       withSession: true,
     });
-    console.log('response', response)
 
     return response;
   } catch (error) {

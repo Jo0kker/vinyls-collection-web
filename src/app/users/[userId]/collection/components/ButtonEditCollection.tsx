@@ -12,16 +12,20 @@ import { Collection } from '@/types'
 
 type ButtonEditCollectionProps = {
     collection: Collection
+    onSuccess?: () => void
 }
 
-export const ButtonEditCollection = ({ collection }: ButtonEditCollectionProps) => {
+export const ButtonEditCollection = ({ collection, onSuccess }: ButtonEditCollectionProps) => {
     const [isOpen, setIsOpen] = useState(false)
     const [newCollectionName, setNewCollectionName] = useState(collection.name)
 
     const handleUpdateCollection = () => {
         updateCollection(collection.id, {
             name: newCollectionName
-        }).then(() => setIsOpen(false))
+        }).then(() => {
+            setIsOpen(false)
+            onSuccess?.()
+        })
     }
 
     return (

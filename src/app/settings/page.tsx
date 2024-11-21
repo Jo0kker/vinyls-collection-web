@@ -4,7 +4,7 @@ import { faCompactDisc } from '@fortawesome/pro-light-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useSession } from 'next-auth/react'
 import { fetchAPI } from '@/utils/fetchAPI'
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { cn } from '@/utils/classNames'
 import { useSearchParams } from 'next/navigation'
 
@@ -15,55 +15,55 @@ export default function SettingsPage() {
     const searchParams = useSearchParams()
 
     const link = searchParams.get('link')
-        
-    if (link === 'true' && session?.user?.access_token) {
-        fetchAPI('/users/me', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session.user.access_token}`
-            }
-        })
-        .then(userData => {
-            update({
-                user: {
-                    ...userData,
-                    access_token: session.user.access_token
+
+    const getDiscogsUrl = async () => {
+        try {
+            const response: any = await fetchAPI('/auth/discogs', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session?.user?.access_token}`
                 }
             })
-        })
-        .catch(error => {
-            console.error('Erreur lors de la mise à jour de la session:', error)
-        })        
+            
+            setIsLinked(!!response.url)
+            if (response.url) {
+                setDiscogsUrl(response.url)
+            }
+        } catch (error) {
+            setIsLinked(false)
+        }
     }
 
     useEffect(() => {
-        const getDiscogsUrl = async () => {
-            try {
-                const response: any = await fetchAPI('/auth/discogs', {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${session?.user?.access_token}`
+        if (link === 'true' && session?.user?.access_token) {
+            fetchAPI('/users/me', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.user.access_token}`
+                }
+            })
+            .then(userData => {
+                console.log('userData', userData)
+                update({
+                    user: {
+                        ...userData,
+                        access_token: session.user.access_token
                     }
                 })
-                
-                setIsLinked(!!response.url)
-                if (response.url) {
-                    setDiscogsUrl(response.url)
-                }
-            } catch (error) {
-                setIsLinked(false)
-            }
+            })
+            .catch(error => {
+                console.error('Erreur lors de la mise à jour de la session:', error)
+            })        
         }
-
         if (session?.user?.access_token) {
             getDiscogsUrl()
         }
-    }, [session])
-
+    }, [])
+    
     return (
         <div className="flex flex-col px-4 pt-4 mt-4 bg-white rounded sm:pt-0">
             <div className="flex flex-row justify-center mt-6 mb-4 text-2xl font-bold">

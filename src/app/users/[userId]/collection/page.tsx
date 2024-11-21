@@ -28,7 +28,11 @@ import { useCollectionSearch } from './hooks/useCollectionSearch'
 import { Loading } from '@/assets/lottie/Loading'
 import { CollectionFilters } from '@/app/users/[userId]/collection/components/CollectionFilters'
 import { useCollectionSort } from './hooks/useCollectionSort'
-import ButtonSyncDiscogs from './components/ButtonSyncDiscogs'
+import ButtonImportDiscogs from './components/ButtonImportDiscogs'
+import { ViewStyle } from './types/ViewStyle'
+import { ViewStyleButtons } from './components/ViewStyleButtons'
+import { useViewStyle } from './hooks/useViewStyle'
+import { Pagination } from './components/Pagination'
 
 
 const SPECIAL_COLLECTIONS = {
@@ -41,7 +45,7 @@ export type SpecialCollection = {
     name: string
 }
 
-export const specialCollections: SpecialCollection[] = [
+const specialCollections: SpecialCollection[] = [
     { id: SPECIAL_COLLECTIONS.WISHLIST, name: 'Liste de souhaits' },
     { id: SPECIAL_COLLECTIONS.TRADES, name: 'Liste d\'échanges' }
 ]
@@ -58,6 +62,13 @@ export default function CollectionPage() {
     const [ownerData, setOwnerData] = useState<User>({} as User)
     const [isLoading, setIsLoading] = useState(false)
     const [refreshTrigger, setRefreshTrigger] = useState(0)
+    const { viewStyle, setViewStyle } = useViewStyle()
+    const [pagination, setPagination] = useState({
+        currentPage: 1,
+        totalPages: 1,
+        totalItems: 0,
+        perPage: 24
+    })
 
     // Hook de tri des collections
     const { 
@@ -94,9 +105,15 @@ export default function CollectionPage() {
             const response = await getCollectionData(
                 parseInt(userId),
                 selectedCollection.id,
-                currentPage
+                pagination.currentPage
             )
             setCollectionItems(response.data)
+            setPagination({
+                currentPage: response.current_page,
+                totalPages: response.last_page,
+                totalItems: response.total,
+                perPage: response.per_page
+            })
         } catch (error) {
             console.error('Erreur lors du chargement des items:', error)
         }
@@ -105,7 +122,7 @@ export default function CollectionPage() {
 
     useEffect(() => {
         loadCollectionItems()
-    }, [selectedCollection, currentPage, refreshTrigger])
+    }, [selectedCollection, pagination.currentPage, refreshTrigger])
 
     useEffect(() => {
         if (collections.length > 0 && !selectedCollection) {
@@ -131,6 +148,7 @@ export default function CollectionPage() {
             <div className="flex flex-col items-center gap-4 mb-6 md:hidden">
                 {isOwner && (
                     <div className="w-full max-w-[24rem]">
+                        <ButtonImportDiscogs onSuccess={() => searchCollections(searchQuery, getSortParams())} />
                         <ButtonAddCollection onSuccess={() => searchCollections(searchQuery, getSortParams())} />
                     </div>
                 )}
@@ -152,7 +170,7 @@ export default function CollectionPage() {
             {/* Desktop Navigation */}
             <div className="flex flex-col md:flex-row md:gap-4">
                 <nav className="hidden w-56 gap-2 px-4 overflow-x-auto md:mx-0 md:flex md:flex-col md:p-4 md:border-r md:border-fuchsia-100">
-                    {isOwner && <ButtonSyncDiscogs />}
+                    {isOwner && <ButtonImportDiscogs onSuccess={() => searchCollections(searchQuery, getSortParams())} />}
                     {isOwner && <ButtonAddCollection onSuccess={() => searchCollections(searchQuery, getSortParams())} />}
                     
                     {/* Champ de recherche desktop */}
@@ -253,10 +271,14 @@ export default function CollectionPage() {
                                     />
                                     {selectedCollection.id > 0 && (
                                         <>
-                                            <ButtonEditCollection collection={selectedCollection as Collection} />
+                                            <ButtonEditCollection 
+                                                collection={selectedCollection as Collection} 
+                                                onSuccess={() => searchCollections(searchQuery, getSortParams())}
+                                            />
                                             <ButtonDeleteCollection
                                                 collectionId={selectedCollection.id}
                                                 userId={parseInt(userId)}
+                                                onSuccess={() => searchCollections(searchQuery, getSortParams())}
                                             />
                                         </>
                                     )}
@@ -264,32 +286,48 @@ export default function CollectionPage() {
                             )}
 
                             {/* Collection Items */}
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                                {isLoading ? (
-                                    <div className="flex items-center justify-center h-full col-span-full">
-                                        <Loading className="w-10 opacity-40" />
-                                    </div>
-                                ) : collectionItems.length === 0 ? (
-                                    <div className="col-span-full">
-                                        <EmptyList />
-                                    </div>
-                                ) : (
-                                    collectionItems.map(item => (
-                                        <VinylItem
-                                            key={item.id}
-                                            item={item}
-                                            collectionId={selectedCollection?.id}
-                                            isOwner={isOwner}
-                                            onDelete={() => {
-                                                searchCollections(searchQuery, getSortParams())
-                                                loadCollectionItems()
-                                            }}
-                                            onRefresh={loadCollectionItems}
-                                        />
-                                    ))
-                                )}
+                            <div className="flex items-center justify-between mb-4">
+                                <ViewStyleButtons 
+                                    currentStyle={viewStyle}
+                                    onStyleChange={setViewStyle}
+                                />
+                            </div>
+
+                            <div className={cn(
+                                viewStyle === ViewStyle.DETAILS 
+                                    ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 p-2'
+                                    : cn(
+                                        'grid gap-3',
+                                        viewStyle === ViewStyle.GRID 
+                                            ? 'grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6' 
+                                            : 'grid-cols-1'
+                                    )
+                            )}>
+                                {collectionItems.map(item => (
+                                    <VinylItem
+                                        key={item.id}
+                                        item={item}
+                                        collectionId={selectedCollection?.id}
+                                        isOwner={isOwner}
+                                        onDelete={() => {
+                                            searchCollections(searchQuery, getSortParams())
+                                            loadCollectionItems()
+                                        }}
+                                        onRefresh={loadCollectionItems}
+                                        viewStyle={viewStyle}
+                                    />
+                                ))}
                             </div>
                             <ModalItemEdit />
+                            {collectionItems.length > 0 && pagination.totalPages > 1 && (
+                                <Pagination
+                                    currentPage={pagination.currentPage}
+                                    totalPages={pagination.totalPages}
+                                    onPageChange={(page) => {
+                                        setPagination(prev => ({ ...prev, currentPage: page }))
+                                    }}
+                                />
+                            )}
                         </>
                     )}
                 </div>

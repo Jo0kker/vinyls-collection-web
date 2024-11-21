@@ -30,12 +30,12 @@ export interface ProfileFormData {
 }
 
 const validationSchema = Yup.object().shape({
-  first_name: Yup.string().required('Le prénom est requis'),
-  last_name: Yup.string().required('Le nom est requis'),
+  first_name: Yup.string(),
+  last_name: Yup.string(),
   email: Yup.string().email('Adresse email invalide').required('L\'email est requis'),
-  phone: Yup.string().required('Le numéro de téléphone est requis'),
-  birth_date: Yup.date().required('La date de naissance est requise'),
-  audio_equipment: Yup.string().required('L\'équipement audio est requis'),
+  phone: Yup.string(),
+  birth_date: Yup.date(),
+  audio_equipment: Yup.string(),
   influence: Yup.string(),
   description: Yup.string(),
 });
@@ -63,7 +63,6 @@ const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
     console.log('values', values)
     try {
       updateProfil(values).then((response) => {
-        console.log('response', response)
         showToast({ type: 'success', message: 'Profil mis à jour avec succès' })
 
         values.avatar = response.avatar

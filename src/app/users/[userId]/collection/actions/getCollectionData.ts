@@ -10,6 +10,7 @@ export const getCollectionData = async (
 ): Promise<FetchResponse<CollectionVinyl[]>> => {
     if (!collectionId) return {
         data: [],
+        status: 200,
         total: 0,
         current_page: 1,
         last_page: 1,

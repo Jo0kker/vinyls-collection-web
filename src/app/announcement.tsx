@@ -1,8 +1,8 @@
 import { cn } from '@/utils/classNames'
-import { fetchAPI, FetchResponse } from '@/utils/fetchAPI'
+import { APIResponse, fetchAPI } from '@/utils/fetchAPI'
 
 export default async function Announcement() {
-    const stats: FetchResponse<{
+    const stats: APIResponse<{
         users: number
         collections: number
         vinyls: number
@@ -15,7 +15,7 @@ export default async function Announcement() {
     ]
 
     return (
-        <article className="flex justify-between gap-4 rounded-lg bg-black/10 px-5 py-3 shadow-md">
+        <article className="flex justify-between gap-4 px-5 py-3 rounded-lg shadow-md bg-black/10">
             <p className="font-medium text-red-500">
                 <span className="lg:hidden ">Site encore en développement</span>
                 <span className="hidden lg:inline ">Site encore en développement.</span>
