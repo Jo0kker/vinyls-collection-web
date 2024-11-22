@@ -12,6 +12,8 @@ export default function CallbackPage() {
     const { update } = useSession()
     
     useEffect(() => {
+        if (!searchParams) return
+        
         const token = searchParams.get('access_token')
         
         console.log('Token:', token)
@@ -36,8 +38,7 @@ export default function CallbackPage() {
                     type: 'success', 
                     message: 'Compte Discogs lié avec succès' 
                 })
-                console.log('UserData:', userData)
-                //router.push('/settings')
+                router.push('/settings')
             })
             .catch((error) => {
                 console.error('Erreur:', error)
@@ -45,10 +46,10 @@ export default function CallbackPage() {
                     type: 'error', 
                     message: 'Erreur lors de la liaison avec Discogs' 
                 })
-                //router.push('/settings')
+                router.push('/settings')
             })
         } else {
-            //router.push('/settings')
+            router.push('/settings')
         }
     }, [searchParams, router, update])
 

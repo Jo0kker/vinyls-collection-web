@@ -159,8 +159,8 @@ export function VinylItem({ item, collectionId, isOwner, onDelete, onRefresh, vi
                                 <Image
                                     src={prefixImage(item.vinyl?.image)}
                                     alt={item.vinyl?.title}
-                                    width={viewStyle === ViewStyle.GRID ? 180 : 100}
-                                    height={viewStyle === ViewStyle.GRID ? 180 : 100}
+                                    width={viewStyle === ViewStyle.COMPACT ? 50 : 100}
+                                    height={viewStyle === ViewStyle.COMPACT ? 50 : 100}
                                     className="object-cover w-full h-full rounded cursor-pointer"
                                 />
                             </Link>

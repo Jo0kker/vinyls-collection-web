@@ -14,7 +14,7 @@ export default function SettingsPage() {
     const [isLinked, setIsLinked] = useState<boolean>(false)
     const searchParams = useSearchParams()
 
-    const link = searchParams.get('link')
+    const link = searchParams?.get('link')
 
     const getDiscogsUrl = async () => {
         try {

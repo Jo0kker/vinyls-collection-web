@@ -1,8 +1,8 @@
 import { cn } from '@/utils/classNames'
-import { APIResponse, fetchAPI } from '@/utils/fetchAPI'
+import { fetchAPI, FetchResponse } from '@/utils/fetchAPI'
 
 export default async function Announcement() {
-    const stats: APIResponse<{
+    const stats: FetchResponse<{
         users: number
         collections: number
         vinyls: number
@@ -11,6 +11,7 @@ export default async function Announcement() {
     const badges = [
         { label: `${stats.data.users} collectionneurs`, color: 'text-orange-500' },
         { label: `${stats.data.collections} collections`, color: 'text-green-500' },
+     
         { label: `${stats.data.vinyls} disques`, color: 'text-blue-400' }
     ]
 

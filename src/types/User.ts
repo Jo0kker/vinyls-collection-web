@@ -23,4 +23,5 @@ export interface User {
     discogs_token?: string
     discogs_username?: string
     discogs_data?: any
+    ability?: string[]
 }
