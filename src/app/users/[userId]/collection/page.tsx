@@ -35,7 +35,8 @@ import { useViewStyle } from './hooks/useViewStyle'
 import { Pagination } from './components/Pagination'
 
 
-const SPECIAL_COLLECTIONS = {
+export const SPECIAL_COLLECTIONS = {
+    ALL: -3,
     WISHLIST: -1,
     TRADES: -2
 } as const
@@ -46,6 +47,7 @@ export type SpecialCollection = {
 }
 
 const specialCollections: SpecialCollection[] = [
+    { id: SPECIAL_COLLECTIONS.ALL, name: 'Toutes les collections' },
     { id: SPECIAL_COLLECTIONS.WISHLIST, name: 'Liste de souhaits' },
     { id: SPECIAL_COLLECTIONS.TRADES, name: 'Liste d\'échanges' }
 ]
@@ -102,18 +104,48 @@ export default function CollectionPage() {
 
         setIsLoading(true)
         try {
-            const response = await getCollectionData(
-                parseInt(userId),
-                selectedCollection.id,
-                pagination.currentPage
-            )
-            setCollectionItems(response.data)
-            setPagination({
-                currentPage: response.current_page,
-                totalPages: response.last_page,
-                totalItems: response.total,
-                perPage: response.per_page
-            })
+            if (selectedCollection.id === SPECIAL_COLLECTIONS.ALL) {
+                const response = await fetchAPI('/collectionVinyl/search', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        search: {
+                            scopes: [
+                                { name: "uniqueVinyls" }
+                            ],
+                            includes: [
+                                {relation: "vinyl"},
+                                {relation: "collection"},
+                                {relation: "collection.user"}
+                            ],
+                            filters: [
+                                {field: "user_id", value: parseInt(userId)}
+                            ],
+                            page: pagination.currentPage,
+                            per_page: pagination.perPage
+                        }
+                    })
+                })
+                setCollectionItems(response.data)
+                setPagination({
+                    currentPage: response.current_page,
+                    totalPages: response.last_page,
+                    totalItems: response.total,
+                    perPage: response.per_page
+                })
+            } else {
+                const response = await getCollectionData(
+                    parseInt(userId),
+                    selectedCollection.id,
+                    pagination.currentPage
+                )
+                setCollectionItems(response.data)
+                setPagination({
+                    currentPage: response.current_page,
+                    totalPages: response.last_page,
+                    totalItems: response.total,
+                    perPage: response.per_page
+                })
+            }
         } catch (error) {
             console.error('Erreur lors du chargement des items:', error)
         }
@@ -286,11 +318,16 @@ export default function CollectionPage() {
                             )}
 
                             {/* Collection Items */}
-                            <div className="flex items-center justify-between mb-4">
-                                <ViewStyleButtons 
-                                    currentStyle={viewStyle}
-                                    onStyleChange={setViewStyle}
-                                />
+                            <div className="flex flex-row items-center justify-between mb-4">
+                                <div className="flex flex-row items-center gap-2">
+                                    {isOwner && selectedCollection && selectedCollection.id !== SPECIAL_COLLECTIONS.ALL && (
+                                        <ButtonAddVinyl
+                                            collectionId={selectedCollection.id}
+                                            onSuccess={() => searchCollections(searchQuery, getSortParams())}
+                                        />
+                                    )}
+                                    <ViewStyleButtons viewStyle={viewStyle} onViewStyleChange={setViewStyle} />
+                                </div>
                             </div>
 
                             <div className={cn(
@@ -319,6 +356,7 @@ export default function CollectionPage() {
                                 ))}
                             </div>
                             <ModalItemEdit />
+                            <ModalItemView />
                             {collectionItems.length > 0 && pagination.totalPages > 1 && (
                                 <Pagination
                                     currentPage={pagination.currentPage}

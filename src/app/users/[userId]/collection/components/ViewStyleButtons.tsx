@@ -5,12 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faList, faGrip, faTableCells, faTableList } from '@fortawesome/pro-duotone-svg-icons'
 import { cn } from '@/utils/classNames'
 
-type ViewStyleButtonsProps = {
-  currentStyle: ViewStyle
-  onStyleChange: (style: ViewStyle) => void
+interface ViewStyleButtonsProps {
+  viewStyle: ViewStyle
+  onViewStyleChange: (newStyle: ViewStyle) => void
 }
 
-export const ViewStyleButtons = ({ currentStyle, onStyleChange }: ViewStyleButtonsProps) => {
+export function ViewStyleButtons({ viewStyle, onViewStyleChange }: ViewStyleButtonsProps) {
   const styles = [
     { 
       type: ViewStyle.LIST, 
@@ -39,10 +39,10 @@ export const ViewStyleButtons = ({ currentStyle, onStyleChange }: ViewStyleButto
       {styles.map(style => (
         <button
           key={style.type}
-          onClick={() => onStyleChange(style.type)}
+          onClick={() => onViewStyleChange(style.type)}
           className={cn(
             'p-2 rounded-lg transition-colors',
-            currentStyle === style.type
+            viewStyle === style.type
               ? 'bg-fuchsia-600 text-white'
               : 'bg-gray-100 text-gray-700 hover:bg-fuchsia-50 hover:text-fuchsia-700'
           )}

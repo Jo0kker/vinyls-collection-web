@@ -16,6 +16,7 @@ import { cn } from '@/utils/classNames'
 import { prefixImage } from '@/utils/prefixImage'
 import { showToast } from '@/utils/toast'
 import { ViewStyle } from '../types/ViewStyle'
+import { SPECIAL_COLLECTIONS } from '../page'
 
 type VinylItemProps = {
     item: Search | CollectionVinyl | Trade
@@ -28,8 +29,11 @@ type VinylItemProps = {
 
 export function VinylItem({ item, collectionId, isOwner, onDelete, onRefresh, viewStyle }: VinylItemProps) {
     const [isLoadingDelete, setIsLoadingDelete] = useState(false)
-    const openModal = useModalItemEditStore((state) => state.openModal);
-    const openViewModal = useModalItemViewStore((state) => state.openModal);
+    const openModal = useModalItemEditStore((state) => state.openModal)
+    const openViewModal = useModalItemViewStore((state) => state.openModal)
+
+    const showActions = isOwner && collectionId !== -3
+    const showEye = !isOwner && collectionId !== -3
 
     const editVinyl = (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
@@ -121,31 +125,29 @@ export function VinylItem({ item, collectionId, isOwner, onDelete, onRefresh, vi
                                     </p>
                                 </div>
                             </Link>
-                            {isOwner && (
+                            {showActions && (
                                 <div className="flex justify-end border-t border-gray-100 bg-gray-50/50">
                                     <button
                                         className="flex-1 p-2 transition-colors border-r border-gray-100 hover:bg-red-50"
-                                        onClick={e => {
-                                            e.preventDefault()
-                                            setIsLoadingDelete(true)
-                                            deleteVinyl(item.id, collectionId).then(() => {
-                                                setIsLoadingDelete(false)
-                                                showToast({ type: 'success', message: 'Vinyle supprimé' })
-                                                onDelete?.()
-                                            })
-                                        }}
+                                        onClick={onDelete}
                                     >
-                                        {isLoadingDelete ? (
-                                            <Spinner size="sm" color="failure" />
-                                        ) : (
-                                            <FontAwesomeIcon icon={faTrash} className="text-red-600 opacity-60 hover:opacity-100" size="sm" />
-                                        )}
+                                        <FontAwesomeIcon icon={faTrash} className="text-red-600 opacity-60 hover:opacity-100" size="sm" />
                                     </button>
                                     <button
                                         className="flex-1 p-2 transition-colors hover:bg-fuchsia-50"
                                         onClick={editVinyl}
                                     >
                                         <FontAwesomeIcon icon={faPen} className="text-fuchsia-600 opacity-60 hover:opacity-100" size="sm" />
+                                    </button>
+                                </div>
+                            )}
+                            {showEye && (
+                                <div className="flex justify-end border-t border-gray-100 bg-gray-50/50">
+                                    <button
+                                        className="flex-1 p-2 transition-colors hover:bg-fuchsia-50"
+                                        onClick={viewVinyl}
+                                    >
+                                        <FontAwesomeIcon icon={faEye} className="text-fuchsia-600 opacity-60 hover:opacity-100" size="sm" />
                                     </button>
                                 </div>
                             )}
@@ -165,61 +167,41 @@ export function VinylItem({ item, collectionId, isOwner, onDelete, onRefresh, vi
                                 />
                             </Link>
 
-                            <Link href={`/vinyls/${item.vinyl_id}`} className="mx-3 flex-1 truncate py-0.5">
-                                <h2 className="text-lg font-bold truncate text-fuchsia-800 group-hover:underline">
+                            <Link
+                                href={`/vinyls/${item.vinyl.id}`}
+                                className="flex flex-col flex-1 p-4"
+                            >
+                                <h2 className="mb-1 text-base font-semibold truncate">
                                     {item.vinyl.title}
                                 </h2>
                                 <h3 className="mb-2 text-sm truncate text-fuchsia-800">{item.vinyl.artist}</h3>
                                 <p className="text-xs font-light">{item.vinyl.released}</p>
                             </Link>
-                            {isOwner ? (
+                            {showActions && (
                                 <div className="flex flex-col justify-center px-0.5 pt-0.5">
                                     <button
-                                        className={cn('h-8 w-8 rounded-md hover:bg-red-200', {
-                                            'cursor-not-allowed': !collectionId,
-                                            'bg-red-200': isLoadingDelete
-                                        })}
-                                        disabled={!collectionId}
-                                        onClick={e => {
-                                            e.preventDefault()
-                                            setIsLoadingDelete(true)
-                                            deleteVinyl(item.id, collectionId).then(() => {
-                                                setIsLoadingDelete(false)
-                                                showToast({ type: 'success', message: 'Vinyle supprimé' })
-                                                onDelete?.()
-                                            })
-                                        }}
+                                        className="w-8 h-8 rounded-md hover:bg-red-200"
+                                        onClick={onDelete}
                                     >
-                                        {isLoadingDelete ? (
-                                            <Spinner size="sm" color="failure" />
-                                        ) : (
-                                            <FontAwesomeIcon icon={faTrash} className="text-red-800" size="sm" />
-                                        )}
+                                        <FontAwesomeIcon icon={faTrash} className="text-red-800" size="sm" />
                                     </button>
                                     <button
-                                        className={cn('h-8 w-8 rounded-md hover:bg-red-200', {
-                                            'cursor-not-allowed': !collectionId,
-                                            'bg-red-200': isLoadingDelete
-                                        })}
-                                        disabled={!collectionId}
+                                        className="w-8 h-8 rounded-md hover:bg-fuchsia-200"
                                         onClick={editVinyl}
                                     >
                                         <FontAwesomeIcon icon={faPen} className="text-fuchsia-600" size="sm" />
                                     </button>
                                 </div>
-                            ) : (
-                              <div className="flex flex-col justify-center px-0.5 pt-0.5">
-                                <button
-                                  className={cn('h-8 w-8 rounded-md hover:bg-red-200', {
-                                    'cursor-not-allowed': !collectionId,
-                                    'bg-red-200': isLoadingDelete
-                                  })}
-                                  disabled={!collectionId}
-                                  onClick={viewVinyl}
-                                >
-                                  <FontAwesomeIcon icon={faEye} className="text-fuchsia-600" size="sm"/>
-                                </button>
-                              </div>
+                            )}
+                            {showEye && (
+                                <div className="flex justify-end border-t border-gray-100 bg-gray-50/50">
+                                    <button
+                                        className="flex-1 p-2 transition-colors hover:bg-fuchsia-50"
+                                        onClick={viewVinyl}
+                                    >
+                                        <FontAwesomeIcon icon={faEye} className="text-fuchsia-600 opacity-60 hover:opacity-100" size="sm" />
+                                    </button>
+                                </div>
                             )}
                         </>
                     )}
