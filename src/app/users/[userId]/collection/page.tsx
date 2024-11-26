@@ -33,24 +33,15 @@ import { ViewStyle } from './types/ViewStyle'
 import { ViewStyleButtons } from './components/ViewStyleButtons'
 import { useViewStyle } from './hooks/useViewStyle'
 import { Pagination } from './components/Pagination'
-
-
-export const SPECIAL_COLLECTIONS = {
-    ALL: -3,
-    WISHLIST: -1,
-    TRADES: -2
-} as const
-
-export type SpecialCollection = {
-    id: typeof SPECIAL_COLLECTIONS[keyof typeof SPECIAL_COLLECTIONS]
-    name: string
-}
+import { ButtonSearchVinyls } from './components/ButtonSearchVinyls'
+import { SearchVinylsModal } from './components/SearchVinylsModal'
+import { SPECIAL_COLLECTIONS, SpecialCollection } from './constants';
 
 const specialCollections: SpecialCollection[] = [
     { id: SPECIAL_COLLECTIONS.ALL, name: 'Toutes les collections' },
     { id: SPECIAL_COLLECTIONS.WISHLIST, name: 'Liste de souhaits' },
-    { id: SPECIAL_COLLECTIONS.TRADES, name: 'Liste d\'échanges' }
-]
+    { id: SPECIAL_COLLECTIONS.TRADES, name: 'Liste d\'échanges' },
+];
 
 export default function CollectionPage() {
     const params = useParams<{ userId: string }>()
@@ -60,6 +51,7 @@ export default function CollectionPage() {
     // États
     const [selectedCollection, setSelectedCollection] = useState<Collection | SpecialCollection | null>(null)
     const [currentPage, setCurrentPage] = useState(1)
+    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
     const [collectionItems, setCollectionItems] = useState<any[]>([])
     const [ownerData, setOwnerData] = useState<User>({} as User)
     const [isLoading, setIsLoading] = useState(false)
@@ -291,6 +283,10 @@ export default function CollectionPage() {
                         </div>
                     ) : (
                         <>
+                            <ButtonSearchVinyls 
+                                userId={userId}
+                                onOpen={() => setIsSearchModalOpen(true)}
+                            />
                             {/* Collection Actions */}
                             {isOwner && selectedCollection && (
                                 <div className="flex flex-row justify-end gap-2 mb-4 mr-4">
@@ -312,6 +308,7 @@ export default function CollectionPage() {
                                                 userId={parseInt(userId)}
                                                 onSuccess={() => searchCollections(searchQuery, getSortParams())}
                                             />
+                                            
                                         </>
                                     )}
                                 </div>
@@ -357,6 +354,7 @@ export default function CollectionPage() {
                             </div>
                             <ModalItemEdit />
                             <ModalItemView />
+                            
                             {collectionItems.length > 0 && pagination.totalPages > 1 && (
                                 <Pagination
                                     currentPage={pagination.currentPage}
@@ -368,8 +366,13 @@ export default function CollectionPage() {
                             )}
                         </>
                     )}
-                </div>
+                </div>    
             </div>
+            <SearchVinylsModal
+                userId={userId}
+                isOpen={isSearchModalOpen}
+                onClose={() => setIsSearchModalOpen(false)}
+            />
         </div>
     )
 }

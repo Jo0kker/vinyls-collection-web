@@ -16,7 +16,6 @@ import { cn } from '@/utils/classNames'
 import { prefixImage } from '@/utils/prefixImage'
 import { showToast } from '@/utils/toast'
 import { ViewStyle } from '../types/ViewStyle'
-import { SPECIAL_COLLECTIONS } from '../page'
 
 type VinylItemProps = {
     item: Search | CollectionVinyl | Trade

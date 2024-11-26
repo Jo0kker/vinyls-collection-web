@@ -1,6 +1,6 @@
 import { Combobox } from '@headlessui/react'
 import { Collection } from '@/types'
-import { SpecialCollection } from '../page'
+import { SpecialCollection } from '../constants'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faSpinner, faXmark, faChevronUp, faChevronDown } from '@fortawesome/pro-duotone-svg-icons'
 import { useState } from 'react'
