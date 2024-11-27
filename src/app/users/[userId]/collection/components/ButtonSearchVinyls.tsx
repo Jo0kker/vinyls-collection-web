@@ -11,13 +11,15 @@ interface ButtonSearchVinylsProps {
 
 export function ButtonSearchVinyls({ userId, onOpen }: ButtonSearchVinylsProps) {
     return (
-        <Tooltip content="Recherche avancée">
-            <button
-                onClick={onOpen}
-                className="inline-flex items-center px-2 py-2 mr-1 border rounded-md hover:bg-fuchsia-600 hover:bg-opacity-30 focus:outline-none focus:ring-2 focus:ring-fuchsia-400 focus:ring-offset-2"
-            >
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </button>
-        </Tooltip>
+        <div className="flex items-center">
+            <Tooltip content="Recherche avancée">
+                <button
+                    onClick={onOpen}
+                    className="inline-flex items-center p-2 text-white rounded-md bg-fuchsia-700 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-fuchsia-400 focus:ring-offset-2"
+                >
+                    <FontAwesomeIcon icon={faMagnifyingGlass} className="w-5 h-5" color='white' />
+                </button>
+            </Tooltip>
+        </div>
     )
 }

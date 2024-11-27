@@ -6,16 +6,17 @@ import { redirect } from 'next/navigation'
 import { fetchAPI } from '@/utils/fetchAPI'
 
 const deleteCollection = async (collectionId: number, userId: number) => {
-    await fetchAPI('/collections', {
+    fetchAPI('/collections', {
         method: 'DELETE',
         withSession: true,
         body: JSON.stringify({
             resources: [collectionId]
         })
+    }).then(() => {
+        redirect(`/users/${userId}/collection`)
+    }).catch((error) => {
+        console.error('Erreur lors de la suppression:', error)
     })
-
-    revalidateTag('collection')
-    redirect(`/users/${userId}/collection`)
 }
 
 export default deleteCollection

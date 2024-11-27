@@ -10,6 +10,11 @@ import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { fetchAPI } from '@/utils/fetchAPI'
 import { Collection } from '@/types/Collection'
+import { prefixImage } from '@/utils/prefixImage'
+import Link from 'next/link'
+import Image from 'next/image'
+import { useFormik } from 'formik'
+import { Loading } from '@/assets/lottie/Loading'
 
 interface SearchVinylsModalProps {
     userId: string
@@ -17,93 +22,131 @@ interface SearchVinylsModalProps {
     onClose: () => void
 }
 
+function VinylSearchResult({ item }: { item: any }) {
+    return (
+        <Link 
+            href={`/vinyls/${item.vinyl_id}`}
+            className="flex items-center gap-4 p-3 transition-colors border-b border-gray-100 hover:bg-gray-50"
+        >
+            <Image
+                src={prefixImage(item.vinyl?.image)}
+                alt={item.vinyl?.title}
+                width={50}
+                height={50}
+                className="object-cover rounded"
+            />
+            <div className="flex-1">
+                <h3 className="font-medium text-gray-900 hover:text-fuchsia-600">
+                    {item.vinyl.title}
+                </h3>
+                <p className="text-sm text-gray-600">
+                    {item.vinyl.artist} • {item.vinyl.released}
+                </p>
+            </div>
+        </Link>
+    )
+}
+
+interface SearchFormValues {
+    title: string
+    artist: string
+    genre: string
+    startYear: string
+    endYear: string
+    collection: any
+}
+
 export function SearchVinylsModal({ userId, isOpen, onClose }: SearchVinylsModalProps) {
     const session = useSession()
-    const [searchTitle, setSearchTitle] = useState('')
-    const [searchArtist, setSearchArtist] = useState('')
-    const [searchGenre, setSearchGenre] = useState('')
-    const [startYear, setStartYear] = useState('')
-    const [endYear, setEndYear] = useState('')
-    const [selectedCollection, setSelectedCollection] = useState<any>(null)
     const [searchResults, setSearchResults] = useState<any[]>([])
     const [isLoading, setIsLoading] = useState(false)
 
-    const handleSearch = async () => {
-        setIsLoading(true)
-        const filters = [
-            {
-                field: 'user_id',
-                operator: '=',
-                value: userId
-            }
-        ]
+    const formik = useFormik<SearchFormValues>({
+        initialValues: {
+            title: '',
+            artist: '',
+            genre: '',
+            startYear: '',
+            endYear: '',
+            collection: null
+        },
+        onSubmit: async (values) => {
+            setIsLoading(true)
+            const filters = [
+                {
+                    field: 'user_id',
+                    operator: '=',
+                    value: userId
+                }
+            ]
 
-        if (searchTitle) {
-            filters.push({
-                field: 'vinyl.title',
-                operator: 'like',
-                value: `%${searchTitle}%`
-            })
-        }
-        if (searchArtist) {
-            filters.push({
-                field: 'vinyl.artist',
-                operator: 'like',
-                value: `%${searchArtist}%`
-            })
-        }
-        if (searchGenre) {
-            filters.push({
-                field: 'vinyl.genre',
-                operator: 'like',
-                value: `%${searchGenre}%`
-            })
-        }
-        if (startYear) {
-            filters.push({
-                field: 'vinyl.released',
-                operator: '>=',
-                value: startYear
-            })
-        }
-        if (endYear) {
-            filters.push({
-                field: 'vinyl.released',
-                operator: '<=',
-                value: endYear
-            })
-        }
-        if (selectedCollection?.value) {
-            filters.push({
-                field: 'collection_id',
-                operator: '=',
-                value: selectedCollection.value
-            })
-        }
-
-        try {
-            const response = await fetchAPI('/collectionVinyl/search', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${session.data?.user.access_token}`,
-                },
-                body: JSON.stringify({
-                    search: {
-                        filters,
-                        includes: [
-                            { relation: "vinyl" },
-                            { relation: "collection" }
-                        ]
-                    }
+            if (values.title) {
+                filters.push({
+                    field: 'vinyl.title',
+                    operator: 'like',
+                    value: `%${values.title}%`
                 })
-            })
-            setSearchResults(response.data)
-        } catch (error) {
-            console.error('Erreur lors de la recherche:', error)
-        } finally {
-            setIsLoading(false)
+            }
+            if (values.artist) {
+                filters.push({
+                    field: 'vinyl.artist',
+                    operator: 'like',
+                    value: `%${values.artist}%`
+                })
+            }
+            if (values.genre) {
+                filters.push({
+                    field: 'vinyl.genre',
+                    operator: 'like',
+                    value: `%${values.genre}%`
+                })
+            }
+            if (values.startYear) {
+                filters.push({
+                    field: 'vinyl.released',
+                    operator: '>=',
+                    value: values.startYear
+                })
+            }
+            if (values.endYear) {
+                filters.push({
+                    field: 'vinyl.released',
+                    operator: '<=',
+                    value: values.endYear
+                })
+            }
+            if (values.collection?.value) {
+                filters.push({
+                    field: 'collection_id',
+                    operator: '=',
+                    value: values.collection.value
+                })
+            }
+
+            try {
+                const response = await fetchAPI('/collectionVinyl/search', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${session.data?.user.access_token}`,
+                    },
+                    body: JSON.stringify({
+                        search: {
+                            filters,
+                            includes: [
+                                { relation: "vinyl" },
+                                { relation: "collection" }
+                            ]
+                        }
+                    })
+                })
+                setSearchResults(response.data)
+            } catch (error) {
+                console.error('Erreur lors de la recherche:', error)
+            } finally {
+                setIsLoading(false)
+            }
         }
-    }
+    })
 
     const loadCollections = async (inputValue: string) => {
         const filters = [
@@ -145,19 +188,14 @@ export function SearchVinylsModal({ userId, isOpen, onClose }: SearchVinylsModal
     if (!isOpen) return null
 
     return (
-        <div className="absolute top-0 left-0 w-screen h-screen z-[100]">
-            {/* Overlay */}
+        <div className="absolute top-0 left-0 w-full min-h-screen z-[100]">
             <div 
-                className="absolute inset-0 bg-black/50" 
+                className="absolute inset-0 w-full min-h-screen bg-black/50" 
                 onClick={onClose}
             />
-
-            {/* Container */}
-            <div className="relative w-full h-full overflow-y-auto">
+            <div className="relative w-full min-h-screen overflow-y-auto">
                 <div className="flex items-center justify-center min-h-full p-4">
-                    {/* Modal */}
                     <div className="relative w-[95%] sm:w-auto sm:min-w-[600px] max-w-4xl bg-white rounded-lg shadow-xl">
-                        {/* Header */}
                         <div className="sticky top-0 z-[101] flex items-center justify-between p-4 border-b bg-white">
                             <h3 className="text-xl font-semibold text-gray-900">
                                 Recherche avancée
@@ -170,15 +208,13 @@ export function SearchVinylsModal({ userId, isOpen, onClose }: SearchVinylsModal
                             </button>
                         </div>
 
-                        {/* Body */}
                         <div className="p-4">
-                            <div className="flex flex-col gap-4">
+                            <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
                                 <div className="flex flex-col gap-4 sm:flex-row">
                                     <div className="w-full sm:w-1/2">
                                         <InputText
                                             label="Titre"
-                                            value={searchTitle}
-                                            setValue={setSearchTitle}
+                                            {...formik.getFieldProps('title')}
                                             name="title"
                                             inputClassName="border-gray-200"
                                         />
@@ -186,8 +222,7 @@ export function SearchVinylsModal({ userId, isOpen, onClose }: SearchVinylsModal
                                     <div className="w-full sm:w-1/2">
                                         <InputText
                                             label="Artiste"
-                                            value={searchArtist}
-                                            setValue={setSearchArtist}
+                                            {...formik.getFieldProps('artist')}
                                             name="artist"
                                             inputClassName="border-gray-200"
                                         />
@@ -198,8 +233,7 @@ export function SearchVinylsModal({ userId, isOpen, onClose }: SearchVinylsModal
                                     <div className="w-full sm:w-1/2">
                                         <InputText
                                             label="Genre"
-                                            value={searchGenre}
-                                            setValue={setSearchGenre}
+                                            {...formik.getFieldProps('genre')}
                                             name="genre"
                                             inputClassName="border-gray-200"
                                         />
@@ -208,8 +242,7 @@ export function SearchVinylsModal({ userId, isOpen, onClose }: SearchVinylsModal
                                         <div className="w-1/2">
                                             <InputText
                                                 label="Année début"
-                                                value={startYear}
-                                                setValue={setStartYear}
+                                                {...formik.getFieldProps('startYear')}
                                                 name="startYear"
                                                 type="number"
                                                 inputClassName="border-gray-200"
@@ -218,8 +251,7 @@ export function SearchVinylsModal({ userId, isOpen, onClose }: SearchVinylsModal
                                         <div className="w-1/2">
                                             <InputText
                                                 label="Année fin"
-                                                value={endYear}
-                                                setValue={setEndYear}
+                                                {...formik.getFieldProps('endYear')}
                                                 name="endYear"
                                                 type="number"
                                                 inputClassName="border-gray-200"
@@ -232,8 +264,8 @@ export function SearchVinylsModal({ userId, isOpen, onClose }: SearchVinylsModal
                                     <AsyncSelect
                                         className="z-[110]"
                                         placeholder="Sélectionner une collection"
-                                        value={selectedCollection}
-                                        onChange={setSelectedCollection}
+                                        value={formik.values.collection}
+                                        onChange={(value) => formik.setFieldValue('collection', value)}
                                         loadOptions={loadCollections}
                                         defaultOptions
                                         isClearable
@@ -247,7 +279,7 @@ export function SearchVinylsModal({ userId, isOpen, onClose }: SearchVinylsModal
                                 </div>
 
                                 <button
-                                    onClick={handleSearch}
+                                    type="submit"
                                     disabled={isLoading}
                                     className="w-full px-4 py-2 text-white rounded-md bg-fuchsia-600 hover:bg-fuchsia-700 disabled:opacity-50"
                                 >
@@ -262,16 +294,20 @@ export function SearchVinylsModal({ userId, isOpen, onClose }: SearchVinylsModal
                                 </button>
 
                                 <div className="mt-4 max-h-[50vh] overflow-y-auto">
-                                    {searchResults.map((result) => (
-                                        <VinylItem
-                                            key={result.id}
-                                            item={result}
-                                            collectionId={result.collection_id}
-                                            viewStyle={ViewStyle.LIST}
-                                        />
-                                    ))}
+                                    {isLoading ? (
+                                        <div className="flex items-center justify-center p-8">
+                                            <Loading className="w-32 h-32" />
+                                        </div>
+                                    ) : (
+                                        searchResults.map((result) => (
+                                            <VinylSearchResult
+                                                key={result.id}
+                                                item={result}
+                                            />
+                                        ))
+                                    )}
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>

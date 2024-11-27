@@ -34,6 +34,20 @@ export function VinylItem({ item, collectionId, isOwner, onDelete, onRefresh, vi
     const showActions = isOwner && collectionId !== -3
     const showEye = !isOwner && collectionId !== -3
 
+    const handleDelete = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault()
+        setIsLoadingDelete(true)
+        try {
+            await deleteVinyl(item.id, collectionId?.toString())
+            if (onDelete) onDelete()
+            if (onRefresh) onRefresh()
+        } catch (error) {
+            console.error('Erreur lors de la suppression:', error)
+        } finally {
+            setIsLoadingDelete(false)
+        }
+    }
+
     const editVinyl = (event : React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         /**
@@ -127,10 +141,15 @@ export function VinylItem({ item, collectionId, isOwner, onDelete, onRefresh, vi
                             {showActions && (
                                 <div className="flex justify-end border-t border-gray-100 bg-gray-50/50">
                                     <button
-                                        className="flex-1 p-2 transition-colors border-r border-gray-100 hover:bg-red-50"
-                                        onClick={onDelete}
+                                        className="flex-1 p-2 transition-colors border-r border-gray-100 hover:bg-red-50 disabled:opacity-50"
+                                        onClick={handleDelete}
+                                        disabled={isLoadingDelete}
                                     >
-                                        <FontAwesomeIcon icon={faTrash} className="text-red-600 opacity-60 hover:opacity-100" size="sm" />
+                                        {isLoadingDelete ? (
+                                            <Spinner size="sm" />
+                                        ) : (
+                                            <FontAwesomeIcon icon={faTrash} className="text-red-600 opacity-60 hover:opacity-100" size="sm" />
+                                        )}
                                     </button>
                                     <button
                                         className="flex-1 p-2 transition-colors hover:bg-fuchsia-50"
@@ -168,7 +187,7 @@ export function VinylItem({ item, collectionId, isOwner, onDelete, onRefresh, vi
 
                             <Link
                                 href={`/vinyls/${item.vinyl.id}`}
-                                className="flex flex-col flex-1 p-4"
+                                className="flex flex-col flex-1 min-w-0 p-4"
                             >
                                 <h2 className="mb-1 text-base font-semibold truncate">
                                     {item.vinyl.title}
@@ -177,12 +196,17 @@ export function VinylItem({ item, collectionId, isOwner, onDelete, onRefresh, vi
                                 <p className="text-xs font-light">{item.vinyl.released}</p>
                             </Link>
                             {showActions && (
-                                <div className="flex flex-col justify-center px-0.5 pt-0.5">
+                                <div className="flex flex-col justify-center gap-2 px-2">
                                     <button
-                                        className="w-8 h-8 rounded-md hover:bg-red-200"
-                                        onClick={onDelete}
+                                        className="w-8 h-8 rounded-md hover:bg-red-200 disabled:opacity-50"
+                                        onClick={handleDelete}
+                                        disabled={isLoadingDelete}
                                     >
-                                        <FontAwesomeIcon icon={faTrash} className="text-red-800" size="sm" />
+                                        {isLoadingDelete ? (
+                                            <Spinner size="sm" />
+                                        ) : (
+                                            <FontAwesomeIcon icon={faTrash} className="text-red-800" size="sm" />
+                                        )}
                                     </button>
                                     <button
                                         className="w-8 h-8 rounded-md hover:bg-fuchsia-200"
@@ -193,9 +217,9 @@ export function VinylItem({ item, collectionId, isOwner, onDelete, onRefresh, vi
                                 </div>
                             )}
                             {showEye && (
-                                <div className="flex justify-end border-t border-gray-100 bg-gray-50/50">
+                                <div className="flex items-center px-2">
                                     <button
-                                        className="flex-1 p-2 transition-colors hover:bg-fuchsia-50"
+                                        className="w-8 h-8 rounded-md hover:bg-fuchsia-50"
                                         onClick={viewVinyl}
                                     >
                                         <FontAwesomeIcon icon={faEye} className="text-fuchsia-600 opacity-60 hover:opacity-100" size="sm" />

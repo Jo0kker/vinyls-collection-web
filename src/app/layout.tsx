@@ -39,9 +39,9 @@ export default async function Layout({ children }: PropsWithChildren) {
             <HelperModal/>
             <Header/>
             <NextTopLoader/>
-            <main className="mx-auto w-full max-w-screen-xl flex-1 space-y-4 p-4 md:px-0">
+            <main className="flex-1 w-full max-w-screen-xl p-4 mx-auto space-y-4 md:px-0">
                 <Announcement/>
-                <div className="rounded-lg bg-black/10 p-4 shadow-md">{children}</div>
+                <div className="p-4 rounded-lg shadow-md bg-black/10">{children}</div>
             </main>
             <Footer/>
         </Providers>
@@ -55,8 +55,6 @@ export const metadata: Metadata = {
     applicationName: 'Vinyls Collection',
     description:
         'Créez gratuitement, facilement et rapidement votre collection musicale en ligne sur Vinyls-collection.com.',
-    // creator: 'Ezio.dev',
-    // authors: [{ name: 'Ezio.dev', url: 'https://ezio.dev' }],
     keywords: ['vinyls', 'collection', 'musique'],
     manifest: '/manifest.json',
     openGraph: {
@@ -75,7 +73,7 @@ export const metadata: Metadata = {
         ],
         type: 'website',
         locale: 'fr',
-        alternateLocale: 'fr-FR'
+        alternateLocale: 'en'
     },
     twitter: {
         card: 'summary_large_image',

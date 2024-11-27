@@ -35,7 +35,7 @@ export function ViewStyleButtons({ viewStyle, onViewStyleChange }: ViewStyleButt
   ]
 
   return (
-    <div className="flex gap-2 mb-4">
+    <div className="flex gap-2">
       {styles.map(style => (
         <button
           key={style.type}
@@ -48,7 +48,7 @@ export function ViewStyleButtons({ viewStyle, onViewStyleChange }: ViewStyleButt
           )}
           title={style.title}
         >
-          <FontAwesomeIcon icon={style.icon} className="w-4 h-4" />
+          <FontAwesomeIcon icon={style.icon} className="w-5 h-5" />
         </button>
       ))}
     </div>

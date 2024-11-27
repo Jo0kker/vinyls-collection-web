@@ -54,7 +54,7 @@ export default function CollectionPage() {
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
     const [collectionItems, setCollectionItems] = useState<any[]>([])
     const [ownerData, setOwnerData] = useState<User>({} as User)
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const [refreshTrigger, setRefreshTrigger] = useState(0)
     const { viewStyle, setViewStyle } = useViewStyle()
     const [pagination, setPagination] = useState({
@@ -149,11 +149,26 @@ export default function CollectionPage() {
     }, [selectedCollection, pagination.currentPage, refreshTrigger])
 
     useEffect(() => {
-        if (collections.length > 0 && !selectedCollection) {
-            // On sélectionne la première collection spéciale (wishlist) par défaut
+        if (!selectedCollection) {
+            // On sélectionne la première collection spéciale (Toutes les collections) par défaut
             setSelectedCollection(specialCollections[0])
         }
     }, [collections])
+
+    // Chargement initial des données utilisateur
+    useEffect(() => {
+        const loadInitialData = async () => {
+            try {
+                const userData = await fetchUserData(parseInt(userId))
+                setOwnerData(userData)
+            } catch (error) {
+                console.error('Erreur lors du chargement des données utilisateur:', error)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+        loadInitialData()
+    }, [userId])
 
     return (
         <div className="flex flex-col py-4 mt-4 bg-white rounded">
@@ -283,13 +298,9 @@ export default function CollectionPage() {
                         </div>
                     ) : (
                         <>
-                            <ButtonSearchVinyls 
-                                userId={userId}
-                                onOpen={() => setIsSearchModalOpen(true)}
-                            />
                             {/* Collection Actions */}
-                            {isOwner && selectedCollection && (
-                                <div className="flex flex-row justify-end gap-2 mb-4 mr-4">
+                            {isOwner && selectedCollection && selectedCollection.id !== SPECIAL_COLLECTIONS.ALL && (
+                                <div className="flex flex-row justify-end gap-2 mr-4">
                                     <ButtonAddVinyl 
                                         collectionId={selectedCollection.id} 
                                         onSuccess={() => {
@@ -306,25 +317,29 @@ export default function CollectionPage() {
                                             <ButtonDeleteCollection
                                                 collectionId={selectedCollection.id}
                                                 userId={parseInt(userId)}
-                                                onSuccess={() => searchCollections(searchQuery, getSortParams())}
+                                                onSuccess={() => {
+                                                    // Revenir à "Toutes les collections"
+                                                    setSelectedCollection(specialCollections[0])
+                                                    // Forcer un rechargement des données
+                                                    setRefreshTrigger(prev => prev + 1)
+                                                    // Rafraîchir la liste des collections
+                                                    searchCollections(searchQuery, getSortParams())
+                                                }}
                                             />
-                                            
                                         </>
                                     )}
                                 </div>
                             )}
 
                             {/* Collection Items */}
-                            <div className="flex flex-row items-center justify-between mb-4">
+                            <div className="flex flex-row items-center justify-between m-1">
                                 <div className="flex flex-row items-center gap-2">
-                                    {isOwner && selectedCollection && selectedCollection.id !== SPECIAL_COLLECTIONS.ALL && (
-                                        <ButtonAddVinyl
-                                            collectionId={selectedCollection.id}
-                                            onSuccess={() => searchCollections(searchQuery, getSortParams())}
-                                        />
-                                    )}
                                     <ViewStyleButtons viewStyle={viewStyle} onViewStyleChange={setViewStyle} />
                                 </div>
+                                <ButtonSearchVinyls 
+                                    userId={userId}
+                                    onOpen={() => setIsSearchModalOpen(true)}
+                                />
                             </div>
 
                             <div className={cn(
@@ -337,20 +352,30 @@ export default function CollectionPage() {
                                             : 'grid-cols-1'
                                     )
                             )}>
-                                {collectionItems.map(item => (
-                                    <VinylItem
-                                        key={item.id}
-                                        item={item}
-                                        collectionId={selectedCollection?.id}
-                                        isOwner={isOwner}
-                                        onDelete={() => {
-                                            searchCollections(searchQuery, getSortParams())
-                                            loadCollectionItems()
-                                        }}
-                                        onRefresh={loadCollectionItems}
-                                        viewStyle={viewStyle}
-                                    />
-                                ))}
+                                {isLoading ? (
+                                    <div className="col-span-full flex justify-center items-center min-h-[400px]">
+                                        <Loading className="w-32 h-32" />
+                                    </div>
+                                ) : collectionItems.length === 0 ? (
+                                    <div className="col-span-full">
+                                        <EmptyList />
+                                    </div>
+                                ) : (
+                                    collectionItems.map(item => (
+                                        <VinylItem
+                                            key={item.id}
+                                            item={item}
+                                            collectionId={selectedCollection?.id}
+                                            isOwner={isOwner}
+                                            onDelete={() => {
+                                                searchCollections(searchQuery, getSortParams())
+                                                loadCollectionItems()
+                                            }}
+                                            onRefresh={loadCollectionItems}
+                                            viewStyle={viewStyle}
+                                        />
+                                    ))
+                                )}
                             </div>
                             <ModalItemEdit />
                             <ModalItemView />
