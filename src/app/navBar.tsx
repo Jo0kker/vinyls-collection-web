@@ -25,19 +25,19 @@ interface Link {
 }
 const LINKS = (isAuth?: boolean, userId?: number): Link[] => [
     {
-        name: 'Les vinyles',
+        name: 'Vinyles',
         href: '/vinyls',
         icon: <FontAwesomeIcon icon={faCompactDisc} color="purple" className="mr-2" size="lg" />
     },
     {
-        name: 'Les collectionneurs',
+        name: 'Collectionneurs',
         href: '/collector',
         icon: <FontAwesomeIcon icon={faUserMusic} color="purple" className="mr-2" size="lg" />
     },
     ...(isAuth
         ? [
               {
-                  name: 'Votre espace collectionneur',
+                  name: 'Collection',
                   href: `/users/${userId}/collection`,
                   icon: (
                       <FontAwesomeIcon

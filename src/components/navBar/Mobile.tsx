@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { faHome, faUser, faRightToBracket } from '@fortawesome/pro-duotone-svg-icons'
+import { faMagnifyingGlass, faUser } from '@fortawesome/pro-duotone-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
@@ -8,20 +8,24 @@ import { signOut } from 'next-auth/react'
 import { MenuItem } from '@/app/navBar'
 import { verifyEmail } from '@/components/navBar/Desktop'
 import MainItem from '@/components/navBar/mobileNavBar/MainItem'
+import useModalSearchStore from '@/store/modalSearchStore'
+
 const MobileMenu = ({ session, links }: MenuItem) => {
+    const openModal = useModalSearchStore((state) => state.openModal)
+
     const [subMenu, setSubMenu] =
         useState<{ name: string; href?: string; onClick?: () => void }[]>()
 
     const homeItem = {
-        name: 'Accueil',
-        href: '/',
-        icon: <FontAwesomeIcon icon={faHome} color="purple" className="mr-2" />
+        name: 'Rechercher',
+        onClick: openModal,
+        icon: <FontAwesomeIcon icon={faMagnifyingGlass} color="purple" className="mr-2" />
     }
 
     const UserItem = {
         name: 'Settings',
         href: '#',
-        icon: <FontAwesomeIcon icon={faUser} color="purple" className="mr-2" />,
+        icon: <FontAwesomeIcon icon={faMagnifyingGlass} color="purple" className="mr-2" />,
         subMenu: [
             {
                 name: 'Profil',
@@ -78,7 +82,11 @@ const MobileMenu = ({ session, links }: MenuItem) => {
                 </div>
             )}
             <div className="flex justify-between h-full max-w-md mx-auto">
-                <MainItem name={homeItem.name} href={homeItem.href} icon={homeItem.icon} />
+                <MainItem 
+                    name={homeItem.name} 
+                    onClick={homeItem.onClick} 
+                    icon={homeItem.icon} 
+                />
                 {links(!!session, session?.user?.id).map(link => (
                     <MainItem key={link.href} href={link.href} name={link.name} icon={link.icon} />
                 ))}
@@ -97,7 +105,7 @@ const MobileMenu = ({ session, links }: MenuItem) => {
                         name="Login"
                         icon={
                             <FontAwesomeIcon
-                                icon={faRightToBracket}
+                                icon={faUser}
                                 color="purple"
                                 className="mr-2"
                             />

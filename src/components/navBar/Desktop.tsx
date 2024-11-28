@@ -11,8 +11,13 @@ import { VinylLoading } from '@/assets/lottie/VinylLoading'
 import { cn } from '@/utils/classNames'
 import { fetchAPI } from '@/utils/fetchAPI'
 import { showToast } from '@/utils/toast'
+import { faMagnifyingGlass } from '@fortawesome/pro-duotone-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import useModalSearchStore from '@/store/modalSearchStore'
+
 const DesktopMenu = ({ session, links }: MenuItem) => {
     const [menuOpen, setMenuOpen] = useState(false)
+    const openModal = useModalSearchStore((state) => state.openModal)
 
     return (
         <nav className="relative z-40 hidden w-full bg-transparent font-roboto md:block">
@@ -54,7 +59,15 @@ const DesktopMenu = ({ session, links }: MenuItem) => {
                         { hidden: !menuOpen }
                     )}
                 >
-                    <ul className="flex flex-col p-4 mt-4 space-y-2 font-medium border border-gray-100 rounded-lg bg-gray-50 md:mt-0 md:flex-row md:space-x-8 md:space-y-0 md:border-0 md:bg-transparent md:p-0">
+                    <ul className="flex flex-col items-center p-4 mt-4 space-y-2 font-medium border border-gray-100 rounded-lg justify-normal bg-gray-50 md:mt-0 md:flex-row md:space-x-8 md:space-y-0 md:border-0 md:bg-transparent md:p-0">
+                        <li className="p-3 text-base font-medium rounded-md cursor-pointer font-body md:rounded-none md:p-0 ">
+                            <button
+                                onClick={openModal}
+                                className="flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
+                            >
+                                <FontAwesomeIcon icon={faMagnifyingGlass} className="w-5 h-5 mr-2 text-purple-400" size='lg' />
+                            </button>
+                        </li>
                         {links(!!session, session?.user.id).map(link => (
                             <Link
                                 key={link.href}

@@ -7,6 +7,7 @@ import NextTopLoader from 'nextjs-toploader'
 import HelperModal from '@/components/home/HelperModal'
 import { getSession } from '@/utils/authOptions'
 import { cn } from '@/utils/classNames'
+import { SearchModal } from '@/components/SearchModal'
 
 import Announcement from './announcement'
 import Footer from './footer'
@@ -16,7 +17,6 @@ import Providers from './Providers'
 import './global.css'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import 'filepond/dist/filepond.min.css'
-
 
 const roboto = Roboto({
     subsets: ['latin'],
@@ -29,23 +29,26 @@ export default async function Layout({ children }: PropsWithChildren) {
 
     return (
         <html lang="fr">
-        <body
-          className={cn(
-            roboto.className,
-            'text-body flex min-h-screen w-full flex-col bg-gradient-to-tr from-fuchsia-900 via-fuchsia-900 to-fuchsia-800 text-gray-900 '
-          )}
-        >
-        <Providers session={session}>
-            <HelperModal/>
-            <Header/>
-            <NextTopLoader/>
-            <main className="flex-1 w-full max-w-screen-xl p-4 mx-auto space-y-4 md:px-0">
-                <Announcement/>
-                <div className="p-4 rounded-lg shadow-md bg-black/10">{children}</div>
-            </main>
-            <Footer/>
-        </Providers>
-        </body>
+            <body
+                className={cn(
+                    roboto.className,
+                    'text-body flex min-h-screen w-full flex-col bg-gradient-to-tr from-fuchsia-900 via-fuchsia-900 to-fuchsia-800 text-gray-900'
+                )}
+            >
+                <Providers session={session}>
+                    <HelperModal />
+                    <Header />
+                    <NextTopLoader />
+                    <main className="flex-1 w-full max-w-screen-xl p-4 mx-auto space-y-4 md:px-0">
+                        <Announcement />
+                        <div className="p-4 rounded-lg shadow-md bg-black/10">
+                            {children}
+                        </div>
+                    </main>
+                    <Footer />
+                    <SearchModal />
+                </Providers>
+            </body>
         </html>
     )
 }
