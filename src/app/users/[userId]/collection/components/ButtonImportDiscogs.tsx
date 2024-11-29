@@ -37,10 +37,9 @@ export default function ButtonImportDiscogs({ onSuccess }: { onSuccess?: () => v
                     message: 'Import Discogs effectué avec succès' 
                 })
             }).catch((error) => {
-                console.error('Erreur lors de l\'import:', error)
                 showToast({ 
                     type: 'error', 
-                    message: error.cause === 429 ? 'Trop de requêtes, veuillez réessayer plus tard' : error.message
+                    message: 'Trop de requêtes, veuillez réessayer plus tard'
                 })
             })
         } catch (error) {
