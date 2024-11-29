@@ -14,21 +14,34 @@ export default function ButtonImportDiscogs({ onSuccess }: { onSuccess?: () => v
     const [isLoading, setIsLoading] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const session = useSession()
+    const router = useRouter()
 
     const importDiscogs = async () => {
+        if (!session.data?.user?.discogs_id) {
+            router.push('/settings')
+            return
+        }
+
         setIsLoading(true)
         setIsModalOpen(true)
         try {
-            await fetchAPI('/discogs/import', {
+            fetchAPI('/discogs/import', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${session.data?.user.access_token}`,
                 }
-            })
-            onSuccess?.()
-            showToast({ 
-                type: 'success', 
-                message: 'Import Discogs effectué avec succès' 
+            }).then(() => {
+                onSuccess?.()
+                showToast({ 
+                    type: 'success', 
+                    message: 'Import Discogs effectué avec succès' 
+                })
+            }).catch((error) => {
+                console.error('Erreur lors de l\'import:', error)
+                showToast({ 
+                    type: 'error', 
+                    message: error.cause === 429 ? 'Trop de requêtes, veuillez réessayer plus tard' : error.message
+                })
             })
         } catch (error) {
             console.error('Erreur lors de l\'import:', error)
@@ -54,7 +67,9 @@ export default function ButtonImportDiscogs({ onSuccess }: { onSuccess?: () => v
                 ) : (
                     <FontAwesomeIcon icon={faFileImport} />
                 )}
-                <span className="ml-2">Importer de Discogs</span>
+                <span className="ml-2">
+                    {session.data?.user?.discogs_id ? "Importer de Discogs" : "Lier le compte Discogs"}
+                </span>
             </button>
 
             <Modal show={isModalOpen} onClose={() => setIsModalOpen(false)}>

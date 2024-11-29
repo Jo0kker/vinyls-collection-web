@@ -68,7 +68,7 @@ export function SearchModal() {
                     <div className="relative w-[95%] sm:w-auto sm:min-w-[600px] max-w-4xl bg-white rounded-lg shadow-xl">
                         <div className="p-4">
                             <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
-                                <div className="flex gap-2">
+                                <div className="flex flex-col sm:flex-row gap-2 items-center">
                                     <input
                                         type="text"
                                         {...formik.getFieldProps('search')}
@@ -76,25 +76,27 @@ export function SearchModal() {
                                         className="flex-1 px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent"
                                         autoFocus
                                     />
-                                    <button
-                                        type="submit"
-                                        disabled={isLoading || !formik.values.search.trim()}
-                                        className="px-4 py-2 text-white rounded-md bg-fuchsia-600 hover:bg-fuchsia-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        {isLoading ? (
-                                            <FontAwesomeIcon icon={faSpinner} className="w-5 h-5 animate-spin" />
-                                        ) : (
-                                            <FontAwesomeIcon icon={faSearch} />
-                                        )}
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={closeModal}
-                                        className="p-2 text-gray-400 rounded-md hover:text-gray-500 hover:bg-gray-100"
-                                        aria-label="Fermer"
-                                    >
-                                        <FontAwesomeIcon icon={faXmark} className="w-5 h-5" />
-                                    </button>
+                                    <div className="flex gap-2">
+                                        <button
+                                            type="submit"
+                                            disabled={isLoading || !formik.values.search.trim()}
+                                            className="px-4 py-2 text-white rounded-md bg-fuchsia-700 hover:bg-fuchsia-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {isLoading ? (
+                                                <FontAwesomeIcon icon={faSpinner} className="w-5 h-5 animate-spin" />
+                                            ) : (
+                                                <FontAwesomeIcon icon={faSearch} />
+                                            )}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={closeModal}
+                                            className="p-2 text-gray-400 rounded-md hover:text-gray-500 hover:bg-gray-100"
+                                            aria-label="Fermer"
+                                        >
+                                            <FontAwesomeIcon icon={faXmark} className="w-5 h-5" />
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div className="mt-4 max-h-[60vh] overflow-y-auto">

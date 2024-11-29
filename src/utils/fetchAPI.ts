@@ -45,7 +45,7 @@ export async function fetchAPI<T = any>(
                 : {})
         }
     }).then(async response => {
-        if (response.ok || ![400, 401, 403, 404, 422, 500, 503, 504].includes(response.status)) {
+    if (response.ok || ![400, 401, 403, 404, 422, 429, 500, 503, 504].includes(response.status)) {
             const data = await response.json()
             return {
                 ...data,
@@ -54,7 +54,7 @@ export async function fetchAPI<T = any>(
         } else {
             const errorData = await response.json()
 
-            throw new Error(JSON.stringify(errorData))
+            throw new Error(JSON.stringify(errorData), { cause: response.status })
         }
     })
 }

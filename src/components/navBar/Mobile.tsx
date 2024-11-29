@@ -25,7 +25,7 @@ const MobileMenu = ({ session, links }: MenuItem) => {
     const UserItem = {
         name: 'Settings',
         href: '#',
-        icon: <FontAwesomeIcon icon={faMagnifyingGlass} color="purple" className="mr-2" />,
+        icon: <FontAwesomeIcon icon={faUser} color="purple" className="mr-2" />,
         subMenu: [
             {
                 name: 'Profil',

@@ -1,4 +1,5 @@
 // import { faFacebook } from '@fortawesome/free-brands-svg-icons'
+// import { faFacebook } from '@fortawesome/free-brands-svg-icons'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -52,7 +53,7 @@ export default function Footer() {
 
                 <div className="flex flex-col gap-4 lg:flex-row lg:justify-between">
                     <span className="text-sm text-gray-500 sm:text-center">
-                        © 2022{' '}
+                        © 2022-2024{' '}
                         <Link href="/" className="cursor-pointer hover:underline">
                             Vinyls-Collection™
                         </Link>
