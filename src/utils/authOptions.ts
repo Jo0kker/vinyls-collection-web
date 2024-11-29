@@ -65,17 +65,13 @@ export const authOptions: AuthOptions = {
                     })
                 })
 
-                console.log(authResponse)
-
                 if (!authResponse.ok) return null
 
                 const authData = (await authResponse.json()) as AuthResponse
 
-                console.log(authData)
-
                 const user = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/users/me', {
                     next: {
-                        revalidate: 3600
+                        tags: ['user']
                     },
                     headers: {
                         Authorization: `Bearer ${authData.access_token}`
@@ -97,8 +93,6 @@ export const authOptions: AuthOptions = {
                     )
                 })
 
-                console.log(userData)
-
                 return {
                     ...userData,
                     ...authData
@@ -111,7 +105,15 @@ export const authOptions: AuthOptions = {
             if (user) return true
             return false
         },
-        jwt({ token, user }) {
+        jwt({ token, user, trigger, session }) {
+            if (trigger === "update" && session) {
+                token = {
+                    ...token,
+                    ...session.user
+                }
+                return token
+            }
+
             if (user) {
                 token = {
                     ...token,

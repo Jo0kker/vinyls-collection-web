@@ -2,26 +2,39 @@ import Link from 'next/link'
 
 type Item = {
     name: string
-    href: string
+    href?: string
     icon: JSX.Element
+    onClick?: () => void
     subContent?: { name: string; href?: string; onClick?: () => void }[]
     subMenu?: { name: string; href?: string; onClick?: () => void }[]
     setSubMenu?: (value: { name: string; href?: string; onClick?: () => void }[]) => void
 }
 
-const MainItem = ({ name, href, icon, subContent, subMenu, setSubMenu }: Item) => {
-    const onClick = () => {
+const MainItem = ({ name, href, icon, onClick, subContent, subMenu, setSubMenu }: Item) => {
+    const handleClick = () => {
         if (subContent && setSubMenu) {
             setSubMenu(subMenu?.length ? [] : subContent)
         }
+    }
+
+    if (onClick) {
+        return (
+            <button
+                onClick={onClick}
+                className="inline-flex flex-col items-center justify-center p-2 group md:p-4 hover:bg-gray-50 dark:hover:bg-gray-800"
+            >
+                {icon}
+                <span className="sr-only">{name}</span>
+            </button>
+        )
     }
 
     return (
         <>
             {!subContent ? (
                 <Link
-                    href={href}
-                    className="group inline-flex flex-col items-center justify-center p-2 md:p-4 hover:bg-gray-50 dark:hover:bg-gray-800"
+                    href={href || '#'}
+                    className="inline-flex flex-col items-center justify-center p-2 group md:p-4 hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                     {icon}
                     <span className="sr-only">{name}</span>
@@ -31,8 +44,8 @@ const MainItem = ({ name, href, icon, subContent, subMenu, setSubMenu }: Item) =
                     <button
                         data-tooltip-target="tooltip-home"
                         type="button"
-                        onClick={onClick}
-                        className="group inline-flex flex-col items-center justify-center p-2 md:p-4 hover:bg-gray-50 dark:hover:bg-gray-800"
+                        onClick={handleClick}
+                        className="inline-flex flex-col items-center justify-center p-2 group md:p-4 hover:bg-gray-50 dark:hover:bg-gray-800"
                     >
                         {icon}
                         <span className="sr-only">{name}</span>
@@ -40,7 +53,7 @@ const MainItem = ({ name, href, icon, subContent, subMenu, setSubMenu }: Item) =
                     <div
                         id="tooltip-home"
                         role="tooltip"
-                        className="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
+                        className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
                     >
                         {name}
                         <div className="tooltip-arrow" data-popper-arrow="" />

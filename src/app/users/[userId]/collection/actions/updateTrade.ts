@@ -16,11 +16,6 @@ const UpdateSearch = async (collectionId: number, attributes: object) => {
         ]
     })
 
-    console.log('body', body)
-
-
-
-
     await fetchAPI<Search|Trade>('/trades/mutate', {
         method: 'POST',
         withSession: true,

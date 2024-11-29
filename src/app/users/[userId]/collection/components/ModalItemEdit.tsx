@@ -17,13 +17,14 @@ import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
 
-import updateCollection from '@/app/users/[userId]/collection/[collectionId]/actions/updateCollection'
-import updateSearch from '@/app/users/[userId]/collection/[collectionId]/actions/updateSearch'
-import updateTrade from '@/app/users/[userId]/collection/[collectionId]/actions/updateTrade'
+import updateCollectionVinyl from '@/app/users/[userId]/collection/actions/updateCollectionVinyl'
+import updateSearch from '@/app/users/[userId]/collection/actions/updateSearch'
+import updateTrade from '@/app/users/[userId]/collection/actions/updateTrade'
 import revalidateCacheClient from '@/components/actions/revalidateCacheClient'
 import { Button } from '@/components/atom/Button'
 import { InputText } from '@/components/atom/InputText'
 import useModalItemEditStore from '@/store/modalItemEditStore';
+import { on } from 'events';
 // Enregistrer le plugin
 registerPlugin(
     FilePondPluginImagePreview,
@@ -33,7 +34,7 @@ registerPlugin(
 );
 
 const ModalItemEdit = () => {
-    const { isModalOpen, modalData, collectionType, closeModal } = useModalItemEditStore();
+    const { isModalOpen, modalData, collectionType, closeModal, onRefresh } = useModalItemEditStore();
     const [description, setDescription] = useState<string>(modalData?.description || '')
     const [imageIds, setImageIds] = useState<number[]>([])
     const [files, setFiles] = useState<any[]>([])
@@ -77,9 +78,7 @@ const ModalItemEdit = () => {
      * -2: Trades (Échanges)
      * other: Collection
      */
-    const save = async (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-
+    const save = async () => {
         if (!modalData) {
             return
         }
@@ -87,15 +86,13 @@ const ModalItemEdit = () => {
         // Save the data
         switch (collectionType) {
             case '-1':
-                await updateSearch(modalData.id, {
-                    description,
-                })
+                await updateSearch(modalData.id, { description })
                 break
             case '-2':
                 await updateTrade(modalData.id, { description })
                 break
             default:
-                await updateCollection(modalData.id, {
+                await updateCollectionVinyl(modalData.id, {
                     description,
                 })
                 break
@@ -108,6 +105,7 @@ const ModalItemEdit = () => {
         setImageIds([])
         setFiles([])
         refresh()
+        if (onRefresh) onRefresh()
         closeModal()
     }
 
@@ -282,7 +280,7 @@ const ModalItemEdit = () => {
                             <Button onClick={processClose} className="mr-2">
                                 Annuler
                             </Button>
-                            <Button onClick={save} className="mb-1 rounded-md bg-fuchsia-900 px-1 py-2 text-white hover:bg-opacity-80">
+                            <Button onClick={() => save()} className="px-1 py-2 mb-1 text-white rounded-md bg-fuchsia-900 hover:bg-opacity-80">
                                 Enregistrer
                             </Button>
                         </div>

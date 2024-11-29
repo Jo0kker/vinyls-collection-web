@@ -25,20 +25,20 @@ interface Link {
 }
 const LINKS = (isAuth?: boolean, userId?: number): Link[] => [
     {
-        name: 'Les vinyles',
+        name: 'Vinyles',
         href: '/vinyls',
         icon: <FontAwesomeIcon icon={faCompactDisc} color="purple" className="mr-2" size="lg" />
     },
     {
-        name: 'Les collectionneurs',
+        name: 'Collectionneurs',
         href: '/collector',
         icon: <FontAwesomeIcon icon={faUserMusic} color="purple" className="mr-2" size="lg" />
     },
     ...(isAuth
         ? [
               {
-                  name: 'Votre espace collectionneur',
-                  href: `/users/${userId}/collection/-1`,
+                  name: 'Collection',
+                  href: `/users/${userId}/collection`,
                   icon: (
                       <FontAwesomeIcon
                           icon={faAlbumCollection}
@@ -61,7 +61,7 @@ const NavBar: FunctionComponent = () => {
     const session = useSession()
 
     return (
-        <div className="mx-auto max-w-screen-xl p-6">
+        <div className="max-w-screen-xl p-6 mx-auto">
             <Desktop session={session.data} links={LINKS} />
             <Mobile session={session.data} links={LINKS} />
         </div>

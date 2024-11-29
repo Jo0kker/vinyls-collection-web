@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 import { getSession } from './authOptions'
 
 export type FetchResponse<T> = {
+    avatar: string | null
     id: any
     data: T
     current_page: number
@@ -11,6 +12,8 @@ export type FetchResponse<T> = {
     per_page: number
     to: number
     total: number
+    status: number
+    message?: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -44,7 +47,10 @@ export async function fetchAPI<T = any>(
     }).then(async response => {
         if (response.ok || ![400, 401, 403, 404, 422, 500, 503, 504].includes(response.status)) {
             const data = await response.json()
-            return data
+            return {
+                ...data,
+                status: response.status
+            }
         } else {
             const errorData = await response.json()
 

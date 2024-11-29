@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { faHome, faUser, faRightToBracket } from '@fortawesome/pro-duotone-svg-icons'
+import { faMagnifyingGlass, faUser } from '@fortawesome/pro-duotone-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
@@ -8,24 +8,32 @@ import { signOut } from 'next-auth/react'
 import { MenuItem } from '@/app/navBar'
 import { verifyEmail } from '@/components/navBar/Desktop'
 import MainItem from '@/components/navBar/mobileNavBar/MainItem'
+import useModalSearchStore from '@/store/modalSearchStore'
+
 const MobileMenu = ({ session, links }: MenuItem) => {
+    const openModal = useModalSearchStore((state) => state.openModal)
+
     const [subMenu, setSubMenu] =
         useState<{ name: string; href?: string; onClick?: () => void }[]>()
 
     const homeItem = {
-        name: 'Accueil',
-        href: '/',
-        icon: <FontAwesomeIcon icon={faHome} color="purple" className="mr-2" />
+        name: 'Rechercher',
+        onClick: openModal,
+        icon: <FontAwesomeIcon icon={faMagnifyingGlass} color="purple" className="mr-2" />
     }
 
     const UserItem = {
         name: 'Settings',
         href: '#',
-        icon: <FontAwesomeIcon icon={faUser} color="purple" className="mr-2" />,
+        icon: <FontAwesomeIcon icon={faMagnifyingGlass} color="purple" className="mr-2" />,
         subMenu: [
             {
                 name: 'Profil',
-                href: '/profil'
+                href: '/settings/profil'
+            },
+            {
+                name: 'Sécurité',
+                href: '/settings/security'
             },
             {
                 name: 'Settings',
@@ -39,7 +47,7 @@ const MobileMenu = ({ session, links }: MenuItem) => {
     }
 
     return (
-        <div className="fixed bottom-0 left-1/2 z-50 w-full -translate-x-1/2 border-t border-gray-200 bg-white pb-2 dark:border-gray-600 dark:bg-gray-700 md:hidden">
+        <div className="fixed bottom-0 z-50 w-full pb-2 -translate-x-1/2 bg-white border-t border-gray-200 left-1/2 dark:border-gray-600 dark:bg-gray-700 md:hidden">
             {/* top part of navBar */}
             {subMenu && subMenu?.length !== 0 && (
                 <div className="w-full border-b-2 border-purple-700">
@@ -73,8 +81,12 @@ const MobileMenu = ({ session, links }: MenuItem) => {
                     ))}
                 </div>
             )}
-            <div className="mx-auto flex h-full max-w-md justify-between">
-                <MainItem name={homeItem.name} href={homeItem.href} icon={homeItem.icon} />
+            <div className="flex justify-between h-full max-w-md mx-auto">
+                <MainItem 
+                    name={homeItem.name} 
+                    onClick={homeItem.onClick} 
+                    icon={homeItem.icon} 
+                />
                 {links(!!session, session?.user?.id).map(link => (
                     <MainItem key={link.href} href={link.href} name={link.name} icon={link.icon} />
                 ))}
@@ -93,7 +105,7 @@ const MobileMenu = ({ session, links }: MenuItem) => {
                         name="Login"
                         icon={
                             <FontAwesomeIcon
-                                icon={faRightToBracket}
+                                icon={faUser}
                                 color="purple"
                                 className="mr-2"
                             />

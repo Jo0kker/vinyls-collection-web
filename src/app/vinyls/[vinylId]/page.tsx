@@ -22,18 +22,21 @@ import { fetchAPI } from '@/utils/fetchAPI'
 import { prefixImage } from '@/utils/prefixImage'
 
 type VinylPageProps = {
-    params: {
+    params: Promise<{
         vinylId: string
-    }
+    }>
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-export default async function VinylPage({ params }: VinylPageProps) {
+export default async function VinylPage({ params, searchParams }: VinylPageProps) {
+    const resolvedParams = await params
+    const queryParams = await searchParams
     const session = await getSession()
 
     const { data: vinyls } = await fetchAPI<Vinyl[]>('/vinyls/search', {
         method: 'POST',
         next: {
-            tags: [`vinyls:${params.vinylId}`]
+            tags: [`vinyls:${resolvedParams.vinylId}`]
         },
         body: JSON.stringify({
             search: {
@@ -41,7 +44,7 @@ export default async function VinylPage({ params }: VinylPageProps) {
                     {
                         field: 'id',
                         operator: '=',
-                        value: params.vinylId
+                        value: resolvedParams.vinylId
                     }
                 ]
             }
@@ -51,8 +54,8 @@ export default async function VinylPage({ params }: VinylPageProps) {
     const vinyl = vinyls[0]
 
     return (
-        <div className="mt-4 flex flex-col gap-4 rounded bg-white px-4 py-4 pt-4 sm:pt-0">
-            <div className="mb-4 mt-4 flex flex-row justify-center text-2xl font-bold">
+        <div className="flex flex-col gap-4 px-4 py-4 pt-4 mt-4 bg-white rounded sm:pt-0">
+            <div className="flex flex-row justify-center mt-4 mb-4 text-2xl font-bold">
                 <span className="mr-3 text-emerald-500">&#47;&#47;</span>
                 <h1 className="text-fuchsia-800">{vinyl?.title}</h1>
                 <span className="ml-3 text-orange-400">&#47;&#47;</span>
@@ -68,7 +71,7 @@ export default async function VinylPage({ params }: VinylPageProps) {
                         className="rounded-md"
                     />
                     <div>
-                        <table className="table-auto text-sm">
+                        <table className="text-sm table-auto">
                             <tbody>
                             <tr>
                                 <td className="px-4 py-2">Titre</td>
@@ -148,7 +151,7 @@ export default async function VinylPage({ params }: VinylPageProps) {
                                                             key={index}
                                                         >
                                                             <TableCell
-                                                                className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                                                className="font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                                 {track.position}
                                                             </TableCell>
                                                             <TableCell>{track.title}</TableCell>

@@ -31,7 +31,7 @@ export default function CollectorPage() {
                     }
                 ],
                 page: nextPage,
-                limit: 6
+                limit: 9
             }
         }
 
@@ -72,8 +72,8 @@ export default function CollectorPage() {
     }, [])
 
     return (
-        <div className="mt-4 flex flex-col rounded bg-white px-4 py-4 sm:pt-0">
-            <div className="mb-4 mt-6 flex flex-row justify-center text-2xl font-bold">
+        <div className="flex flex-col px-4 py-4 mt-4 bg-white rounded sm:pt-0">
+            <div className="flex flex-row justify-center mt-6 mb-4 text-2xl font-bold">
                 <span className="mr-3 text-emerald-500">&#47;&#47;</span>
                 <h1 className="text-fuchsia-800">Liste des collectionneurs</h1>
                 <span className="ml-3 text-orange-400">&#47;&#47;</span>
@@ -98,15 +98,15 @@ export default function CollectorPage() {
                 </div>
             )}
             {isLoading && (
-                <div className="flex h-full items-center justify-center">
+                <div className="flex items-center justify-center h-full">
                     <Loading className="w-10 opacity-40" />
                 </div>
             )}
             {infoPagination.current_page < infoPagination.last_page && (
-                <div className="mt-4 flex justify-center">
+                <div className="flex justify-center mt-4">
                     <button
                         onClick={() => getCollectors()}
-                        className="rounded bg-fuchsia-800 px-4 py-2 font-bold text-white"
+                        className="px-4 py-2 font-bold text-white rounded bg-fuchsia-800"
                     >
                         Voir plus
                     </button>

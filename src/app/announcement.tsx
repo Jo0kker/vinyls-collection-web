@@ -11,11 +11,12 @@ export default async function Announcement() {
     const badges = [
         { label: `${stats.data.users} collectionneurs`, color: 'text-orange-500' },
         { label: `${stats.data.collections} collections`, color: 'text-green-500' },
+     
         { label: `${stats.data.vinyls} disques`, color: 'text-blue-400' }
     ]
 
     return (
-        <article className="flex justify-between gap-4 rounded-lg bg-black/10 px-5 py-3 shadow-md">
+        <article className="flex justify-between gap-4 px-5 py-3 rounded-lg shadow-md bg-black/10">
             <p className="font-medium text-red-500">
                 <span className="lg:hidden ">Site encore en développement</span>
                 <span className="hidden lg:inline ">Site encore en développement.</span>

@@ -4,8 +4,8 @@ import { Loading } from '@/assets/lottie/Loading'
 
 export default function LoadingPage() {
     return (
-        <div className="flex h-full items-center justify-center rounded bg-white py-4">
-            <Loading className="h-20 w-20 opacity-40" />
+        <div className="flex items-center justify-center h-full py-4 bg-white rounded">
+            <Loading className="w-20 h-20 opacity-40" />
         </div>
     )
 }

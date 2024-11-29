@@ -14,8 +14,8 @@ export default function ErrorBoundary({ error }: ErrorBoundaryProps) {
     }, [error])
 
     return (
-        <div className="rounded-lg bg-red-500/70 p-4 text-white">
-            <p className="text-md font-body font-light">{error.message}</p>
+        <div className="p-4 text-white rounded-lg bg-red-500/70">
+            <p className="font-light text-md font-body">{error.message}</p>
         </div>
     )
 }
