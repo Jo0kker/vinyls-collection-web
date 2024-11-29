@@ -45,16 +45,25 @@ export async function fetchAPI<T = any>(
                 : {})
         }
     }).then(async response => {
-    if (response.ok || ![400, 401, 403, 404, 422, 429, 500, 503, 504].includes(response.status)) {
-            const data = await response.json()
-            return {
-                ...data,
-                status: response.status
+        const contentType = response.headers.get('content-type');
+        if (response.ok || ![400, 401, 403, 404, 422, 429, 500, 503, 504].includes(response.status)) {
+            if (contentType && contentType.includes('application/json')) {
+                const data = await response.json();
+                return {
+                    ...data,
+                    status: response.status
+                };
+            } else {
+                throw new Error('La réponse n\'est pas au format JSON');
             }
         } else {
-            const errorData = await response.json()
-
-            throw new Error(JSON.stringify(errorData), { cause: response.status })
+            if (contentType && contentType.includes('application/json')) {
+                const errorData = await response.json();
+                throw new Error(JSON.stringify(errorData), { cause: response.status });
+            } else {
+                const errorText = await response.text();
+                throw new Error(`Unexpected response: ${errorText}`, { cause: response.status });
+            }
         }
-    })
+    });
 }
