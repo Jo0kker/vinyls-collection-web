@@ -1,5 +1,5 @@
-[phases]
-setup = [
+[phases.setup]
+cmds = [
   "echo '@fortawesome:registry=https://npm.fontawesome.com/' > .npmrc",
   "echo '@awesome.me:registry=https://npm.fontawesome.com/' >> .npmrc",
   "echo '//npm.fontawesome.com/:_authToken=${FONTAWESOME_PACKAGE_TOKEN}' >> .npmrc"
