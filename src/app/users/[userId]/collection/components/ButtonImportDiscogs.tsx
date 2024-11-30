@@ -25,28 +25,21 @@ export default function ButtonImportDiscogs({ onSuccess }: { onSuccess?: () => v
         setIsLoading(true)
         setIsModalOpen(true)
         try {
-            fetchAPI('/discogs/import', {
+            await fetchAPI('/discogs/import', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${session.data?.user.access_token}`,
                 }
-            }).then(() => {
-                onSuccess?.()
-                showToast({ 
-                    type: 'success', 
-                    message: 'Import Discogs effectué avec succès' 
-                })
-            }).catch((error) => {
-                showToast({ 
-                    type: 'error', 
-                    message: 'Trop de requêtes, veuillez réessayer plus tard'
-                })
+            })
+            onSuccess?.()
+            showToast({ 
+                type: 'success', 
+                message: 'Import Discogs en cours... (vous recevrez un lorsque cela sera terminé)' 
             })
         } catch (error) {
-            console.error('Erreur lors de l\'import:', error)
             showToast({ 
                 type: 'error', 
-                message: 'Erreur lors de l\'import Discogs' 
+                message: 'Trop de requêtes, veuillez réessayer plus tard'
             })
         } finally {
             setIsLoading(false)
