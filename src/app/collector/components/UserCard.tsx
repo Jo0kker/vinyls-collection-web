@@ -20,7 +20,7 @@ export const UserCard = ({ user }: UserCardProps) => {
                     src={
                         user.avatar
                             ? user.avatar
-                            : 'https://vinyls-collection.fra1.cdn.digitaloceanspaces.com/default_image_vinyl.png'
+                            : 'https://minio-s0o448og8cs4884cg0wccg8c.54.37.82.33.sslip.io/vinyl-collection/default_image_vinyl.png'
                     }
                     alt={user.name}
                     fill
