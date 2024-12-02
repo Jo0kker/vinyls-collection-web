@@ -7,6 +7,3 @@ cmds = [
 
 [phases.build]
 cmds = ["yarn global add pm2", "yarn build"]
-
-[phases.start]
-cmds = ["yarn start:pm2"]
