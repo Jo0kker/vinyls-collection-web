@@ -6,7 +6,10 @@ cmds = [
 ]
 
 [phases.start]
-cmds = ["yarn global add pm2", "chmod +x start.sh", "./start.sh"]
+cmds = ["yarn global add pm2"]
 
 [phases.build]
-cmds = ["yarn", "yarn build"]
+cmds = ["yarn build"]
+
+[phases.start]
+cmds = ["yarn start:pm2"]

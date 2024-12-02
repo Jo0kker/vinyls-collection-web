@@ -6,6 +6,7 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
+        "start:pm2": "pm2 start npm --name vinyl-app -- start",
         "setup": "echo '@fortawesome:registry=https://npm.fontawesome.com/' > .npmrc && echo '@awesome.me:registry=https://npm.fontawesome.com/' >> .npmrc && echo '//npm.fontawesome.com/:_authToken=${FONTAWESOME_PACKAGE_TOKEN}' >> .npmrc",
         "install": "next build",
         "lint": "next lint",
