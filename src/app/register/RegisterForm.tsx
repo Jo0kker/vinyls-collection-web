@@ -8,22 +8,27 @@ import { useRouter } from 'next/navigation'
 import { InputText } from '@/components/atom/InputText'
 import { fetchAPI } from '@/utils/fetchAPI'
 import { showToast } from '@/utils/toast';
+import { useReCaptcha } from "next-recaptcha-v3";
 
 export function RegisterForm() {
     const router = useRouter()
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [password_confirmation, setPasswordConfirmation] = useState('')
+    const [name, setName] = useState('aze')
+    const [email, setEmail] = useState('aze@example.com')
+    const [password, setPassword] = useState('password')
+    const [password_confirmation, setPasswordConfirmation] = useState('password')
+    const { executeRecaptcha } = useReCaptcha();
 
     const register = async () => {
+        const token = await executeRecaptcha('register')
+
         await fetchAPI('/register', {
             method: 'POST',
             body: JSON.stringify({
                 name: name,
                 email: email,
                 password: password,
-                password_confirmation: password_confirmation
+                password_confirmation: password_confirmation,
+                "g-recaptcha-response": token
             })
         }).then(() => {
             router.push('/login')

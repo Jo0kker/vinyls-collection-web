@@ -10,6 +10,7 @@ import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 // eslint-disable-next-line import/default
 import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import { Modal } from 'flowbite-react';
 import { useSession } from 'next-auth/react'
 import { FilePond, registerPlugin } from 'react-filepond';
@@ -31,6 +32,7 @@ registerPlugin(
     FilePondPluginImageExifOrientation,
     FilePondPluginImageTransform,
     FilePondPluginFileValidateType,
+    FilePondPluginFileValidateSize
 );
 
 const ModalItemEdit = () => {
@@ -134,6 +136,7 @@ const ModalItemEdit = () => {
                                 maxFiles={3}
                                 allowRevert={false}
                                 credits={false}
+                                maxFileSize={"2MB"}
                                 acceptedFileTypes={['image/png', 'image/jpeg']}
                                 fileValidateTypeDetectType={(source, type) => new Promise((resolve, reject) => {
                                     // Custom file type detection

@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { FilePond, registerPlugin } from 'react-filepond';
 // eslint-disable-next-line import/default
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import { updateProfil } from '../actions/updateProfil'; // Importer l'action
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
@@ -16,7 +17,7 @@ import { useSession } from 'next-auth/react';
 import { showToast } from '@/utils/toast';
 import { FilePondInitialFile, FilePondFile } from 'filepond';
 registerPlugin(FilePondPluginImagePreview);
-
+registerPlugin(FilePondPluginFileValidateSize);
 export interface ProfileFormData {
   first_name: string;
   last_name: string;
@@ -55,23 +56,14 @@ const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
     influence: user.influence,
     description: user.description,
   });
-  console.log('user', user)
-  console.log('initialValues', initialValues)
 
   
   const handleSubmit = async (values: ProfileFormData, { setSubmitting }: any) => {
-    console.log('values', values)
     try {
       updateProfil(values).then((response) => {
         showToast({ type: 'success', message: 'Profil mis à jour avec succès' })
 
         values.avatar = response.avatar
-        console.log('values', values)
-        console.log('update user', {
-          ...user,
-          ...values
-        })
-        
 
         if (response.avatar) {
           setInitialValues((prev) => ({
@@ -86,6 +78,8 @@ const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
             ...values
           }
         });
+      }).catch((error) => {
+        showToast({ type: 'error', message: JSON.parse(error.message).error })
       })
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -183,6 +177,7 @@ const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
                 }
               }}
               allowMultiple={false}
+              maxFileSize={"2MB"}
               acceptedFileTypes={['image/png', 'image/jpeg']}
               labelIdle='Déposez votre image ou <span class="filepond--label-action">parcourez</span>'
             />
@@ -192,7 +187,7 @@ const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 mb-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             {isSubmitting ? 'Mise à jour...' : 'Mettre à jour le profil'}
           </button>

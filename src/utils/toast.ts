@@ -10,7 +10,7 @@ type showToastProps = {
 export function showToast({ type, message, icon }: showToastProps) {
     toast(message, {
         position: 'top-left',
-        duration: 3000,
+        duration: 6000,
         icon: icon,
         style: {
             background: type === 'success' ? '#5cb85c' : '#d9534f',

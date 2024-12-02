@@ -2029,6 +2029,11 @@ file-entry-cache@^6.0.1:
   dependencies:
     flat-cache "^3.0.4"
 
+filepond-plugin-file-validate-size@^2.2.8:
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-file-validate-size/-/filepond-plugin-file-validate-size-2.2.8.tgz#2018c7e1110d7452cfd2a384725869786b8260f7"
+  integrity sha512-yzb8scATmkWqPTP7oKQz6L8WwJm6Xmgc/fuq6DFGRaLz0I7372BUvBsxagBk/hypMIjvieNzhggm33Y60x3rcw==
+
 filepond-plugin-file-validate-type@^1.2.9:
   version "1.2.9"
   resolved "https://registry.yarnpkg.com/filepond-plugin-file-validate-type/-/filepond-plugin-file-validate-type-1.2.9.tgz#84787c027354a459d91382e77adc9463ceb0182d"
@@ -2982,6 +2987,11 @@ next-client-cookies@^1.1.0:
   dependencies:
     js-cookie "^3.0.5"
 
+next-recaptcha-v3@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/next-recaptcha-v3/-/next-recaptcha-v3-1.5.0.tgz#70c9da41425048a7da1389879f4e8ed7703644ea"
+  integrity sha512-TvOvPkBb6P7D167Q8pXpTqu1GbJWkYEKPpDyJYIj8WBFGzaYGivZ+QWghFhbY0jq+9pOJxUVL9ZOqa5i97L6ZQ==
+
 next@^15.0.0-rc.0:
   version "15.0.1"
   resolved "https://registry.yarnpkg.com/next/-/next-15.0.1.tgz#a0e8eda35d803cb7f8092b2a2eb9d072e22bf21d"
@@ -3799,16 +3809,8 @@ streamx@^2.15.0, streamx@^2.20.0:
   optionalDependencies:
     bare-events "^2.2.0"
 
-"string-width-cjs@npm:string-width@^4.2.0":
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
-  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
-  dependencies:
-    emoji-regex "^8.0.0"
-    is-fullwidth-code-point "^3.0.0"
-    strip-ansi "^6.0.1"
-
-string-width@^4.1.0:
+"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -3896,14 +3898,7 @@ string_decoder@^1.1.1:
   dependencies:
     safe-buffer "~5.2.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
-  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
-  dependencies:
-    ansi-regex "^5.0.1"
-
-strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==

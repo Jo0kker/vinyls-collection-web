@@ -13,6 +13,7 @@ import Announcement from './announcement'
 import Footer from './footer'
 import Header from './header'
 import Providers from './Providers'
+import { ReCaptchaProvider } from "next-recaptcha-v3";
 
 import './global.css'
 import '@fortawesome/fontawesome-svg-core/styles.css'
@@ -35,19 +36,21 @@ export default async function Layout({ children }: PropsWithChildren) {
                     'text-body flex min-h-screen w-full flex-col bg-gradient-to-tr from-fuchsia-900 via-fuchsia-900 to-fuchsia-800 text-gray-900'
                 )}
             >
-                <Providers session={session}>
-                    <HelperModal />
-                    <Header />
-                    <NextTopLoader />
-                    <main className="flex-1 w-full max-w-screen-xl p-4 mx-auto space-y-4 md:px-0">
-                        <Announcement />
-                        <div className="p-4 rounded-lg shadow-md bg-black/10">
-                            {children}
-                        </div>
-                    </main>
-                    <Footer />
-                    <SearchModal />
-                </Providers>
+                <ReCaptchaProvider reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY} hidden={true} >
+                    <Providers session={session}>
+                        <HelperModal />
+                        <Header />
+                        <NextTopLoader />
+                        <main className="flex-1 w-full max-w-screen-xl p-4 mx-auto space-y-4 md:px-0">
+                            <Announcement />
+                            <div className="p-4 rounded-lg shadow-md bg-black/10">
+                                {children}
+                            </div>
+                        </main>
+                        <Footer />
+                        <SearchModal />
+                    </Providers>
+                </ReCaptchaProvider>
             </body>
         </html>
     )

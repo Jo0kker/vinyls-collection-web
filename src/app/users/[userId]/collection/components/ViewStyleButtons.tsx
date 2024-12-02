@@ -41,9 +41,9 @@ export function ViewStyleButtons({ viewStyle, onViewStyleChange }: ViewStyleButt
           key={style.type}
           onClick={() => onViewStyleChange(style.type)}
           className={cn(
-            'p-2 rounded-lg transition-colors',
+            'p-2 rounded-lg transition-colors flex',
             viewStyle === style.type
-              ? 'bg-fuchsia-600 text-white'
+              ? 'bg-fuchsia-700 text-white'
               : 'bg-gray-100 text-gray-700 hover:bg-fuchsia-50 hover:text-fuchsia-700'
           )}
           title={style.title}

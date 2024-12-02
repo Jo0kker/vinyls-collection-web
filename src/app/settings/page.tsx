@@ -7,6 +7,7 @@ import { fetchAPI } from '@/utils/fetchAPI'
 import { useState, useEffect } from 'react'
 import { cn } from '@/utils/classNames'
 import { useSearchParams } from 'next/navigation'
+import { showToast } from '@/utils/toast'
 
 export default function SettingsPage() {
     const { data: session, update } = useSession()
@@ -15,6 +16,7 @@ export default function SettingsPage() {
     const searchParams = useSearchParams()
 
     const link = searchParams?.get('link')
+    const errorQuery = searchParams?.get('error')
 
     const getDiscogsUrl = async () => {
         try {
@@ -37,6 +39,12 @@ export default function SettingsPage() {
     }
 
     useEffect(() => {
+        if (errorQuery) {
+            showToast({
+                type: 'error',
+                message: errorQuery
+            })
+        }
         if (link === 'true' && session?.user?.access_token) {
             fetchAPI('/users/me', {
                 method: 'GET',

@@ -68,7 +68,7 @@ export default async function VinylPage({ params, searchParams }: VinylPageProps
                         alt={vinyl.title}
                         width={300}
                         height={300}
-                        className="rounded-md"
+                        className="object-cover w-[300px] h-[300px] rounded-md"
                     />
                     <div>
                         <table className="text-sm table-auto">

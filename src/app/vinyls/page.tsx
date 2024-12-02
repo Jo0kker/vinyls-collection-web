@@ -43,9 +43,9 @@ export default async function VinylsPage({ searchParams }: PageProps) {
                             <Image
                                 src={prefixImage(collectionVinyl.vinyl.image)}
                                 alt={collectionVinyl.vinyl.title}
-                                width={100}
-                                height={100}
-                                className="object-cover w-full rounded-md"
+                                width={176}
+                                height={176}
+                                className="object-cover w-[176px] h-[176px] rounded-md"
                             />
                             <div className="w-full overflow-hidden">
                                 <h3 className="font-bold text-center truncate text-fuchsia-800">
