@@ -5,8 +5,8 @@ cmds = [
   "echo '//npm.fontawesome.com/:_authToken=${FONTAWESOME_PACKAGE_TOKEN}' >> .npmrc"
 ]
 
-[phases.build]
-cmds = ["yarn", "yarn build", "chmod +x start.sh"]
-
 [phases.start]
-cmds = ["yarn add -g pm2", "./start.sh"]
+cmds = ["yarn global add pm2", "chmod +x start.sh", "./start.sh"]
+
+[phases.build]
+cmds = ["yarn", "yarn build"]
