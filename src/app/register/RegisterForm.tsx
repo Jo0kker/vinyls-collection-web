@@ -12,10 +12,10 @@ import { useReCaptcha } from "next-recaptcha-v3";
 
 export function RegisterForm() {
     const router = useRouter()
-    const [name, setName] = useState('aze')
-    const [email, setEmail] = useState('aze@example.com')
-    const [password, setPassword] = useState('password')
-    const [password_confirmation, setPasswordConfirmation] = useState('password')
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [password_confirmation, setPasswordConfirmation] = useState('')
     const { executeRecaptcha } = useReCaptcha();
 
     const register = async () => {
