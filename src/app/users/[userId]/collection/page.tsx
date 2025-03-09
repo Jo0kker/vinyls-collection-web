@@ -207,8 +207,8 @@ export default function CollectionPage() {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="flex flex-col md:flex-row md:gap-4">
-                <nav className="hidden w-56 gap-2 px-4 overflow-x-auto md:mx-0 md:flex md:flex-col md:p-4 md:border-r md:border-fuchsia-100">
+            <div className="flex flex-col flex-1 min-h-0 overflow-hidden md:flex-row md:gap-4">
+                <nav className="flex-shrink-0 hidden w-56 gap-2 px-4 overflow-y-auto md:mx-0 md:flex md:flex-col md:p-4 md:border-r md:border-fuchsia-100">
                     {isOwner && <ButtonImportDiscogs onSuccess={() => searchCollections(searchQuery, getSortParams())} />}
                     {isOwner && <ButtonAddCollection onSuccess={() => searchCollections(searchQuery, getSortParams())} />}
                     
@@ -291,7 +291,7 @@ export default function CollectionPage() {
                 </nav>
 
                 {/* Collection Content */}
-                <div className="flex flex-col flex-1">
+                <div className="flex flex-col flex-1 overflow-hidden">
                     {isLoading && !selectedCollection ? (
                         <div className="flex items-center justify-center h-[300px]">
                             <Loading className="w-10 opacity-40" />
@@ -343,8 +343,9 @@ export default function CollectionPage() {
                             </div>
 
                             <div className={cn(
+                                'overflow-y-auto p-2',
                                 viewStyle === ViewStyle.DETAILS 
-                                    ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 p-2'
+                                    ? 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3'
                                     : cn(
                                         'grid gap-3',
                                         viewStyle === ViewStyle.GRID 

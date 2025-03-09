@@ -14,6 +14,7 @@ export const useCollectionSearch = (userId: string, getSortParams: () => SortPar
     const [collections, setCollections] = useState<Collection[]>([])
     const [searchQuery, setSearchQuery] = useState('')
     const [isLoading, setIsLoading] = useState(true)
+    const previousSortParams = useRef<SortParams>({})
 
     const debouncedSearch = useRef(
         debounce((query: string, sortParams: SortParams) => {
@@ -57,6 +58,7 @@ export const useCollectionSearch = (userId: string, getSortParams: () => SortPar
         setIsLoading(false)
     }
 
+    // Effet pour la recherche
     useEffect(() => {
         const sortParams = getSortParams()
         debouncedSearch(searchQuery, sortParams)
@@ -66,9 +68,23 @@ export const useCollectionSearch = (userId: string, getSortParams: () => SortPar
         }
     }, [searchQuery])
 
+    // Effet pour le tri
+    useEffect(() => {
+        const currentSortParams = getSortParams()
+        const prevParams = previousSortParams.current
+        
+        // Vérifie si les paramètres de tri ont changé
+        if (JSON.stringify(currentSortParams) !== JSON.stringify(prevParams)) {
+            searchCollections(searchQuery, currentSortParams)
+            previousSortParams.current = currentSortParams
+        }
+    }, [getSortParams()])
+
     // Chargement initial des collections
     useEffect(() => {
-        searchCollections('', getSortParams())
+        const initialSortParams = getSortParams()
+        searchCollections('', initialSortParams)
+        previousSortParams.current = initialSortParams
     }, [])
 
     return {
