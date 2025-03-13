@@ -9,6 +9,7 @@ import { showToast } from '@/utils/toast'
 import { useState } from 'react'
 import { Modal } from 'flowbite-react'
 import { Button } from '@/components/atom/Button'
+import { DiscogsImportProgress } from './DiscogsImportProgress'
 
 export default function ButtonImportDiscogs({ onSuccess }: { onSuccess?: () => void }) {
     const [isLoading, setIsLoading] = useState(false)
@@ -41,8 +42,15 @@ export default function ButtonImportDiscogs({ onSuccess }: { onSuccess?: () => v
                 type: 'error', 
                 message: 'Trop de requêtes, veuillez réessayer plus tard'
             })
+            setIsModalOpen(false)
         } finally {
             setIsLoading(false)
+        }
+    }
+
+    const handleCloseModal = () => {
+        // On ferme la modal uniquement si l'import n'est pas en cours
+        if (!isLoading) {
             setIsModalOpen(false)
         }
     }
@@ -64,13 +72,14 @@ export default function ButtonImportDiscogs({ onSuccess }: { onSuccess?: () => v
                 </span>
             </button>
 
-            <Modal show={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <Modal.Header>Import en cours</Modal.Header>
+            <Modal 
+                show={isModalOpen}
+                onClose={handleCloseModal}
+                dismissible={!isLoading}
+            >
+                <Modal.Header>Import Discogs</Modal.Header>
                 <Modal.Body>
-                    <div className="flex flex-col items-center justify-center p-4">
-                        <FontAwesomeIcon icon={faSpinner} className="w-16 h-16 animate-spin text-fuchsia-600" />
-                        <p className="mt-4">Import de votre collection Discogs en cours...</p>
-                    </div>
+                    <DiscogsImportProgress />
                 </Modal.Body>
             </Modal>
         </>
