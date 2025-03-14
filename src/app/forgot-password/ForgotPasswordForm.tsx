@@ -3,9 +3,9 @@
 import { Button } from '@/components/atom/Button';
 import { fetchAPI } from '@/utils/fetchAPI';
 import { showToast } from '@/utils/toast';
-
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { InputText } from '@/components/atom/InputText';
 
 const ForgotPasswordForm = () => {
     const formik = useFormik({
@@ -39,28 +39,29 @@ const ForgotPasswordForm = () => {
     return (
         <div>
             <form onSubmit={formik.handleSubmit} className="flex flex-col items-center justify-center lg:mx-32 mb-8">
-                <div className="flex flex-col w-full">
-                    <label htmlFor="email" className="text-sm font-bold text-gray-600">Adresse email</label>
-                    <input
-                        id="email"
-                        type="email"
-                        name="email"
-                        placeholder="Votre adresse email"
-                        className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.email}
-                    />
-                    {formik.touched.email && formik.errors.email ? (
-                        <div className="text-red-500 text-sm mt-1">{formik.errors.email}</div>
-                    ) : null}
+                <div className="w-full max-w-md p-4 space-y-3 border border-gray-200 rounded-lg shadow-lg">
+                    <div className="space-y-2">
+                        <InputText
+                            label="Adresse email"
+                            name="email"
+                            type="email"
+                            placeholder="Votre adresse email"
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.email && formik.errors.email && (
+                            <div className="text-xs text-red-500">{formik.errors.email}</div>
+                        )}
+                        <Button
+                            type="submit"
+                            className="flex justify-center w-full px-3 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-lg bg-fuchsia-500 hover:bg-fuchsia-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                            disabled={formik.isSubmitting}
+                        >
+                            Réinitialiser mon mot de passe
+                        </Button>
+                    </div>
                 </div>
-                <Button
-                    type="submit"
-                    className="mt-2 sm:w-full xl:w-auto xl:px-3 px-3 py-1"
-                >
-                    Réinitialiser mon mot de passe
-                </Button>
             </form>
         </div>
     );

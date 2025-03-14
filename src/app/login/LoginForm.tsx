@@ -6,8 +6,6 @@ import * as Yup from 'yup'
 import { Spinner } from 'flowbite-react'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCompactDisc } from '@fortawesome/pro-duotone-svg-icons'
 
 import { Button } from '@/components/atom/Button'
 import { InputText } from '@/components/atom/InputText'
@@ -29,7 +27,6 @@ export function LoginForm() {
         onSubmit: async (values) => {
             setLoading(true)
 
-            setLoading(true)
             signIn('credentials', {
                 username: values.email,
                 password: values.password,
@@ -57,24 +54,23 @@ export function LoginForm() {
     })
 
     return (
-        <>
-            <form
-                onSubmit={formik.handleSubmit}
-                className="flex flex-col items-center justify-center w-full gap-4 p-2 mx-4 bg-black rounded bg-opacity-20 lg:w-2/3"
-            >
-                <div className="flex flex-col w-full pt-2 md:w-1/2 md:flex-row md:items-center md:justify-center md:gap-4 lg:w-full">
+        <form
+            onSubmit={formik.handleSubmit}
+            className="w-full max-w-md p-4 mb-4 space-y-3 border border-gray-200 rounded-lg shadow-lg"
+        >
+            <div className="space-y-2">
+                <div className="flex flex-col gap-2">
                     <InputText
                         value={formik.values.email}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         name="email"
-                        label="E-mail"
+                        label="Adresse e-mail"
                         type="email"
-                        className="my-3"
                     />
-                    {formik.touched.email && formik.errors.email ? (
-                        <div className="text-red-500">{formik.errors.email}</div>
-                    ) : null}
+                    {formik.touched.email && formik.errors.email && (
+                        <div className="text-xs text-red-500">{formik.errors.email}</div>
+                    )}
 
                     <InputText
                         value={formik.values.password}
@@ -84,14 +80,19 @@ export function LoginForm() {
                         label="Mot de passe"
                         type="password"
                     />
-                    {formik.touched.password && formik.errors.password ? (
-                        <div className="text-red-500">{formik.errors.password}</div>
-                    ) : null}
+                    {formik.touched.password && formik.errors.password && (
+                        <div className="text-xs text-red-500">{formik.errors.password}</div>
+                    )}
                 </div>
-                <Button type="submit" disabled={loading || !formik.isValid}>
-                    {loading ? <Spinner /> : 'Connexion'}
+
+                <Button 
+                    type="submit" 
+                    disabled={loading || !formik.isValid}
+                    className="flex justify-center w-full px-3 py-2 text-sm font-medium text-white transition-all duration-200 border border-transparent rounded-md shadow-lg bg-fuchsia-500 hover:bg-fuchsia-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {loading ? <Spinner /> : 'Se connecter'}
                 </Button>
-            </form>
-        </>
+            </div>
+        </form>
     )
 }

@@ -5,6 +5,7 @@ import { fetchAPI } from '@/utils/fetchAPI';
 import { showToast } from '@/utils/toast';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { InputText } from '@/components/atom/InputText';
 
 interface ResetPasswordFormProps {
     token: string;
@@ -52,34 +53,42 @@ const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ token, email }) =
     });
 
     return (
-        <form onSubmit={formik.handleSubmit} className="flex flex-col items-center justify-center w-full mb-8">
-            <div className="flex flex-col w-full mb-4">
-                <label htmlFor="newPassword" className="text-sm font-bold text-gray-600">Nouveau mot de passe</label>
-                <input
-                    id="newPassword"
-                    type="password"
-                    {...formik.getFieldProps('newPassword')}
-                    className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-                />
-                {formik.touched.newPassword && formik.errors.newPassword ? (
-                    <div className="text-red-500 text-sm mt-1">{formik.errors.newPassword}</div>
-                ) : null}
+        <form onSubmit={formik.handleSubmit} className="w-full max-w-md p-4 space-y-3 border border-gray-200 rounded-lg shadow-lg">
+            <div className="space-y-2">
+                <div className="flex flex-col gap-2">
+                    <InputText
+                        label="Nouveau mot de passe"
+                        name="newPassword"
+                        type="password"
+                        value={formik.values.newPassword}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.newPassword && formik.errors.newPassword && (
+                        <div className="text-xs text-red-500">{formik.errors.newPassword}</div>
+                    )}
+
+                    <InputText
+                        label="Confirmer le mot de passe"
+                        name="confirmPassword"
+                        type="password"
+                        value={formik.values.confirmPassword}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                        <div className="text-xs text-red-500">{formik.errors.confirmPassword}</div>
+                    )}
+                </div>
+
+                <Button 
+                    type="submit" 
+                    className="flex justify-center w-full px-3 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-lg bg-fuchsia-500 hover:bg-fuchsia-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    disabled={formik.isSubmitting}
+                >
+                    Réinitialiser le mot de passe
+                </Button>
             </div>
-            <div className="flex flex-col w-full mb-4">
-                <label htmlFor="confirmPassword" className="text-sm font-bold text-gray-600">Confirmer le mot de passe</label>
-                <input
-                    id="confirmPassword"
-                    type="password"
-                    {...formik.getFieldProps('confirmPassword')}
-                    className="w-full p-2 mt-1 border border-gray-300 rounded-md"
-                />
-                {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                    <div className="text-red-500 text-sm mt-1">{formik.errors.confirmPassword}</div>
-                ) : null}
-            </div>
-            <Button type="submit" className="mt-2 sm:w-full xl:w-auto xl:px-3 px-3 py-1" disabled={formik.isSubmitting}>
-                Réinitialiser le mot de passe
-            </Button>
         </form>
     );
 };

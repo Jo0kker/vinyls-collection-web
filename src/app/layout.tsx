@@ -41,9 +41,9 @@ export default async function Layout({ children }: PropsWithChildren) {
                         <HelperModal />
                         <Header />
                         <NextTopLoader />
-                        <main className="flex-1 w-full max-w-screen-xl p-4 mx-auto space-y-4 md:px-0">
+                        <main className="flex-1 w-full max-w-screen-xl mx-auto">
                             <Announcement />
-                            <div className="p-4 rounded-lg shadow-md bg-black/10">
+                            <div className="px-4 py-2 md:px-6 md:py-4">
                                 {children}
                             </div>
                         </main>
