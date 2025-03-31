@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: false,
-    swcMinify: true,
     distDir: 'build',
     images: {
         remotePatterns: [
@@ -71,7 +70,7 @@ module.exports = withSentryConfig(module.exports, {
     // For all available options, see:
     // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-    org: 'sentry',
+    org: 'codible',
     project: 'vinyls-collection-web',
     sentryUrl: 'https://sentry.codible.net/',
 
