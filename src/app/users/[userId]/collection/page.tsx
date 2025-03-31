@@ -216,7 +216,7 @@ export default function CollectionPage() {
                     <div className="w-full max-w-[24rem]">
                         <Link
                             href={`/users/${userId}`}
-                            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-fuchsia-600 border border-transparent rounded-md shadow-sm hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
+                            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-fuchsia-600 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
                         >
                             <FontAwesomeIcon icon={faUser} className="mr-2" />
                             Voir le profil
@@ -249,7 +249,7 @@ export default function CollectionPage() {
                     ) : (
                         <Link
                             href={`/users/${userId}`}
-                            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-fuchsia-600 border border-transparent rounded-md shadow-sm hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
+                            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-fuchsia-600 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
                         >
                             <FontAwesomeIcon icon={faUser} className="mr-2" />
                             Voir le profil

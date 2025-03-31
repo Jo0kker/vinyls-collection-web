@@ -21,6 +21,7 @@ type InputTextProps = {
     required?: boolean
     formikOnChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
     formikOnBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
+    placeholder?: string
 }
 
 export const InputText = ({
@@ -39,7 +40,8 @@ export const InputText = ({
     tipMessage,
     required = false,
     formikOnChange,
-    formikOnBlur
+    formikOnBlur,
+    placeholder
 }: InputTextProps) => {
     const [showPassword, setShowPassword] = useState(false)
     const isPassword = type === 'password'
@@ -69,7 +71,7 @@ export const InputText = ({
                         'w-full px-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent text-gray-900 placeholder-gray-400 shadow-sm transition-all duration-200',
                         inputClassName ?? ''
                     )}
-                    placeholder={' '}
+                    placeholder={placeholder ?? ' '}
                     required={required}
                     value={value}
                     style={inputStyle}

@@ -6,13 +6,13 @@ import Link from 'next/link'
 import { fetchAPI } from '@/utils/fetchAPI'
 import { prefixImage } from '@/utils/prefixImage'
 
-type UserPageProps = {
-    params: {
-        userId: string
-    }
-}
+export default async function UserPage({
+    params,
+}: {
+    params: Promise<{ userId: string }>
+}) {
+    const { userId } = await params
 
-export default async function UserPage({ params }: UserPageProps) {
     const { data: users } = await fetchAPI('/users/search', {
         method: 'POST',
         body: JSON.stringify({
@@ -21,7 +21,7 @@ export default async function UserPage({ params }: UserPageProps) {
                     {
                         field: "id",
                         operator: "=",
-                        value: parseInt(params.userId)
+                        value: parseInt(userId)
                     }
                 ]
             }
@@ -122,7 +122,7 @@ export default async function UserPage({ params }: UserPageProps) {
                 {/* Bouton vers la collection */}
                 <Link 
                     href={`/users/${user.id}/collection`}
-                    className="inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-fuchsia-600 border border-transparent rounded-md shadow-sm hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
+                    className="inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-fuchsia-600 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
                 >
                     <FontAwesomeIcon icon={faCompactDisc} className="mr-2" />
                     Voir sa collection
