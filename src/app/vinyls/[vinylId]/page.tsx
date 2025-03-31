@@ -1,4 +1,4 @@
-import { faCompactDisc, faVideo, faArrowUpRightFromSquare, faEarMuffs } from '@fortawesome/pro-duotone-svg-icons'
+import { faCompactDisc, faVideo, faArrowUpRightFromSquare, faEarMuffs, faUser, faEnvelope } from '@fortawesome/pro-duotone-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     Accordion, AccordionContent, AccordionPanel, AccordionTitle,
@@ -9,14 +9,16 @@ import {
     TableHead,
     TableHeadCell,
     TableRow,
-    Tooltip
+    Tooltip,
+    Avatar
 } from 'flowbite-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import AccordionVideo from '@/app/vinyls/[vinylId]/components/AccordionVideo'
 import AddToCollection from '@/app/vinyls/[vinylId]/components/AddToCollection'
 import ButtonUpdateDiscog from '@/app/vinyls/[vinylId]/components/ButtonUpdateDiscog'
-import { Vinyl } from '@/types'
+import { Vinyl, Owner } from '@/types'
 import { getSession } from '@/utils/authOptions'
 import { fetchAPI } from '@/utils/fetchAPI'
 import { prefixImage } from '@/utils/prefixImage'
@@ -46,12 +48,14 @@ export default async function VinylPage({ params, searchParams }: VinylPageProps
                         operator: '=',
                         value: resolvedParams.vinylId
                     }
-                ]
+                ],
+                scopes: [{name: 'ownedByUsers'}]
             }
         })
     })
 
     const vinyl = vinyls[0]
+    const owners: Owner[] = vinyl.owners ? JSON.parse(vinyl.owners) : []
 
     return (
         <div className="flex flex-col gap-4 px-4 py-4 pt-4 mt-4 bg-white rounded sm:pt-0">
@@ -211,6 +215,44 @@ export default async function VinylPage({ params, searchParams }: VinylPageProps
                                 </AccordionContent>
                             </AccordionPanel>
                         )}
+                        {/* Owners Accordion */}
+                        <AccordionPanel className="w-full">
+                            <AccordionTitle className="w-full text-fuchsia-800">
+                                <span className="text-emerald-500">
+                                    <FontAwesomeIcon className="text-emerald-500" icon={faUser} />{' '}
+                                </span>
+                                {' '}
+                                Propriétaires ({owners.length})
+                            </AccordionTitle>
+                            <AccordionContent>
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                    {owners.map((owner) => (
+                                        <div key={owner.id} className="flex items-center gap-4 p-4 bg-white border rounded-lg shadow-sm">
+                                            <Avatar
+                                                img={owner.avatar || "https://minio-s0o448og8cs4884cg0wccg8c.54.37.82.33.sslip.io/vinyl-collection/default_image_vinyl.png"}
+                                                rounded
+                                                size="lg"
+                                            />
+                                            <div className="flex flex-col">
+                                                <span className="font-medium text-gray-900">{owner.name}</span>
+                                                <div className="flex gap-2 mt-1">
+                                                    <Tooltip content="Voir la collection">
+                                                        <Link href={`/users/${owner.id}/collection`} className="text-gray-500 hover:text-emerald-500">
+                                                            <FontAwesomeIcon icon={faCompactDisc} />
+                                                        </Link>
+                                                    </Tooltip>
+                                                    <Tooltip content="Envoyer un message">
+                                                        <Link href={`/messages/new?to=${owner.id}`} className="text-gray-500 hover:text-emerald-500">
+                                                            <FontAwesomeIcon icon={faEnvelope} />
+                                                        </Link>
+                                                    </Tooltip>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </AccordionContent>
+                        </AccordionPanel>
                     </Accordion>
                 )}
             </div>

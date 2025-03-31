@@ -10,6 +10,15 @@ export interface Video {
     uri: string
 }
 
+export interface Owner {
+    id: number
+    name: string
+    email: string
+    first_name: string | null
+    last_name: string | null
+    avatar: string | null
+}
+
 export interface Vinyl {
     id: number
     title: string
@@ -25,6 +34,7 @@ export interface Vinyl {
     discog_url?: string
     discog_videos?: string
     discog_img?: string
+    owners?: string
     created_at: Date
     updated_at?: Date
 }

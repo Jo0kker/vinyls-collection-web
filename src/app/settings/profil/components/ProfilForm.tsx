@@ -97,100 +97,148 @@ const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
       onSubmit={handleSubmit}
     >
       {({ setFieldValue, isSubmitting }) => (
-        <Form>
-          <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">Prénom</label>
-            <Field type="text" id="first_name" name="first_name" className="block w-full mt-1" />
-            <ErrorMessage name="first_name" component="p" className="mt-1 text-sm text-red-600" />
+        <Form className="max-w-2xl p-6 mx-auto space-y-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div>
+              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">Prénom</label>
+              <Field 
+                type="text" 
+                id="first_name" 
+                name="first_name" 
+                className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" 
+              />
+              <ErrorMessage name="first_name" component="p" className="mt-1 text-sm text-red-600" />
+            </div>
+
+            <div>
+              <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">Nom</label>
+              <Field 
+                type="text" 
+                id="last_name" 
+                name="last_name" 
+                className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" 
+              />
+              <ErrorMessage name="last_name" component="p" className="mt-1 text-sm text-red-600" />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+              <Field 
+                type="email" 
+                id="email" 
+                name="email" 
+                className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" 
+              />
+              <ErrorMessage name="email" component="p" className="mt-1 text-sm text-red-600" />
+            </div>
+
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Téléphone</label>
+              <Field 
+                type="text" 
+                id="phone" 
+                name="phone" 
+                className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" 
+              />
+              <ErrorMessage name="phone" component="p" className="mt-1 text-sm text-red-600" />
+            </div>
+
+            <div>
+              <label htmlFor="birth_date" className="block text-sm font-medium text-gray-700">Date de naissance</label>
+              <Field 
+                type="date" 
+                id="birth_date" 
+                name="birth_date" 
+                className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" 
+              />
+              <ErrorMessage name="birth_date" component="p" className="mt-1 text-sm text-red-600" />
+            </div>
+
+            <div>
+              <label htmlFor="audio_equipment" className="block text-sm font-medium text-gray-700">Équipement audio</label>
+              <Field 
+                type="text" 
+                id="audio_equipment" 
+                name="audio_equipment" 
+                className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" 
+              />
+              <ErrorMessage name="audio_equipment" component="p" className="mt-1 text-sm text-red-600" />
+            </div>
+
+            <div>
+              <label htmlFor="influence" className="block text-sm font-medium text-gray-700">Influence</label>
+              <Field 
+                type="text" 
+                id="influence" 
+                name="influence" 
+                className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" 
+              />
+              <ErrorMessage name="influence" component="p" className="mt-1 text-sm text-red-600" />
+            </div>
           </div>
 
-          <div>
-            <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">Nom</label>
-            <Field type="text" id="last_name" name="last_name" className="block w-full mt-1" />
-            <ErrorMessage name="last_name" component="p" className="mt-1 text-sm text-red-600" />
-          </div>
-
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-            <Field type="email" id="email" name="email" className="block w-full mt-1" />
-            <ErrorMessage name="email" component="p" className="mt-1 text-sm text-red-600" />
-          </div>
-
-          <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Téléphone</label>
-            <Field type="text" id="phone" name="phone" className="block w-full mt-1" />
-            <ErrorMessage name="phone" component="p" className="mt-1 text-sm text-red-600" />
-          </div>
-
-          <div>
-            <label htmlFor="birth_date" className="block text-sm font-medium text-gray-700">Date de naissance</label>
-            <Field type="date" id="birth_date" name="birth_date" className="block w-full mt-1" />
-            <ErrorMessage name="birth_date" component="p" className="mt-1 text-sm text-red-600" />
-          </div>
-
-          <div>
-            <label htmlFor="audio_equipment" className="block text-sm font-medium text-gray-700">Équipement audio</label>
-            <Field type="text" id="audio_equipment" name="audio_equipment" className="block w-full mt-1" />
-            <ErrorMessage name="audio_equipment" component="p" className="mt-1 text-sm text-red-600" />
-          </div>
-
-          <div>
-            <label htmlFor="influence" className="block text-sm font-medium text-gray-700">Influence</label>
-            <Field type="text" id="influence" name="influence" className="block w-full mt-1" />
-            <ErrorMessage name="influence" component="p" className="mt-1 text-sm text-red-600" />
-          </div>
-
-          <div>
+          <div className="col-span-full">
             <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
-            <Field as="textarea" id="description" name="description" className="block w-full mt-1" />
+            <Field 
+              as="textarea" 
+              id="description" 
+              name="description" 
+              rows={4}
+              className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm" 
+            />
             <ErrorMessage name="description" component="p" className="mt-1 text-sm text-red-600" />
           </div>
           
-          <div>
+          <div className="col-span-full">
             <label htmlFor="avatar" className="block text-sm font-medium text-gray-700">Avatar</label>
-            <FilePond
-              files={initialAvatar ? [initialAvatar] : []}
-              onupdatefiles={(fileItems) => {
-                const file = fileItems[0] || null;
-              
-                if (file) {
-                  setTempAvatar(file);
-              
-                  const adaptedFile: FilePondInitialFile = {
-                    source: file.file as unknown as string,
-                    options: {
-                      type: 'local',
-                      file: {
-                        name: file.file.name,
-                        size: file.file.size,
-                        type: file.file.type,
+            <div className="mt-1">
+              <FilePond
+                files={initialAvatar ? [initialAvatar] : []}
+                onupdatefiles={(fileItems) => {
+                  const file = fileItems[0] || null;
+                
+                  if (file) {
+                    setTempAvatar(file);
+                
+                    const adaptedFile: FilePondInitialFile = {
+                      source: file.file as unknown as string,
+                      options: {
+                        type: 'local',
+                        file: {
+                          name: file.file.name,
+                          size: file.file.size,
+                          type: file.file.type,
+                        },
                       },
-                    },
-                  };
-              
-                  setInitialAvatar(adaptedFile);
-                  setFieldValue('avatar', file.file);
-                } else {
-                  setTempAvatar(null);
-                  setInitialAvatar(null);
-                  setFieldValue('avatar', null);
-                }
-              }}
-              allowMultiple={false}
-              maxFileSize={"2MB"}
-              acceptedFileTypes={['image/png', 'image/jpeg']}
-              labelIdle='Déposez votre image ou <span class="filepond--label-action">parcourez</span>'
-            />
+                    };
+                
+                    setInitialAvatar(adaptedFile);
+                    setFieldValue('avatar', file.file);
+                  } else {
+                    setTempAvatar(null);
+                    setInitialAvatar(null);
+                    setFieldValue('avatar', null);
+                  }
+                }}
+                allowMultiple={false}
+                maxFileSize={"2MB"}
+                acceptedFileTypes={['image/png', 'image/jpeg']}
+                labelIdle='Déposez votre image ou <span class="filepond--label-action">parcourez</span>'
+                className="filepond--panel-root:bg-emerald-50 filepond--drop-label:border-emerald-200 filepond--drop-label:hover:border-emerald-300"
+              />
+            </div>
             <ErrorMessage name="avatar" component="p" className="mt-1 text-sm text-red-600" />
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full px-4 py-2 mb-4 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            {isSubmitting ? 'Mise à jour...' : 'Mettre à jour le profil'}
-          </button>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? 'Mise à jour...' : 'Mettre à jour le profil'}
+            </button>
+          </div>
         </Form>
       )}
     </Formik>

@@ -1,6 +1,6 @@
 'use client'
 
-import { faArrowRight, faSearch, faSpinner, faXmark } from '@fortawesome/pro-duotone-svg-icons'
+import { faArrowRight, faSearch, faSpinner, faXmark, faUser } from '@fortawesome/pro-duotone-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -207,10 +207,20 @@ export default function CollectionPage() {
 
             {/* Mobile Collection Selector */}
             <div className="flex flex-col items-center gap-4 mb-6 md:hidden">
-                {isOwner && (
+                {isOwner ? (
                     <div className="w-full max-w-[24rem]">
                         <ButtonImportDiscogs onSuccess={() => searchCollections(searchQuery, getSortParams())} />
                         <ButtonAddCollection onSuccess={() => searchCollections(searchQuery, getSortParams())} />
+                    </div>
+                ) : (
+                    <div className="w-full max-w-[24rem]">
+                        <Link
+                            href={`/users/${userId}`}
+                            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-fuchsia-600 border border-transparent rounded-md shadow-sm hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
+                        >
+                            <FontAwesomeIcon icon={faUser} className="mr-2" />
+                            Voir le profil
+                        </Link>
                     </div>
                 )}
                 <MobileCollectionSelector
@@ -231,8 +241,20 @@ export default function CollectionPage() {
             {/* Desktop Navigation */}
             <div className="flex flex-col flex-1 min-h-0 overflow-hidden md:flex-row md:gap-4">
                 <nav className="flex-shrink-0 hidden w-56 gap-2 px-4 overflow-y-auto md:mx-0 md:flex md:flex-col md:p-4 md:border-r md:border-fuchsia-100">
-                    {isOwner && <ButtonImportDiscogs onSuccess={() => searchCollections(searchQuery, getSortParams())} />}
-                    {isOwner && <ButtonAddCollection onSuccess={() => searchCollections(searchQuery, getSortParams())} />}
+                    {isOwner ? (
+                        <>
+                            <ButtonImportDiscogs onSuccess={() => searchCollections(searchQuery, getSortParams())} />
+                            <ButtonAddCollection onSuccess={() => searchCollections(searchQuery, getSortParams())} />
+                        </>
+                    ) : (
+                        <Link
+                            href={`/users/${userId}`}
+                            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-fuchsia-600 border border-transparent rounded-md shadow-sm hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500"
+                        >
+                            <FontAwesomeIcon icon={faUser} className="mr-2" />
+                            Voir le profil
+                        </Link>
+                    )}
                     
                     {/* Champ de recherche desktop */}
                     <div className="relative mb-4">
