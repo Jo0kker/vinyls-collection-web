@@ -68,15 +68,15 @@ export default function VideoPlayerList({ videos }: { videos: any[] }) {
                         'p-4 border rounded-lg bg-white shadow-md': true,
                         'hidden': !duration[index],
                     })}>
-                        <h3 className="text-lg font-semibold mb-2">{video.title}</h3>
-                        <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+                        <h3 className="mb-2 text-lg font-semibold">{video.title}</h3>
+                        <div className="flex flex-col items-center space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                             <button
                                 onClick={() => handlePlayPause(index)}
-                                className="play-pause-btn text-2xl"
+                                className="text-2xl play-pause-btn"
                             >
                                 <FontAwesomeIcon icon={isPlaying[index] ? faPause : faPlay} />
                             </button>
-                            <span className="current-time text-sm">
+                            <span className="text-sm current-time">
                                 {formatTime((played[index] || 0) * (duration[index] || 0))}
                             </span>
                             <input
@@ -93,9 +93,10 @@ export default function VideoPlayerList({ videos }: { videos: any[] }) {
                                     }));
                                     playerRefs.current[index]?.seekTo(newPlayed);
                                 }}
-                                className="flex-1"
+                                className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-500 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:mt-[-5px] [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-blue-500 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-0 [&::-moz-range-progress]:bg-blue-500 [&::-moz-range-track]:bg-gray-200 [&::-moz-range-track]:rounded-lg [&::-webkit-slider-runnable-track]:bg-gray-200 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-runnable-track]:h-2 [&::-webkit-progress-value]:bg-blue-500 [&::-webkit-progress-inner-element]:bg-blue-500 [&::-webkit-slider-runnable-track]:bg-[linear-gradient(to_right,#3b82f6_0%,#3b82f6_var(--range-progress),rgb(229,231,235)_var(--range-progress),rgb(229,231,235)_100%)] [&::-webkit-slider-runnable-track]:bg-[length:100%_100%] [&::-webkit-slider-runnable-track]:bg-no-repeat"
+                                style={{ '--range-progress': `${(played[index] || 0) * 100}%` } as React.CSSProperties}
                             />
-                            <span className="duration text-sm">
+                            <span className="text-sm duration">
                                 {formatTime(duration[index] || 0)}
                             </span>
                             <div className="flex items-center space-x-2">
@@ -107,7 +108,8 @@ export default function VideoPlayerList({ videos }: { videos: any[] }) {
                                     step="any"
                                     value={volume[index] || 1}
                                     onChange={(e) => handleVolumeChange(index, parseFloat(e.target.value))}
-                                    className="w-24"
+                                    className="w-24 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-500 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:mt-[-5px] [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-blue-500 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-0 [&::-moz-range-progress]:bg-blue-500 [&::-moz-range-track]:bg-gray-200 [&::-moz-range-track]:rounded-lg [&::-webkit-slider-runnable-track]:bg-gray-200 [&::-webkit-slider-runnable-track]:rounded-lg [&::-webkit-slider-runnable-track]:h-2 [&::-webkit-progress-value]:bg-blue-500 [&::-webkit-progress-inner-element]:bg-blue-500 [&::-webkit-slider-runnable-track]:bg-[linear-gradient(to_right,#3b82f6_0%,#3b82f6_var(--range-progress),rgb(229,231,235)_var(--range-progress),rgb(229,231,235)_100%)] [&::-webkit-slider-runnable-track]:bg-[length:100%_100%] [&::-webkit-slider-runnable-track]:bg-no-repeat"
+                                    style={{ '--range-progress': `${(volume[index] || 1) * 100}%` } as React.CSSProperties}
                                 />
                                 <a href={video.uri} target="_blank" rel="noopener noreferrer" className="text-red-500">
                                     <FontAwesomeIcon icon={faYoutube} className="text-2xl" />

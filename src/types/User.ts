@@ -24,4 +24,5 @@ export interface User {
     discogs_username?: string
     discogs_data?: any
     ability?: string[]
+    collection_vinyls_count?: number
 }

@@ -50,7 +50,6 @@ export default function CollectionPage() {
     
     // États
     const [selectedCollection, setSelectedCollection] = useState<Collection | SpecialCollection | null>(null)
-    const [currentPage, setCurrentPage] = useState(1)
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
     const [collectionItems, setCollectionItems] = useState<any[]>([])
     const [ownerData, setOwnerData] = useState<User>({} as User)
@@ -91,7 +90,7 @@ export default function CollectionPage() {
     const isOwner = session?.data?.user?.id === parseInt(userId)
 
     // Chargement des items de la collection sélectionnée
-    const loadCollectionItems = async () => {
+    const loadCollectionItems = async (page: number = pagination.currentPage) => {
         if (!selectedCollection) return
 
         setIsLoading(true)
@@ -101,18 +100,14 @@ export default function CollectionPage() {
                     method: 'POST',
                     body: JSON.stringify({
                         search: {
-                            scopes: [
-                                { name: "uniqueVinyls" }
-                            ],
+                            scopes: [{ name: "uniqueVinyls" }],
                             includes: [
                                 {relation: "vinyl"},
                                 {relation: "collection"},
                                 {relation: "collection.user"}
                             ],
-                            filters: [
-                                {field: "user_id", value: parseInt(userId)}
-                            ],
-                            page: pagination.currentPage,
+                            filters: [{field: "user_id", value: parseInt(userId)}],
+                            page,
                             per_page: pagination.perPage
                         }
                     })
@@ -128,7 +123,7 @@ export default function CollectionPage() {
                 const response = await getCollectionData(
                     parseInt(userId),
                     selectedCollection.id,
-                    pagination.currentPage
+                    page
                 )
                 setCollectionItems(response.data)
                 setPagination({
@@ -144,13 +139,30 @@ export default function CollectionPage() {
         setIsLoading(false)
     }
 
+    // Effet pour gérer le changement de collection et la pagination
     useEffect(() => {
-        loadCollectionItems()
-    }, [selectedCollection, pagination.currentPage, refreshTrigger])
+        if (selectedCollection) {
+            loadCollectionItems(1)
+        }
+    }, [selectedCollection])
 
+    // Effet pour gérer le changement de page
     useEffect(() => {
-        if (!selectedCollection) {
-            // On sélectionne la première collection spéciale (Toutes les collections) par défaut
+        if (selectedCollection && pagination.currentPage > 1) {
+            loadCollectionItems(pagination.currentPage)
+        }
+    }, [pagination.currentPage])
+
+    // Effet pour gérer le rafraîchissement
+    useEffect(() => {
+        if (selectedCollection) {
+            loadCollectionItems(pagination.currentPage)
+        }
+    }, [refreshTrigger])
+
+    // Effet pour la sélection par défaut
+    useEffect(() => {
+        if (!selectedCollection && collections.length > 0) {
             setSelectedCollection(specialCollections[0])
         }
     }, [collections])
@@ -169,6 +181,16 @@ export default function CollectionPage() {
         }
         loadInitialData()
     }, [userId])
+
+    // Fonction pour changer de collection
+    const handleCollectionChange = (collection: Collection | SpecialCollection) => {
+        setSelectedCollection(collection)
+    }
+
+    // Fonction pour changer de page
+    const handlePageChange = (page: number) => {
+        setPagination(prev => ({ ...prev, currentPage: page }))
+    }
 
     return (
         <div className="flex flex-col py-4 mt-4 bg-white rounded">
@@ -194,7 +216,7 @@ export default function CollectionPage() {
                 <MobileCollectionSelector
                     collections={displayedCollections}
                     selectedCollection={selectedCollection}
-                    onSelect={setSelectedCollection}
+                    onSelect={handleCollectionChange}
                     searchQuery={searchQuery}
                     onSearchChange={setSearchQuery}
                     isLoading={isLoadingCollections}
@@ -214,7 +236,7 @@ export default function CollectionPage() {
                     
                     {/* Champ de recherche desktop */}
                     <div className="relative mb-4">
-                        <Combobox value={selectedCollection} onChange={setSelectedCollection}>
+                        <Combobox value={selectedCollection} onChange={handleCollectionChange}>
                             <div className="relative w-full">
                                 <Combobox.Input
                                     className="w-full py-2 pl-3 pr-16 text-sm border-gray-300 rounded-lg shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
@@ -385,9 +407,7 @@ export default function CollectionPage() {
                                 <Pagination
                                     currentPage={pagination.currentPage}
                                     totalPages={pagination.totalPages}
-                                    onPageChange={(page) => {
-                                        setPagination(prev => ({ ...prev, currentPage: page }))
-                                    }}
+                                    onPageChange={handlePageChange}
                                 />
                             )}
                         </>

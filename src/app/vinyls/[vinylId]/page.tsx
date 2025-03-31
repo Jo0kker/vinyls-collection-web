@@ -123,7 +123,7 @@ export default async function VinylPage({ params, searchParams }: VinylPageProps
                     </div>
                 </div>
                 {vinyl.discog_id && (
-                    <Accordion collapseAll className="w-full">
+                    <Accordion alwaysOpen={true} className="w-full">
                         {vinyl.track_list ? (
                             <AccordionPanel className="w-full">
                                 <AccordionTitle className="w-full text-fuchsia-800">

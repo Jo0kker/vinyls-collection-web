@@ -29,6 +29,12 @@ export default function CollectorPage() {
                         direction: 'desc'
                     }
                 ],
+                aggregates: [
+                    {
+                        relation: 'collectionVinyls',
+                        type: 'count'
+                    }
+                ],
                 page: nextPage,
                 limit: 9
             }
@@ -46,6 +52,9 @@ export default function CollectorPage() {
 
         await fetchAPI<User[]>('/users/search', {
             method: 'POST',
+            next: {
+                revalidate: 0
+            },
             body: JSON.stringify(body)
         }).then(res => {
             setCollectors(collectors ? [...collectors, ...res.data] : res.data)
@@ -55,6 +64,7 @@ export default function CollectorPage() {
                 last_page: res.last_page
             })
             setIsLoading(false)
+            console.log(res)
         })
     }, [nextPage, lastSearchValue, collectors])
 

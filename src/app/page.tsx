@@ -36,7 +36,7 @@ export default async function HomePage() {
     })
 
     return (
-        <div className="mt-24 flex flex-col rounded bg-white px-4 pt-44 sm:pt-0">
+        <div className="flex flex-col px-4 mt-24 bg-white rounded pt-44 sm:pt-0">
             <div className="sm:relative sm:-top-[63px] sm:flex sm:flex-row sm:gap-8 md:gap-16 lg:gap-24">
                 <Image
                     src="https://picsum.photos/300/300?random=1"
@@ -47,7 +47,7 @@ export default async function HomePage() {
                 />
 
                 <div>
-                    <h2 className="m-2 text-center text-5xl font-extrabold text-fuchsia-800">
+                    <h2 className="m-2 text-5xl font-extrabold text-center text-fuchsia-800">
                         <span className="sm:text-white">Le vinyl</span>
                         <FontAwesomeIcon icon={faPlus} className="m-1 text-emerald-500" />
                         <br />
@@ -68,18 +68,23 @@ export default async function HomePage() {
             </div>
 
             {collectionVinyls.data?.length > 0 && (
-                <div>
-                    <h2 className="mb-2 mt-4 text-xl font-bold text-fuchsia-800">
-                        <span className="text-emerald-500">
-                            <FontAwesomeIcon icon={faCompactDisc} />{' '}
-                        </span>{' '}
-                        Derniers vinyls ajoutés
-                    </h2>
+                <div className="mt-12 mb-4">
+                    <div className="mb-6">
+                        <h2 className="text-2xl font-bold text-fuchsia-800">
+                            <span className="text-emerald-500">
+                                <FontAwesomeIcon icon={faCompactDisc} className="mr-2" />
+                            </span>
+                            Derniers vinyls ajoutés
+                        </h2>
+                    </div>
                     <Carousel collectionVinyls={collectionVinyls.data} />
-
-                    <Link href="/vinyls">
-                        <Button className="my-4">En voir davantage</Button>
-                    </Link>
+                    <div className="flex justify-center mt-6">
+                        <Link href="/vinyls">
+                            <Button className="text-white bg-fuchsia-600 hover:bg-fuchsia-700">
+                                En voir plus
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
             )}
         </div>

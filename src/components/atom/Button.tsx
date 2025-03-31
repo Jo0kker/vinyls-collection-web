@@ -31,20 +31,19 @@ export const Button = ({ buttonClassName, className, children, type, disabled, .
         )
     } else {
         return (
-            <div className={cn('flex content-center justify-center', className)}>
-                <button 
-                    type={type}
-                    disabled={disabled}
-                    {...props} 
-                    className={cn(
-                        'rounded-3xl border border-black px-4 py-2',
-                        'disabled:border-gray-400 disabled:text-gray-400 disabled:cursor-not-allowed',
-                        buttonClassName
-                    )}
-                >
-                    {children}
-                </button>
-            </div>
+            <button 
+                type={type}
+                disabled={disabled}
+                {...props} 
+                className={cn(
+                    'rounded-3xl border border-black px-4 py-2',
+                    'disabled:border-gray-400 disabled:text-gray-400 disabled:cursor-not-allowed',
+                    buttonClassName,
+                    className
+                )}
+            >
+                {children}
+            </button>
         )
     }
 }
