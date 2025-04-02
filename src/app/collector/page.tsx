@@ -57,11 +57,11 @@ export default function CollectorPage() {
             },
             body: JSON.stringify(body)
         }).then(res => {
-            setCollectors(collectors ? [...collectors, ...res.data] : res.data)
+            setCollectors(collectors ? [...collectors, ...(res.data || [])] : (res.data || []))
             setNextPage(nextPage + 1)
             setInfoPagination({
-                current_page: res.current_page,
-                last_page: res.last_page
+                current_page: res.current_page || 1,
+                last_page: res.last_page || 1
             })
             setIsLoading(false)
             console.log(res)

@@ -67,7 +67,7 @@ export default async function HomePage() {
                 </div>
             </div>
 
-            {collectionVinyls.data?.length > 0 && (
+            {collectionVinyls.data && collectionVinyls.data.length > 0 && (
                 <div className="mt-12 mb-4">
                     <div className="mb-6">
                         <h2 className="text-2xl font-bold text-fuchsia-800">

@@ -3,17 +3,20 @@ import { headers } from 'next/headers'
 import { getSession } from './authOptions'
 
 export type FetchResponse<T> = {
-    avatar: string | null
-    id: any
+    avatar?: string | null
+    id?: any
     data: T
-    current_page: number
-    from: number
-    last_page: number
-    per_page: number
-    to: number
-    total: number
+    current_page?: number
+    from?: number
+    last_page?: number
+    per_page?: number
+    to?: number
+    total?: number
     status: number
     message?: string
+    retry_after?: number
+    error?: string
+    job_uuid?: string
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,15 +52,17 @@ export async function fetchAPI<T = any>(
         
         if (response.ok || ![400, 401, 403, 404, 422, 500, 503, 504].includes(response.status)) {
             return {
-                ...data,
-                status: response.status
+                data: data.data || data,
+                status: response.status,
+                ...data
             }
         } else {
-            // Pour les erreurs 429, on retourne quand même les données
-            if (response.status === 429) {
+            // Pour les erreurs 429 et 409, on retourne quand même les données
+            if (response.status === 429 || response.status === 409) {
                 return {
-                    ...data,
-                    status: response.status
+                    data: data.data || data,
+                    status: response.status,
+                    ...data
                 }
             }
             throw new Error(JSON.stringify(data))

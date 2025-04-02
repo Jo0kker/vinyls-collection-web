@@ -1,138 +1,116 @@
 'use client'
 
-import { faCompactDisc, faSpinner, faFileImport } from '@fortawesome/pro-duotone-svg-icons'
+import { faCompactDisc, faSpinner, faFileImport, faClock } from '@fortawesome/pro-duotone-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { fetchAPI } from '@/utils/fetchAPI'
-import { showToast } from '@/utils/toast'
 import { useState, useEffect } from 'react'
+import { toast } from 'react-hot-toast'
 import { Modal } from 'flowbite-react'
-import { Button } from '@/components/atom/Button'
-import { DiscogsImportProgress } from './DiscogsImportProgress'
+import { fetchAPI } from '@/utils/fetchAPI'
 import { cn } from '@/utils/classNames'
+import { DiscogsImportProgress } from './DiscogsImportProgress'
 
-interface ImportStatus {
-    status: 'in_progress' | 'completed' | 'failed'
+interface ImportResponse {
+    message?: string
+    error?: string
+    job_uuid: string
+    status: number
+    retry_after?: number
 }
 
-export default function ButtonImportDiscogs({ onSuccess }: { onSuccess?: () => void }) {
+interface ButtonImportDiscogsProps {
+    onSuccess?: () => void
+}
+
+export default function ButtonImportDiscogs({ onSuccess }: ButtonImportDiscogsProps) {
     const [isLoading, setIsLoading] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [hasActiveJob, setHasActiveJob] = useState(false)
+    const [currentJobUuid, setCurrentJobUuid] = useState<string | undefined>()
     const session = useSession()
     const router = useRouter()
 
-    // Vérification initiale de l'état du job
     useEffect(() => {
-        const checkJobStatus = async () => {
-            if (!session.data?.user?.discogs_id) return
-
-            try {
-                const response = await fetchAPI<ImportStatus>('/discogs/import/status', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${session.data?.user.access_token}`,
-                    }
-                })
-                
-                if (response.data?.status === 'in_progress') {
-                    setHasActiveJob(true)
-                    setIsModalOpen(true)
-                }
-            } catch (error) {
-                console.error('Erreur lors de la vérification du statut:', error)
-            }
+        if (!session.data?.user?.discogs_id) {
+            router.push('/settings')
         }
-
-        checkJobStatus()
     }, [session.data?.user?.discogs_id])
 
-    const importDiscogs = async () => {
+    const handleImport = async () => {
         if (!session.data?.user?.discogs_id) {
             router.push('/settings')
             return
         }
 
         setIsLoading(true)
-        setIsModalOpen(true)
         try {
-            const response = await fetchAPI('/discogs/import', {
+            const response = await fetchAPI<ImportResponse>('/discogs/import', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${session.data?.user.access_token}`,
                 }
             })
+            console.log('response', response)
             
-            setHasActiveJob(true)
-            onSuccess?.()
-            showToast({ 
-                type: 'success', 
-                message: 'Import Discogs en cours... (vous recevrez un email lorsque cela sera terminé)' 
-            })
-        } catch (error: any) {
-            // Si c'est une erreur 429, on garde la modal ouverte car il y a un job en cours
-            if (error.status === 429) {
-                showToast({ 
-                    type: 'error', 
-                    message: 'Un import est déjà en cours. Veuillez réessayer dans une heure.'
-                })
+            // On ouvre toujours la modal avec le job_uuid
+            if (response.job_uuid) {
                 setHasActiveJob(true)
-                // On ne ferme pas la modal ici
-            } else {
-                showToast({ 
-                    type: 'error', 
-                    message: 'Une erreur est survenue. Veuillez réessayer plus tard.'
-                })
-                setIsModalOpen(false)
+                setCurrentJobUuid(response.job_uuid)
+                setIsModalOpen(true)
+                onSuccess?.()
             }
+
+            // Si on a une erreur 409 ou 429, on met à jour le statut
+            if (response.status === 409 || response.status === 429) {
+                console.log('Erreur 429 ou 409, mise à jour du statut')
+                setHasActiveJob(true)
+                setCurrentJobUuid(response.job_uuid)
+                setIsModalOpen(true)
+            }
+        } catch (error: any) {
+            console.log('Erreur générale')
+            toast.error('Une erreur est survenue lors de l\'import')
         } finally {
             setIsLoading(false)
         }
     }
 
     const handleCloseModal = () => {
+        console.log('Fermeture de la modal')
         setIsModalOpen(false)
     }
 
-    const handleOpenModal = () => {
-        setIsModalOpen(true)
-    }
+    console.log('État de la modal:', isModalOpen)
+    console.log('Job UUID:', currentJobUuid)
 
     return (
         <>
             <button
-                onClick={hasActiveJob ? handleOpenModal : importDiscogs}
+                onClick={handleImport}
                 disabled={isLoading}
                 className={cn(
-                    "flex items-center justify-center w-full gap-2 p-2 mb-4 text-sm transition-colors border rounded",
-                    hasActiveJob ? "bg-gray-100" : "hover:bg-gray-50"
+                    "inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-fuchsia-600 hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fuchsia-500",
+                    isLoading && "opacity-50 cursor-not-allowed"
                 )}
             >
                 {isLoading ? (
-                    <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
+                    <FontAwesomeIcon icon={faSpinner} className="w-4 h-4 mr-2 animate-spin" />
+                ) : hasActiveJob ? (
+                    <FontAwesomeIcon icon={faClock} className="w-4 h-4 mr-2" />
                 ) : (
-                    <FontAwesomeIcon icon={faFileImport} />
+                    <FontAwesomeIcon icon={faCompactDisc} className="w-4 h-4 mr-2" />
                 )}
-                <span className="ml-2">
-                    {hasActiveJob 
-                        ? "Voir l'import en cours..." 
-                        : session.data?.user?.discogs_id 
-                            ? "Importer de Discogs" 
-                            : "Lier le compte Discogs"
-                    }
-                </span>
+                {isLoading ? 'Import en cours...' : hasActiveJob ? 'Import en cours...' : 'Importer depuis Discogs'}
             </button>
 
-            <Modal 
+            <Modal
                 show={isModalOpen}
                 onClose={handleCloseModal}
+                title="Import depuis Discogs"
                 dismissible={true}
             >
-                <Modal.Header>Import Discogs</Modal.Header>
-                <Modal.Body>
-                    <DiscogsImportProgress />
-                </Modal.Body>
+                <DiscogsImportProgress jobUuid={currentJobUuid} />
             </Modal>
         </>
     )

@@ -47,14 +47,14 @@ export const DiscogsImportProgress = ({ jobUuid }: DiscogsImportProgressProps) =
 
     const fetchStatus = async () => {
         try {
-            const response = await fetchAPI<ImportStatusData>('/discogs/import/status', {
+            const response = await fetchAPI<any>('/discogs/import/status', {
                 headers: {
                     'Authorization': `Bearer ${session.data?.user.access_token}`,
                 }
             })
             
             // Si on a un jobUuid spécifique, on vérifie que c'est le bon job
-            if (jobUuid && response.data.job_uuid !== jobUuid) {
+            if (jobUuid && response.data?.job_uuid !== jobUuid) {
                 return
             }
             
@@ -110,8 +110,20 @@ export const DiscogsImportProgress = ({ jobUuid }: DiscogsImportProgressProps) =
         return new Date(dateString).toLocaleTimeString('fr-FR')
     }
 
+    // Calcul du temps restant à partir de la date de début
+    const calculateRemainingTime = (startedAt: string) => {
+        const startDate = new Date(startedAt)
+        const now = new Date()
+        const elapsedMinutes = (now.getTime() - startDate.getTime()) / (1000 * 60)
+        const remainingMinutes = Math.max(0, 60 - elapsedMinutes)
+        return Math.ceil(remainingMinutes)
+    }
+
     // Si le job est terminé mais la progression n'est pas à 100%, on force à 100%
     const displayProgress = status.status === 'completed' ? 100 : status.progress || 0
+
+    // Calcul du temps restant si on a une date de début
+    const remainingMinutes = status.started_at ? calculateRemainingTime(status.started_at) : 0
 
     return (
         <div className="flex flex-col items-center justify-center p-4">
@@ -120,7 +132,11 @@ export const DiscogsImportProgress = ({ jobUuid }: DiscogsImportProgressProps) =
                 <div className="flex items-center gap-2 text-blue-700">
                     <FontAwesomeIcon icon={faInfoCircle} className="w-5 h-5" />
                     <p className="text-sm">
-                        Vous pouvez naviguer librement pendant l'import. La progression sera mise à jour automatiquement.
+                        {status.status === 'running' 
+                            ? 'Vous pouvez naviguer librement pendant l\'import. La progression sera mise à jour automatiquement.'
+                            : status.status === 'completed' && remainingMinutes > 0
+                                ? 'L\'import est terminé. Vous pouvez relancer un nouvel import dans ' + remainingMinutes + ' minute' + (remainingMinutes > 1 ? 's' : '')
+                                : 'Aucun import en cours.'}
                     </p>
                 </div>
             </div>

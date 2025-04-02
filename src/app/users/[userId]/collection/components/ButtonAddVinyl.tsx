@@ -178,7 +178,7 @@ const ButtonAddVinyl = ({
             setOpenIndex(1)
             setVinylsResult(r.data)
             setCurrentPage(1)
-            if (r.last_page > 1) {
+            if (r.last_page && r.last_page > 1) {
                 setHasMorePage(true)
             } else {
                 setHasMorePage(false)
@@ -691,6 +691,7 @@ const ButtonAddVinyl = ({
                                                                         ...r.data
                                                                     ])
                                                                     if (
+                                                                        r.last_page &&
                                                                         r.last_page >
                                                                         currentPage + 1
                                                                     ) {
@@ -706,6 +707,7 @@ const ButtonAddVinyl = ({
                                                                 r => {
                                                                     setVinylsResult(r.data)
                                                                     if (
+                                                                        r.last_page &&
                                                                         r.last_page >
                                                                         currentPage + 1
                                                                     ) {
@@ -733,7 +735,7 @@ const ButtonAddVinyl = ({
                                                             .then(r => {
                                                                 setVinylsResult(r.data)
                                                                 setTitleStep('Résultat de Discogs')
-                                                                if (r.last_page > 1) {
+                                                                if (r.last_page && r.last_page > 1) {
                                                                     setHasMorePage(true)
                                                                 } else {
                                                                     setHasMorePage(false)

@@ -114,10 +114,10 @@ export default function CollectionPage() {
                 })
                 setCollectionItems(response.data)
                 setPagination({
-                    currentPage: response.current_page,
-                    totalPages: response.last_page,
-                    totalItems: response.total,
-                    perPage: response.per_page
+                    currentPage: response.current_page || 1,
+                    totalPages: response.last_page || 1,
+                    totalItems: response.total || 0,
+                    perPage: response.per_page || 10
                 })
             } else {
                 const response = await getCollectionData(
@@ -128,10 +128,10 @@ export default function CollectionPage() {
                 )
                 setCollectionItems(response.data)
                 setPagination({
-                    currentPage: response.current_page,
-                    totalPages: response.last_page,
-                    totalItems: response.total,
-                    perPage: response.per_page
+                    currentPage: response.current_page || 1,
+                    totalPages: response.last_page || 1,
+                    totalItems: response.total || 0,
+                    perPage: response.per_page || 10
                 })
             }
         } catch (error) {

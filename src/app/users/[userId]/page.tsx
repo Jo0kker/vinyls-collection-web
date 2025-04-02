@@ -50,32 +50,14 @@ export default async function UserPage({
                 </div>
 
                 {/* Informations principales */}
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div className="flex items-center gap-3 p-4 bg-white border rounded-lg shadow-sm">
                         <FontAwesomeIcon icon={faUser} className="w-6 h-6 text-fuchsia-500" />
                         <div>
-                            <p className="text-sm text-gray-500">Nom complet</p>
+                            <p className="text-sm text-gray-500">Pseudonyme</p>
                             <p className="font-medium">{user.name}</p>
                         </div>
                     </div>
-
-                    <div className="flex items-center gap-3 p-4 bg-white border rounded-lg shadow-sm">
-                        <FontAwesomeIcon icon={faEnvelope} className="w-6 h-6 text-fuchsia-500" />
-                        <div>
-                            <p className="text-sm text-gray-500">Email</p>
-                            <p className="font-medium">{user.email}</p>
-                        </div>
-                    </div>
-
-                    {user.phone && (
-                        <div className="flex items-center gap-3 p-4 bg-white border rounded-lg shadow-sm">
-                            <FontAwesomeIcon icon={faPhone} className="w-6 h-6 text-fuchsia-500" />
-                            <div>
-                                <p className="text-sm text-gray-500">Téléphone</p>
-                                <p className="font-medium">{user.phone}</p>
-                            </div>
-                        </div>
-                    )}
 
                     {user.birth_date && (
                         <div className="flex items-center gap-3 p-4 bg-white border rounded-lg shadow-sm">

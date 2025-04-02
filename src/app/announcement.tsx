@@ -8,12 +8,11 @@ export default async function Announcement() {
         vinyls: number
     }> = await fetchAPI('/stats/global')
 
-    const badges = [
+    const badges = stats.data ? [
         { label: `${stats.data.users} collectionneurs`, color: 'text-orange-500' },
         { label: `${stats.data.collections} collections`, color: 'text-green-500' },
-     
         { label: `${stats.data.vinyls} disques`, color: 'text-blue-400' }
-    ]
+    ] : []
 
     return (
         <article className="flex justify-between gap-4 px-5 py-3 rounded-lg shadow-md bg-black/10">

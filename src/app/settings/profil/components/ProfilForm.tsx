@@ -63,12 +63,12 @@ const ProfilForm: React.FC<{ user: User }> = ({ user }) => {
       updateProfil(values).then((response) => {
         showToast({ type: 'success', message: 'Profil mis à jour avec succès' })
 
-        values.avatar = response.avatar
+        values.avatar = response.avatar || null
 
         if (response.avatar) {
           setInitialValues((prev) => ({
             ...prev,
-            avatar: response.avatar,
+            avatar: response.avatar || null
           }));
         }
         
