@@ -115,7 +115,7 @@ export function SearchVinylsModal({ userId, isOpen, onClose }: SearchVinylsModal
                     value: values.endYear
                 })
             }
-            if (values.collection?.value) {
+            if (values.collection?.value && values.collection.value !== 'all' && values.collection.value !== 'none') {
                 filters.push({
                     field: 'collection_id',
                     operator: '=',

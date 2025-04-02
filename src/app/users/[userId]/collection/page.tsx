@@ -100,7 +100,7 @@ export default function CollectionPage() {
                     method: 'POST',
                     body: JSON.stringify({
                         search: {
-                            scopes: [{ name: "uniqueVinyls" }],
+                            scopes: [{ name: "uniqueVinyls" }, { name: "orderByVinylTitle" }],
                             includes: [
                                 {relation: "vinyl"},
                                 {relation: "collection"},
@@ -108,7 +108,7 @@ export default function CollectionPage() {
                             ],
                             filters: [{field: "user_id", value: parseInt(userId)}],
                             page,
-                            per_page: pagination.perPage
+                            limit: pagination.perPage
                         }
                     })
                 })
@@ -123,7 +123,8 @@ export default function CollectionPage() {
                 const response = await getCollectionData(
                     parseInt(userId),
                     selectedCollection.id,
-                    page
+                    page,
+                    pagination.perPage
                 )
                 setCollectionItems(response.data)
                 setPagination({
@@ -152,6 +153,13 @@ export default function CollectionPage() {
             loadCollectionItems(pagination.currentPage)
         }
     }, [pagination.currentPage])
+
+    // Effet pour gérer le changement d'éléments par page
+    useEffect(() => {
+        if (selectedCollection) {
+            loadCollectionItems(1)
+        }
+    }, [pagination.perPage])
 
     // Effet pour gérer le rafraîchissement
     useEffect(() => {
@@ -190,6 +198,10 @@ export default function CollectionPage() {
     // Fonction pour changer de page
     const handlePageChange = (page: number) => {
         setPagination(prev => ({ ...prev, currentPage: page }))
+    }
+
+    const handlePerPageChange = (newPerPage: number) => {
+        setPagination(prev => ({ ...prev, perPage: newPerPage, currentPage: 1 }))
     }
 
     return (
@@ -429,7 +441,9 @@ export default function CollectionPage() {
                                 <Pagination
                                     currentPage={pagination.currentPage}
                                     totalPages={pagination.totalPages}
+                                    perPage={pagination.perPage}
                                     onPageChange={handlePageChange}
+                                    onPerPageChange={handlePerPageChange}
                                 />
                             )}
                         </>

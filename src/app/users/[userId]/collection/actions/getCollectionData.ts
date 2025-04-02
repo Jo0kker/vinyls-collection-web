@@ -6,7 +6,8 @@ import { fetchAPI, FetchResponse } from '@/utils/fetchAPI'
 export const getCollectionData = async (
     userId: number,
     collectionId: number | null,
-    page: number = 1
+    page: number = 1,
+    perPage: number = 24
 ): Promise<FetchResponse<CollectionVinyl[]>> => {
     if (!collectionId) return {
         data: [],
@@ -22,6 +23,10 @@ export const getCollectionData = async (
     }
 
     const baseSearchParams = {
+        scopes: [
+            {name: 'orderByVinylTitle'},
+            {name: 'uniqueVinyls'}
+        ],
         filters: [
             {
                 field: 'user.id',
@@ -30,7 +35,8 @@ export const getCollectionData = async (
             }
         ],
         includes: [{ relation: 'vinyl' }, { relation: 'media' }],
-        page: page
+        page: page,
+        limit: perPage
     }
 
     switch (collectionId) {
@@ -40,7 +46,6 @@ export const getCollectionData = async (
                 body: JSON.stringify({
                     search: {
                         ...baseSearchParams,
-                        limit: 12,
                     }
                 })
             })
@@ -51,7 +56,6 @@ export const getCollectionData = async (
                 body: JSON.stringify({
                     search: {
                         ...baseSearchParams,
-                        limit: 12,
                     }
                 })
             })
@@ -74,7 +78,6 @@ export const getCollectionData = async (
                             { relation: 'collection' },
                             { relation: 'media' }
                         ],
-                        limit: 24,
                     }
                 })
             })

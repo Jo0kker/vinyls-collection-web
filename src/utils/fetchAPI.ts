@@ -45,16 +45,22 @@ export async function fetchAPI<T = any>(
                 : {})
         }
     }).then(async response => {
-    if (response.ok || ![400, 401, 403, 404, 422, 429, 500, 503, 504].includes(response.status)) {
-            const data = await response.json()
+        const data = await response.json()
+        
+        if (response.ok || ![400, 401, 403, 404, 422, 500, 503, 504].includes(response.status)) {
             return {
                 ...data,
                 status: response.status
             }
         } else {
-            const errorData = await response.json()
-
-            throw new Error(JSON.stringify(errorData))
+            // Pour les erreurs 429, on retourne quand même les données
+            if (response.status === 429) {
+                return {
+                    ...data,
+                    status: response.status
+                }
+            }
+            throw new Error(JSON.stringify(data))
         }
     })
 }
